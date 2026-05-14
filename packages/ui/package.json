@@ -19,6 +19,7 @@
       }
     },
     "./preset.css": "./dist/preset.css",
+    "./tokens.css": "./dist/tokens.css",
     "./package.json": "./package.json"
   },
   "files": [
@@ -26,7 +27,7 @@
   ],
   "sideEffects": false,
   "scripts": {
-    "build": "tsup && cp src/preset.css dist/preset.css",
+    "build": "tsup && cp src/preset.css dist/preset.css && cp src/tokens.css dist/tokens.css",
     "dev": "tsup --watch",
     "typecheck": "tsc --noEmit",
     "clean": "rm -rf dist"
