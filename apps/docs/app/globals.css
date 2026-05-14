@@ -1,0 +1,8 @@
+@import "@plain-ds/ui/preset.css";
+
+/*
+ * @source — tells Tailwind v4 where to scan for class names beyond
+ * this app's own files. We point at the design-system source so that
+ * any class used inside @plain-ds/ui components gets emitted.
+ */
+@source "../../../packages/ui/src/**/*.{ts,tsx}";
