@@ -2,7 +2,7 @@
 
 > Read this first when resuming work. It catches you up on every decision, what's done, what's next, and how to verify everything still works.
 
-**Last updated:** 2026-05-14 (Button component + apps/docs scaffolded)
+**Last updated:** 2026-05-14 (adopted user tokens.css via @theme inline)
 
 ---
 
@@ -26,6 +26,7 @@ A neutral, minimal, token-driven design system built as a **portfolio + learning
 - [x] `packages/ui/src/preset.css` — Tailwind v4 `@theme {}` with all 6 color families × 11 shades + flat shadcn-style semantic tokens. Build script copies it to `dist/preset.css`. Resolves via `@plain-ds/ui/preset.css`.
 - [x] **Button** component — `packages/ui/src/components/Button.tsx`. Wraps Base UI's `Button` primitive. Variants: `primary` / `secondary` / `destructive` / `ghost`. Sizes: `sm` / `md` / `lg`. `forwardRef<HTMLElement>` to match Base UI. `className` narrowed to `string`. Handles both `disabled:` and `data-[disabled]:` states. Exported from `src/index.ts` along with `ButtonProps` type.
 - [x] **`apps/docs`** — Next.js 16 + MDX scaffold consuming `@plain-ds/ui` via `workspace:*`. Tailwind v4 wired through `@tailwindcss/postcss`; `globals.css` imports `@plain-ds/ui/preset.css` and uses `@source "../../../packages/ui/src/**/*.{ts,tsx}"` so Tailwind picks up classes from the lib source (no rebuild needed during dev). Gallery at `app/page.tsx` renders Button variants × sizes × states + className-override examples. `pnpm -C apps/docs dev` boots on port 3000.
+- [x] **Adopted user-provided `tokens.css`** (full design-token sheet, vendored at `packages/ui/src/tokens.css`). 558 lines of `:root` / `[data-*]` rules covering multi-gray (slate/neutral/stone), multi-brand (blue/violet/emerald/orange/mono), light + dark themes, multi-radius (default/sharp/soft/pill), multi-density (default/compact/comfortable), multi-font (geist/plex/system), plus typography / spacing / shadow / motion scales. Registered with Tailwind v4 via `@theme inline {}` in `preset.css` so every utility resolves through `var(...)` and switches live with `[data-*]` attributes (no rebuild). Button + docs gallery updated to the new token-aligned utility names (`bg-bg-brand`, `text-text-on-brand`, `shadow-focus`, etc.). Docs `<html>` sets all six data-attribute defaults.
 
 ### Todo (in order)
 - [ ] Typography / spacing / radius / shadow / motion primitives (spec §7 Phase 2 — designs not yet finalized)
@@ -66,10 +67,19 @@ A neutral, minimal, token-driven design system built as a **portfolio + learning
 - **Decision:** stay on TS 6, suppress the `baseUrl` deprecation warning via the official migration flag.
 - **Why:** `tsup` (via `rollup-plugin-dts`) uses `baseUrl` internally for type resolution and hasn't been updated for TS 6 yet. The flag is exactly designed for this kind of tool lag. Downgrading TS was the alternative; chose to keep TS 6 and revisit when the toolchain catches up.
 
-### 3.8 Flatten semantic-token names instead of using the spec's `--color-bg-*` / `--color-text-*` / `--color-border-*` pattern
-- **Decision:** Layer 2 tokens are named in the shadcn idiom (`--color-surface`, `--color-content`, `--color-line`, `--color-brand`, `--color-on-brand`, etc.) — not the spec's literal `--color-bg-primary` / `--color-text-primary` / `--color-border-primary`.
-- **Why:** Tailwind v4 generates utility names directly from `--color-*` variables. The spec's naming would produce ugly utilities like `bg-bg-primary`, `text-text-primary`, `border-border-primary`. Flat names produce clean utilities (`bg-surface`, `text-content`, `border-line`). The 3-layer architecture is preserved — only Layer 2 names change. The header comment in `preset.css` documents the spec→flat-name mapping so the spec stays traceable.
-- **Trade-off accepted:** one indirection between spec docs and code. Worth it for usable utility names.
+### 3.8 ~~Flatten semantic-token names~~ → REVERSED by §3.9
+- **Original decision (2026-05-13):** Layer 2 tokens use flat shadcn-idiom names (`--color-surface`, `--color-content`, `--color-line`) to avoid ugly Tailwind utilities like `bg-bg-primary`.
+- **Status:** Reversed on 2026-05-14. See §3.9.
+
+### 3.9 Reverse §3.8 — adopt the spec's `--color-bg-*` / `--color-text-*` / `--color-border-*` token names
+- **Decision:** Use the user-authored `tokens.css` verbatim. Layer 2 tokens follow the spec: `--color-bg-primary`, `--color-text-on-brand`, `--color-border-focus`, etc.
+- **Why:** The user provided a complete, hand-designed token sheet. Token names are part of the design and must round-trip 1:1 between spec docs and code. The §3.8 indirection (mapping spec names → flat names) was a workaround for an ergonomic concern (`bg-bg-primary` reads as redundant) — that concern is now subordinate to source-of-truth fidelity.
+- **Trade-off accepted:** Utility names like `bg-bg-brand`, `text-text-on-brand`, `border-border-focus` look redundant. Worth it because (a) the design tokens are the product, (b) future automated tooling (Figma sync, token docs generation) can treat tokens.css as canonical without a translation table, (c) once readers internalize that the second prefix is the token category, the redundancy fades.
+
+### 3.10 Wire tokens through Tailwind v4 with `@theme inline {}`
+- **Decision:** `preset.css` registers every token from `tokens.css` inside `@theme inline { --color-bg-brand: var(--color-bg-brand); ... }`. The `inline` modifier instructs Tailwind to emit `var(...)` references in the generated utility CSS rather than resolving the values at build time.
+- **Why:** The token sheet uses plain `:root` + `[data-*]` attribute selectors so the cascade rebinds variables at runtime. If `@theme` resolved values at build time, every utility would freeze to the light/blue/slate/default state and `[data-theme="dark"]` switching would be a no-op. With `inline`, `.bg-bg-brand` compiles to `background-color: var(--color-bg-brand)` — and that variable re-resolves every time an ancestor's data-attribute changes. Verified in the docs app: toggling `document.documentElement.setAttribute("data-theme", "dark")` re-skins the gallery instantly without a rebuild.
+- **Note on non-Tailwind-namespace tokens:** `--control-h-*` and `--control-px-*` (density-driven control sizing) have no clean Tailwind namespace. Button.tsx uses arbitrary-value syntax instead: `h-[var(--control-h-md)] px-[var(--control-px-md)]`. These also respect `[data-density]` switching because the var resolves at runtime. `--space-*` is intentionally not registered — the user's spacing scale is 0.25rem-aligned so Tailwind's default `--spacing` multiplier already produces matching values.
 
 ---
 
@@ -111,9 +121,10 @@ plain-design-system/
 │       ├── tsup.config.ts          # entry: src/index.ts, format: [esm, cjs], dts: true, external: peerDeps
 │       ├── src/
 │       │   ├── index.ts            # exports cn, Button, ButtonProps
-│       │   ├── preset.css          # Tailwind v4 @theme — 6 color families × 11 shades + flat semantic tokens
+│       │   ├── tokens.css          # 558-line design-token sheet (primitives + semantics + data-attr switching). Vendored from user's design.
+│       │   ├── preset.css          # @import "tailwindcss" + @import "./tokens.css" + @theme inline {} mapping tokens to Tailwind utilities
 │       │   ├── components/
-│       │   │   └── Button.tsx      # Base UI Button + variants/sizes via cn()
+│       │   │   └── Button.tsx      # Base UI Button + variants/sizes via cn(); classes use --color-bg-*/text-*/border-* utilities
 │       │   └── utils/
 │       │       └── cn.ts           # the clsx + tailwind-merge utility
 │       └── dist/                   # generated by `pnpm build` — gitignored
@@ -121,7 +132,8 @@ plain-design-system/
 │           ├── index.cjs + .map    # CJS bundle
 │           ├── index.d.ts          # ESM types
 │           ├── index.d.cts         # CJS types
-│           └── preset.css          # copied from src/preset.css, exported as `@plain-ds/ui/preset.css`
+│           ├── preset.css          # copied from src/preset.css, exported as `@plain-ds/ui/preset.css` (full Tailwind+tokens)
+│           └── tokens.css          # copied from src/tokens.css, exported as `@plain-ds/ui/tokens.css` (tokens only, no Tailwind wrapper)
 │
 └── apps/
     └── docs/
@@ -253,4 +265,4 @@ Design typography / spacing / radius / shadow / motion. Each lands as a new `@th
 - Consider whether to add `Turborepo` for build caching once there's more than 1 package
 - License: currently `MIT` in `packages/ui/package.json` — confirm or change before first publish
 - Add a Tailwind v4 `@source` directive to `preset.css` once components ship, so consumers' Tailwind detects classes inside `node_modules/@plain-ds/ui/dist/` without per-app configuration
-- Dark mode: spec philosophy is "remap semantic tokens at Layer 2"; no dark palette designed yet — revisit alongside Foundations Phase 2
+- ~~Dark mode: no dark palette designed yet~~ → Resolved 2026-05-14: dark tokens are wired in `tokens.css` under `[data-theme="dark"]`. Components inherit dark-mode behavior automatically through `@theme inline`. Adding a UI toggle in `apps/docs` is still open.
