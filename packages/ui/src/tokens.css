@@ -257,6 +257,19 @@
   --brand-900: var(--black);
   --brand-950: var(--black);
 }
+[data-brand="teal"] {
+  --brand-50:  #E2FBFA;
+  --brand-100: #B8F4F1;
+  --brand-200: #8AECE7;
+  --brand-300: #4DDFD9;
+  --brand-400: #14D2CB;
+  --brand-500: #00CEC8;
+  --brand-600: #00CEC8;
+  --brand-700: #009E99;
+  --brand-800: #007570;
+  --brand-900: #004B48;
+  --brand-950: #002523;
+}
 
 /* ─────────────────────────────────────────────────────────
    Semantic tokens — LIGHT (default)
@@ -397,6 +410,19 @@
   --color-text-on-brand:     var(--gray-950);
   --color-text-brand:        var(--gray-50);
   --color-border-brand:      var(--gray-50);
+}
+
+/* "teal" anchor (#00CEC8) is too light for white text — force dark text on brand */
+:root[data-brand="teal"] {
+  --color-text-on-brand: var(--gray-950);
+}
+[data-theme="dark"][data-brand="teal"] {
+  --color-bg-brand:        var(--brand-500);
+  --color-bg-brand-hover:  var(--brand-400);
+  --color-bg-brand-active: var(--brand-300);
+  --color-text-on-brand:   var(--gray-950);
+  --color-text-brand:      var(--brand-400);
+  --color-border-brand:    var(--brand-500);
 }
 
 /* ─────────────────────────────────────────────────────────
