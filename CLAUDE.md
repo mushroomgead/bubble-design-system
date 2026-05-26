@@ -63,12 +63,12 @@ This is a pnpm-workspaces monorepo for a token-driven React design system. Two w
 
 - `tsup` emits ESM (`dist/index.js`) + CJS (`dist/index.cjs`) + per-format types (`.d.ts` / `.d.cts`). The `exports` field in `packages/ui/package.json` uses conditional `import`/`require` with per-format `types` so strict NodeNext consumers resolve correctly.
 - `src/preset.css` and `src/tokens.css` are copied to `dist/` by the build script and exposed at the subpaths `@plain-ds/ui/preset.css` and `@plain-ds/ui/tokens.css`.
-- `sideEffects: false`, `peerDependencies` for react / react-dom / tailwindcss / @base-ui-components/react. `clsx` + `tailwind-merge` are regular deps.
+- `sideEffects: false`, `peerDependencies` for react / react-dom / tailwindcss / @base-ui/react. `clsx` + `tailwind-merge` are regular deps.
 
 ### Stack-specific gotchas
 
 - **TypeScript 6** with `ignoreDeprecations: "6.0"` in `tsconfig.base.json` — required because tsup's `rollup-plugin-dts` still uses the deprecated `baseUrl`. Don't remove the flag until that toolchain catches up.
-- **`@base-ui-components/react@1.0.0-rc.0`** — npm marks it deprecated but it's the latest published version and works correctly. Bump to stable when published.
+- **`@base-ui/react@^1.5.0`** — the package was renamed from `@base-ui-components/react` (deprecated) to `@base-ui/react` at the 1.0 stable release (2025-12-11). Import paths use the new scope: `@base-ui/react/<primitive>`.
 - **Tailwind v4** is required in consumer apps; this is an accepted architectural cost (shadcn-style override pattern).
 - **`--space-*` tokens are intentionally not registered** with Tailwind — the user's spacing scale is 0.25rem-aligned, so Tailwind's default `--spacing` multiplier already produces matching values.
 

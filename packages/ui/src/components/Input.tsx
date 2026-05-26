@@ -1,5 +1,5 @@
 import { forwardRef, type ComponentPropsWithoutRef } from "react";
-import { Input as BaseInput } from "@base-ui-components/react/input";
+import { Input as BaseInput } from "@base-ui/react/input";
 import { cn } from "../utils/cn";
 
 type InputSize = "sm" | "md" | "lg";

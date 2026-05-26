@@ -1,5 +1,5 @@
 import { forwardRef, type ComponentPropsWithoutRef } from "react";
-import { Separator } from "@base-ui-components/react/separator";
+import { Separator } from "@base-ui/react/separator";
 import { cn } from "../utils/cn";
 
 type BaseSeparatorProps = ComponentPropsWithoutRef<typeof Separator>;

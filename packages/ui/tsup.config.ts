@@ -13,6 +13,6 @@ export default defineConfig({
     "react",
     "react-dom",
     "tailwindcss",
-    "@base-ui-components/react",
+    "@base-ui/react",
   ],
 });

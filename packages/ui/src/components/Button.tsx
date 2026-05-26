@@ -1,5 +1,5 @@
 import { forwardRef, type ComponentPropsWithoutRef } from "react";
-import { Button as BaseButton } from "@base-ui-components/react/button";
+import { Button as BaseButton } from "@base-ui/react/button";
 import { cn } from "../utils/cn";
 
 type ButtonVariant = "primary" | "secondary" | "destructive" | "ghost";

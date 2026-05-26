@@ -39,7 +39,7 @@ A neutral, minimal, token-driven design system built as a **portfolio + learning
   - All eight are exported from `src/index.ts` with their `*Props` types. `apps/docs/app/page.tsx` has a gallery section per component covering variants × sizes × states.
 - [x] **MVP batch 2 components** (2026-05-25): all seven components from §8 Task 2 shipped. Same pattern as batch 1.
   - **`Modal`** — wraps Base UI `Dialog`. Compound `{ Root, Trigger, Close, Content, Title, Description }`. `Content` pre-composes `Portal → Backdrop → Popup` (so consumers don't have to thread all three). Backdrop is `bg-bg-inverse/50` with `backdrop-blur-sm`; popup is centered via translate, animates via `data-[starting-style]:opacity-0 scale-95` + `data-[ending-style]`. Trigger/Close re-export Base UI primitives as-is — consumers pass `render={(props) => <Button {...props}>…</Button>}` to swap the element.
-  - **`Toast`** — uses Base UI's manager pattern. Exports `Toast = { Provider, Viewport, Toaster }` plus a `useToast` hook (re-export of `Toast.useToastManager` — the manager isn't a top-level value from `@base-ui-components/react/toast`, only from the namespace, so we destructure `BaseToast.useToastManager` and re-export it). `Toaster` is the convenience component that renders Viewport + maps `useToast().toasts` to styled `BaseToast.Root` + `Title` + `Description` + `Close`. Stacked-toast layout uses `--toast-index` and `--toast-offset-y` from Base UI for the fan-out + expand-on-hover. Usage: wrap with `<Toast.Provider>`, render `<Toast.Toaster />` once, call `useToast().add({ title, description })` from any descendant.
+  - **`Toast`** — uses Base UI's manager pattern. Exports `Toast = { Provider, Viewport, Toaster }` plus a `useToast` hook (re-export of `Toast.useToastManager` — the manager isn't a top-level value from `@base-ui/react/toast`, only from the namespace, so we destructure `BaseToast.useToastManager` and re-export it). `Toaster` is the convenience component that renders Viewport + maps `useToast().toasts` to styled `BaseToast.Root` + `Title` + `Description` + `Close`. Stacked-toast layout uses `--toast-index` and `--toast-offset-y` from Base UI for the fan-out + expand-on-hover. Usage: wrap with `<Toast.Provider>`, render `<Toast.Toaster />` once, call `useToast().add({ title, description })` from any descendant.
   - **`Tooltip`** — wraps Base UI `Tooltip`. Compound `{ Provider, Root, Trigger, Content }`. `Content` pre-wires Portal → Positioner → Popup with default `sideOffset=6` and `side="top"`. Popup uses `bg-bg-inverse text-text-inverse` so it inverts cleanly in both light + dark themes. `data-[instant]:duration-0` so reopening within the grace window skips the transition.
   - **`Tabs`** — wraps Base UI `Tabs`. Compound: `Tabs` is the callable Root with `.List`, `.Tab`, `.Panel` attached via `Object.assign`. `List` automatically appends a `BaseTabs.Indicator` so consumers don't need to remember to render it — the bar uses `var(--active-tab-width)` / `var(--active-tab-left)` for the slide.
   - **`Alert`** — pure CSS (no Base UI primitive). Variants `info` / `success` / `warning` / `danger` map to `--color-bg-*` + `--color-border-*` + a matching icon tint via `[&_[data-alert-icon]]:text-text-*`. Inline SVG icons default per variant; consumers can pass `icon={...}` to override or `icon={false}` to hide. `title` is a `ReactNode` slot — we `Omit<HTMLAttributes, "title">` first because the native HTML `title` is `string`.
@@ -120,7 +120,7 @@ A neutral, minimal, token-driven design system built as a **portfolio + learning
 | TypeScript | 6.0.3 | Language (with `ignoreDeprecations: "6.0"`) |
 | tsup | 8.5.1 | Library bundler (esbuild + rollup-plugin-dts) |
 | Tailwind CSS | 4.3.0 | Styling — v4 with CSS-first `@theme` config |
-| @base-ui-components/react | 1.0.0-rc.0 | Headless primitives (peer dep) |
+| @base-ui/react | 1.5.0 | Headless primitives (peer dep) — renamed from `@base-ui-components/react` at 1.0 stable |
 | React / React DOM | 19.2.6 | Peer dep (`>=18.2`) |
 | clsx | 2.1.1 | Class composition (regular dep) |
 | tailwind-merge | 3.6.0 | Tailwind class conflict resolution (regular dep) |
@@ -283,7 +283,7 @@ Shipped as `apps/docs/app/ThemeBar.tsx`. Six dropdowns (Theme / Gray / Brand / R
 
 - Add `@source "node_modules/@plain-ds/ui/dist/**/*.{js,cjs}"` to `preset.css` so consumer apps don't need to configure Tailwind sources manually (open question §10).
 - Confirm or change the MIT license in `packages/ui/package.json` (§10).
-- Decide if/when to bump from `@base-ui-components/react@1.0.0-rc.0` to stable.
+- ~~Decide if/when to bump from `@base-ui-components/react@1.0.0-rc.0` to stable.~~ → Done 2026-05-26: bumped to `@base-ui/react@^1.5.0` (package renamed at 1.0 stable; old scope deprecated).
 - Decide if/when to add Turborepo for caching.
 - Push the 2 unpushed commits to origin once the next round of work is ready.
 
@@ -308,7 +308,7 @@ Shipped as `apps/docs/app/ThemeBar.tsx`. Six dropdowns (Theme / Gray / Brand / R
 
 ## 10. Open questions / things to revisit later
 
-- Bump `@base-ui-components/react` to stable `1.0.0` when published
+- ~~Bump `@base-ui-components/react` to stable `1.0.0` when published~~ → Done 2026-05-26: on `@base-ui/react@^1.5.0`
 - Remove `ignoreDeprecations: "6.0"` from `tsconfig.base.json` when tsup/rollup-plugin-dts drop `baseUrl` usage
 - ~~Decide on docs framework (Storybook vs Next.js) when scaffolding `apps/docs`~~ → Decided 2026-05-14: **Next.js 16 + MDX**
 - Consider whether to add `Turborepo` for build caching once there's more than 1 package
