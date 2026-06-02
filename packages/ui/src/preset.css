@@ -2,6 +2,15 @@
 @import "./tokens.css";
 
 /*
+ * Make Tailwind v4 in consumer apps scan the bundled component JS for
+ * utility classes. Path is relative to this file's installed location
+ * (node_modules/@plain-ds/ui/dist/preset.css), so it points to the
+ * sibling dist/index.{js,cjs} bundles. No effect in this repo's source
+ * tree (no .js/.cjs files in src/), so it's a no-op during library dev.
+ */
+@source "./*.{js,cjs}";
+
+/*
  * Plain Design System — Tailwind v4 integration layer
  *
  * `@theme inline` registers the design tokens (defined in tokens.css)
