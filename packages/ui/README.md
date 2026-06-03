@@ -1,4 +1,4 @@
-# @plain-ds/ui
+# @plain-design-system/ui
 
 Minimal, token-driven React component library built on [Base UI](https://base-ui.com/) and [Tailwind CSS v4](https://tailwindcss.com/).
 
@@ -10,8 +10,8 @@ Minimal, token-driven React component library built on [Base UI](https://base-ui
 ## Install
 
 ```bash
-npm install @plain-ds/ui
-# or: pnpm add @plain-ds/ui
+npm install @plain-design-system/ui
+# or: pnpm add @plain-design-system/ui
 ```
 
 Peer dependencies you must have installed in your app:
@@ -28,7 +28,7 @@ Import the preset into your app's global stylesheet. The preset pulls in Tailwin
 
 ```css
 /* app/globals.css (or wherever your global styles live) */
-@import "@plain-ds/ui/preset.css";
+@import "@plain-design-system/ui/preset.css";
 ```
 
 Then set the runtime theme attributes on your root element:
@@ -55,7 +55,7 @@ Toggling any of those `data-*` attributes at runtime re-skins the whole app — 
 ## Usage
 
 ```tsx
-import { Button, Divider, Modal } from "@plain-ds/ui";
+import { Button, Divider, Modal } from "@plain-design-system/ui";
 
 export function Example() {
   return (
@@ -77,12 +77,34 @@ export function Example() {
 
 Plus the `cn()` utility (clsx + tailwind-merge) for composing class names.
 
-## Tokens only
+## Tokens
+
+Every color, radius, shadow, font, motion duration and density value is a CSS custom property defined in `tokens.css` and registered with Tailwind v4 via `@theme inline` in `preset.css`. Examples:
+
+```tsx
+// All three are equivalent surfaces — pick whichever fits your style.
+<div className="bg-bg-primary text-text-primary border border-border-secondary rounded-lg shadow-sm" />
+<div style={{ background: "var(--color-bg-primary)", color: "var(--color-text-primary)" }} />
+<div className="h-[var(--control-h-md)] px-[var(--control-px-md)]" /> // tokens without a Tailwind namespace
+```
+
+Six `data-*` attributes on any ancestor re-skin every descendant at runtime, no rebuild:
+
+| Attribute | Values |
+|---|---|
+| `data-theme` | `light` · `dark` |
+| `data-gray` | `slate` · `neutral` · `stone` |
+| `data-brand` | `blue` · `violet` · `emerald` · `orange` · `mono` · `teal` |
+| `data-radius` | `default` · `sharp` · `soft` · `pill` |
+| `data-density` | `default` · `compact` · `comfortable` |
+| `data-font` | `geist` · `plex` · `system` |
+
+Full reference (color/radius/shadow/typography/spacing/motion/density tokens with live swatches that react to the switches above): see the **Design tokens** page in the docs app at `/tokens` (run `pnpm -C apps/docs dev`).
 
 If you only want the design tokens (no Tailwind layer), import the tokens sheet directly:
 
 ```css
-@import "@plain-ds/ui/tokens.css";
+@import "@plain-design-system/ui/tokens.css";
 ```
 
 ## License

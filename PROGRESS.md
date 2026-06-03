@@ -25,7 +25,7 @@ A neutral, minimal, token-driven design system built as a **portfolio + learning
 - [x] Per-format type resolution in `exports` field (modern conditional exports pattern)
 - [x] `packages/ui/src/preset.css` — initial Tailwind v4 `@theme {}` with 6 color families + flat semantic tokens. Build script copies it to `dist/preset.css`. *Superseded 2026-05-14 — see "Adopted user-provided tokens.css" entry below.*
 - [x] **Button** component — `packages/ui/src/components/Button.tsx`. Wraps Base UI's `Button` primitive. Variants: `primary` / `secondary` / `destructive` / `ghost`. Sizes: `sm` / `md` / `lg`. `forwardRef<HTMLElement>` to match Base UI. `className` narrowed to `string`. Handles both `disabled:` and `data-[disabled]:` states. Exported from `src/index.ts` along with `ButtonProps` type.
-- [x] **`apps/docs`** — Next.js 16 + MDX scaffold consuming `@plain-ds/ui` via `workspace:*`. Tailwind v4 wired through `@tailwindcss/postcss`; `globals.css` imports `@plain-ds/ui/preset.css` and uses `@source "../../../packages/ui/src/**/*.{ts,tsx}"` so Tailwind picks up classes from the lib source (no rebuild needed during dev). Gallery at `app/page.tsx` renders Button variants × sizes × states + className-override examples. `pnpm -C apps/docs dev` boots on port 3000.
+- [x] **`apps/docs`** — Next.js 16 + MDX scaffold consuming `@plain-design-system/ui` via `workspace:*`. Tailwind v4 wired through `@tailwindcss/postcss`; `globals.css` imports `@plain-design-system/ui/preset.css` and uses `@source "../../../packages/ui/src/**/*.{ts,tsx}"` so Tailwind picks up classes from the lib source (no rebuild needed during dev). Gallery at `app/page.tsx` renders Button variants × sizes × states + className-override examples. `pnpm -C apps/docs dev` boots on port 3000.
 - [x] **Adopted user-provided `tokens.css`** (full design-token sheet, vendored at `packages/ui/src/tokens.css`). 558 lines of `:root` / `[data-*]` rules covering multi-gray (slate/neutral/stone), multi-brand (blue/violet/emerald/orange/mono), light + dark themes, multi-radius (default/sharp/soft/pill), multi-density (default/compact/comfortable), multi-font (geist/plex/system), plus typography / spacing / shadow / motion scales. Registered with Tailwind v4 via `@theme inline {}` in `preset.css` so every utility resolves through `var(...)` and switches live with `[data-*]` attributes (no rebuild). Button + docs gallery updated to the new token-aligned utility names (`bg-bg-brand`, `text-text-on-brand`, `shadow-focus`, etc.). Docs `<html>` sets all six data-attribute defaults. **This also closed spec §7 Phase 2** (typography, spacing, radius, shadow, motion primitives are all present in tokens.css).
 - [x] **MVP batch 1 components** (2026-05-25): all eight components from §8 Task 1 shipped, following the Button pattern (Base UI primitive + `cn()` + Tailwind utilities that read from `tokens.css`).
   - **`Input`** — wraps Base UI's `Input`. Sizes `sm`/`md`/`lg` driven by `--control-h-*` / `--control-px-*`. `invalid` prop sets `aria-invalid` and switches border to `border-border-danger` with a red focus ring via `color-mix` on `--color-bg-danger-strong`.
@@ -46,7 +46,7 @@ A neutral, minimal, token-driven design system built as a **portfolio + learning
   - **`DropdownMenu`** — wraps Base UI `Menu`. Compound `{ Root, Trigger, Content, Item, CheckboxItem, RadioGroup, RadioItem, Group, Label, Separator }`. `Content` pre-composes Portal → Positioner → Popup. `CheckboxItem` / `RadioItem` reserve `pl-7` for a leading indicator icon (check / dot) positioned absolutely at `left-2`, matching the Select item layout. `Trigger` is the raw Base UI primitive so consumers use `render` to swap to `<Button>`.
   - **`Skeleton`** — pure CSS. Tailwind's built-in `animate-pulse` over `bg-bg-tertiary`. Shapes `line` (h-4 w-full rounded-sm), `circle` (rounded-full, no default size — caller picks via className), `block` (rounded-md, no default size). Marked `aria-hidden="true"`.
   - All seven exported from `src/index.ts` with their `*Props` types. `apps/docs/app/page.tsx` wraps the gallery in `<Toast.Provider><Tooltip.Provider>` and adds a section per component (Modal has a destructive-confirm example, DropdownMenu exercises CheckboxItem + RadioGroup, Toast has a `ToastDemo` child component that calls `useToast().add()`).
-- [x] **ThemeBar — live token-switching UI in docs** (2026-05-25). Replaces the DevTools-snippet section. New file `apps/docs/app/ThemeBar.tsx` ("use client"): a sticky-top bar with six dropdowns (Theme / Gray / Brand / Radius / Density / Font) plus a Reset button. Each dropdown is a `<Select>` from `@plain-ds/ui` — dogfooding the lib's own primitive in the docs. On change, calls `document.documentElement.setAttribute(attr, value)` and persists the full state object to `localStorage` under key `plain-ds:theme`. **Flash-of-default avoidance:** `apps/docs/app/layout.tsx` injects a tiny synchronous `<script>` in `<head>` (via `dangerouslySetInnerHTML`) that reads localStorage and re-applies the data-attributes before first paint. Without that pre-paint script, the page would briefly render in the defaults (light/slate/orange/default/default/geist) before the React `useEffect` swapped them in on mount.
+- [x] **ThemeBar — live token-switching UI in docs** (2026-05-25). Replaces the DevTools-snippet section. New file `apps/docs/app/ThemeBar.tsx` ("use client"): a sticky-top bar with six dropdowns (Theme / Gray / Brand / Radius / Density / Font) plus a Reset button. Each dropdown is a `<Select>` from `@plain-design-system/ui` — dogfooding the lib's own primitive in the docs. On change, calls `document.documentElement.setAttribute(attr, value)` and persists the full state object to `localStorage` under key `plain-ds:theme`. **Flash-of-default avoidance:** `apps/docs/app/layout.tsx` injects a tiny synchronous `<script>` in `<head>` (via `dangerouslySetInnerHTML`) that reads localStorage and re-applies the data-attributes before first paint. Without that pre-paint script, the page would briefly render in the defaults (light/slate/orange/default/default/geist) before the React `useEffect` swapped them in on mount.
 
 ### Todo (in order)
 - [ ] Codify component-authoring styleguide (see §10 "In-flight items" — three sub-decisions still pending)
@@ -144,7 +144,7 @@ plain-design-system/
 │
 ├── packages/
 │   └── ui/
-│       ├── package.json            # name: @plain-ds/ui, exports per-format + ./preset.css + ./tokens.css, peerDeps: react/dom/tailwind/base-ui, deps: clsx + tailwind-merge. build: `tsup && cp src/preset.css dist/ && cp src/tokens.css dist/`
+│       ├── package.json            # name: @plain-design-system/ui, exports per-format + ./preset.css + ./tokens.css, peerDeps: react/dom/tailwind/base-ui, deps: clsx + tailwind-merge. build: `tsup && cp src/preset.css dist/ && cp src/tokens.css dist/`
 │       ├── tsconfig.json           # extends ../../tsconfig.base.json, rootDir/outDir set
 │       ├── tsup.config.ts          # entry: src/index.ts, format: [esm, cjs], dts: true, external: peerDeps
 │       ├── src/
@@ -175,12 +175,12 @@ plain-design-system/
 │           ├── index.cjs + .map    # CJS bundle
 │           ├── index.d.ts          # ESM types
 │           ├── index.d.cts         # CJS types
-│           ├── preset.css          # copied from src/preset.css, exported as `@plain-ds/ui/preset.css` (full Tailwind+tokens)
-│           └── tokens.css          # copied from src/tokens.css, exported as `@plain-ds/ui/tokens.css` (tokens only, no Tailwind wrapper)
+│           ├── preset.css          # copied from src/preset.css, exported as `@plain-design-system/ui/preset.css` (full Tailwind+tokens)
+│           └── tokens.css          # copied from src/tokens.css, exported as `@plain-design-system/ui/tokens.css` (tokens only, no Tailwind wrapper)
 │
 └── apps/
     └── docs/
-        ├── package.json            # @plain-ds/docs, workspace:* dep on @plain-ds/ui, Next.js 16 + MDX + Tailwind v4
+        ├── package.json            # @plain-design-system/docs, workspace:* dep on @plain-design-system/ui, Next.js 16 + MDX + Tailwind v4
         ├── tsconfig.json           # extends tsconfig.base.json, jsx: preserve, moduleResolution: bundler, Next plugin
         ├── next.config.mjs         # withMDX wrapper, pageExtensions: [ts, tsx, mdx]
         ├── postcss.config.mjs      # @tailwindcss/postcss plugin
@@ -235,8 +235,8 @@ ls packages/ui/dist/
 node --input-type=module -e "
   import { createRequire } from 'node:module';
   const require = createRequire('\${PWD}/packages/ui/');
-  console.log(require.resolve('@plain-ds/ui/preset.css'));
-  console.log(require.resolve('@plain-ds/ui/tokens.css'));
+  console.log(require.resolve('@plain-design-system/ui/preset.css'));
+  console.log(require.resolve('@plain-design-system/ui/tokens.css'));
 "
 # → prints absolute paths to dist/preset.css and dist/tokens.css
 
@@ -277,11 +277,11 @@ All seven shipped: Modal, Toast, Tooltip, Tabs, Alert, DropdownMenu, Skeleton. S
 
 ### Task 3: Theme/density/brand toggle UI in `apps/docs` ✅ DONE 2026-05-25
 
-Shipped as `apps/docs/app/ThemeBar.tsx`. Six dropdowns (Theme / Gray / Brand / Radius / Density / Font), each a `Select` from `@plain-ds/ui`. Sticky to top of `<main>`. State persists in `localStorage` under `plain-ds:theme` and is re-applied pre-paint via an inline `<script>` in `layout.tsx`. Reset button restores defaults. See "ThemeBar" entry under §2 Done.
+Shipped as `apps/docs/app/ThemeBar.tsx`. Six dropdowns (Theme / Gray / Brand / Radius / Density / Font), each a `Select` from `@plain-design-system/ui`. Sticky to top of `<main>`. State persists in `localStorage` under `plain-ds:theme` and is re-applied pre-paint via an inline `<script>` in `layout.tsx`. Reset button restores defaults. See "ThemeBar" entry under §2 Done.
 
 ### Task 4: Polish for first publish
 
-- Add `@source "node_modules/@plain-ds/ui/dist/**/*.{js,cjs}"` to `preset.css` so consumer apps don't need to configure Tailwind sources manually (open question §10).
+- Add `@source "node_modules/@plain-design-system/ui/dist/**/*.{js,cjs}"` to `preset.css` so consumer apps don't need to configure Tailwind sources manually (open question §10).
 - Confirm or change the MIT license in `packages/ui/package.json` (§10).
 - ~~Decide if/when to bump from `@base-ui-components/react@1.0.0-rc.0` to stable.~~ → Done 2026-05-26: bumped to `@base-ui/react@^1.5.0` (package renamed at 1.0 stable; old scope deprecated).
 - Decide if/when to add Turborepo for caching.
@@ -313,7 +313,7 @@ Shipped as `apps/docs/app/ThemeBar.tsx`. Six dropdowns (Theme / Gray / Brand / R
 - ~~Decide on docs framework (Storybook vs Next.js) when scaffolding `apps/docs`~~ → Decided 2026-05-14: **Next.js 16 + MDX**
 - Consider whether to add `Turborepo` for build caching once there's more than 1 package
 - License: currently `MIT` in `packages/ui/package.json` — confirm or change before first publish
-- Add a Tailwind v4 `@source` directive to `preset.css` once components ship, so consumers' Tailwind detects classes inside `node_modules/@plain-ds/ui/dist/` without per-app configuration
+- Add a Tailwind v4 `@source` directive to `preset.css` once components ship, so consumers' Tailwind detects classes inside `node_modules/@plain-design-system/ui/dist/` without per-app configuration
 - ~~Dark mode: no dark palette designed yet~~ → Resolved 2026-05-14: dark tokens are wired in `tokens.css` under `[data-theme="dark"]`. Components inherit dark-mode behavior automatically through `@theme inline`. Adding a UI toggle in `apps/docs` is still open.
 
 ### In-flight items as of 2026-05-16 (resume here next session)

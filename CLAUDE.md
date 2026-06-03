@@ -32,8 +32,8 @@ When booting the docs dev server, free the port first per the user's global rule
 
 This is a pnpm-workspaces monorepo for a token-driven React design system. Two workspaces:
 
-- `packages/ui` — the published lib `@plain-ds/ui` (Base UI + Tailwind v4 + `cn()` overrides)
-- `apps/docs` — Next.js 16 + MDX gallery that consumes `@plain-ds/ui` via `workspace:*`
+- `packages/ui` — the published lib `@plain-design-system/ui` (Base UI + Tailwind v4 + `cn()` overrides)
+- `apps/docs` — Next.js 16 + MDX gallery that consumes `@plain-design-system/ui` via `workspace:*`
 
 ### The four layers, and how they connect
 
@@ -49,7 +49,7 @@ This is a pnpm-workspaces monorepo for a token-driven React design system. Two w
    - Handle both `disabled:` and `data-[disabled]:` (Base UI uses the data-attr form)
    - Density-driven control sizing uses arbitrary values (`h-[var(--control-h-md)]`) because `--control-h-*` has no Tailwind namespace
 
-4. **`apps/docs/app/globals.css`** — `@import "@plain-ds/ui/preset.css"` plus `@source "../../../packages/ui/src/**/*.{ts,tsx}"` so Tailwind scans the lib source during docs dev (no rebuild needed on lib edits). `app/layout.tsx` sets all six `data-*` attributes on `<html>` as the runtime token-switching root.
+4. **`apps/docs/app/globals.css`** — `@import "@plain-design-system/ui/preset.css"` plus `@source "../../../packages/ui/src/**/*.{ts,tsx}"` so Tailwind scans the lib source during docs dev (no rebuild needed on lib edits). `app/layout.tsx` sets all six `data-*` attributes on `<html>` as the runtime token-switching root.
 
 ### Component-authoring rules
 
@@ -62,7 +62,7 @@ This is a pnpm-workspaces monorepo for a token-driven React design system. Two w
 ### Build / packaging shape
 
 - `tsup` emits ESM (`dist/index.js`) + CJS (`dist/index.cjs`) + per-format types (`.d.ts` / `.d.cts`). The `exports` field in `packages/ui/package.json` uses conditional `import`/`require` with per-format `types` so strict NodeNext consumers resolve correctly.
-- `src/preset.css` and `src/tokens.css` are copied to `dist/` by the build script and exposed at the subpaths `@plain-ds/ui/preset.css` and `@plain-ds/ui/tokens.css`.
+- `src/preset.css` and `src/tokens.css` are copied to `dist/` by the build script and exposed at the subpaths `@plain-design-system/ui/preset.css` and `@plain-design-system/ui/tokens.css`.
 - `sideEffects: false`, `peerDependencies` for react / react-dom / tailwindcss / @base-ui/react. `clsx` + `tailwind-merge` are regular deps.
 
 ### Stack-specific gotchas

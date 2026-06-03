@@ -4,7 +4,7 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   title: "Plain DS — Docs",
-  description: "Component gallery for @plain-ds/ui",
+  description: "Component gallery for @plain-design-system/ui",
 };
 
 export const viewport: Viewport = {

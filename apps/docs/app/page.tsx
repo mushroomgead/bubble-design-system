@@ -19,7 +19,8 @@ import {
   Toast,
   Tooltip,
   useToast,
-} from "@plain-ds/ui";
+} from "@plain-design-system/ui";
+import Link from "next/link";
 import { useState } from "react";
 import { ThemeBar } from "./ThemeBar";
 
@@ -82,6 +83,14 @@ export default function HomePage() {
               Component gallery — verifying tokens render as expected. Use the
               bar above to switch theme, brand, radius, density, gray family,
               or font live.
+            </p>
+            <p className="text-sm">
+              <Link
+                href="/tokens"
+                className="text-text-brand hover:underline underline-offset-4"
+              >
+                Design tokens reference →
+              </Link>
             </p>
           </header>
 

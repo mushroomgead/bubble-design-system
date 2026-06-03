@@ -1,6 +1,6 @@
 "use client";
 
-import { Select } from "@plain-ds/ui";
+import { Select } from "@plain-design-system/ui";
 import { useEffect, useState } from "react";
 
 type Axis = {

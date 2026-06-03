@@ -22,9 +22,9 @@ importers:
       '@next/mdx':
         specifier: ^16.2.6
         version: 16.2.6(@mdx-js/loader@3.1.1)(@mdx-js/react@3.1.1(@types/react@19.2.14)(react@19.2.6))
-      '@plain-ds/ui':
-        specifier: workspace:*
-        version: link:../../packages/ui
+      '@plain-design-system/ui':
+        specifier: ^0.1.0
+        version: 0.1.0(@base-ui/react@1.5.0(@types/react@19.2.14)(react-dom@19.2.6(react@19.2.6))(react@19.2.6))(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(tailwindcss@4.3.0)
       next:
         specifier: ^16.2.6
         version: 16.2.6(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
@@ -553,6 +553,14 @@ packages:
     engines: {node: '>= 10'}
     cpu: [x64]
     os: [win32]
+
+  '@plain-design-system/ui@0.1.0':
+    resolution: {integrity: sha512-KCf9dkYWHnenkJsi1XNMaApUlEl6/2ShUSU22wPETr89LzXS5ln03AEuaWhLKxVToC/fkzLjEZ8Q5eV5HFlYUQ==}
+    peerDependencies:
+      '@base-ui/react': '>=1.0.0'
+      react: '>=18.2'
+      react-dom: '>=18.2'
+      tailwindcss: '>=4.0'
 
   '@rollup/rollup-android-arm-eabi@4.60.3':
     resolution: {integrity: sha512-x35CNW/ANXG3hE/EZpRU8MXX1JDN86hBb2wMGAtltkz7pc6cxgjpy1OMMfDosOQ+2hWqIkag/fGok1Yady9nGw==}
@@ -1850,6 +1858,15 @@ snapshots:
 
   '@next/swc-win32-x64-msvc@16.2.6':
     optional: true
+
+  '@plain-design-system/ui@0.1.0(@base-ui/react@1.5.0(@types/react@19.2.14)(react-dom@19.2.6(react@19.2.6))(react@19.2.6))(react-dom@19.2.6(react@19.2.6))(react@19.2.6)(tailwindcss@4.3.0)':
+    dependencies:
+      '@base-ui/react': 1.5.0(@types/react@19.2.14)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
+      clsx: 2.1.1
+      react: 19.2.6
+      react-dom: 19.2.6(react@19.2.6)
+      tailwind-merge: 3.6.0
+      tailwindcss: 4.3.0
 
   '@rollup/rollup-android-arm-eabi@4.60.3':
     optional: true
