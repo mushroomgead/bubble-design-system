@@ -1,0 +1,23 @@
+/* Skeleton */
+.pds-skeleton {
+  background-color: var(--color-bg-tertiary);
+  animation: pds-skeleton-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.pds-skeleton--line {
+  height: 1rem;
+  width: 100%;
+  border-radius: var(--radius-sm);
+}
+
+.pds-skeleton--circle {
+  border-radius: var(--radius-full);
+}
+
+.pds-skeleton--block {
+  border-radius: var(--radius-md);
+}
+
+@keyframes pds-skeleton-pulse {
+  50% { opacity: 0.5; }
+}

@@ -1,6 +1,6 @@
 "use client";
 
-import { Select } from "@plain-design-system/ui";
+import { Select } from "@bubble-design-system/ui";
 import { useEffect, useState } from "react";
 
 type Axis = {
@@ -18,6 +18,12 @@ const axes: readonly Axis[] = [
     defaultValue: "light",
   },
   {
+    attr: "data-tone",
+    label: "Tone",
+    options: ["soft", "vivid", "pastel"],
+    defaultValue: "soft",
+  },
+  {
     attr: "data-gray",
     label: "Gray",
     options: ["slate", "neutral", "stone"],
@@ -27,7 +33,7 @@ const axes: readonly Axis[] = [
     attr: "data-brand",
     label: "Brand",
     options: ["blue", "violet", "emerald", "orange", "mono", "teal"],
-    defaultValue: "orange",
+    defaultValue: "teal",
   },
   {
     attr: "data-radius",
@@ -49,7 +55,7 @@ const axes: readonly Axis[] = [
   },
 ];
 
-const STORAGE_KEY = "plain-ds:theme";
+const STORAGE_KEY = "bubble-design-system:theme";
 
 type ThemeState = Record<string, string>;
 
@@ -110,13 +116,11 @@ export function ThemeBar() {
   };
 
   return (
-    <div className="sticky top-0 z-40 -mx-6 px-6 py-3 bg-bg-primary/85 backdrop-blur border-b border-border-secondary">
-      <div className="flex flex-wrap items-end gap-3">
+    <div className="docs-themebar">
+      <div className="docs-themebar__row">
         {axes.map((axis) => (
-          <label key={axis.attr} className="flex flex-col gap-1 min-w-32">
-            <span className="text-xs font-medium text-text-secondary">
-              {axis.label}
-            </span>
+          <label key={axis.attr} className="docs-themebar__axis">
+            <span className="docs-themebar__label">{axis.label}</span>
             <Select.Root
               value={state[axis.attr] ?? axis.defaultValue}
               onValueChange={(v) => update(axis.attr, v as string)}
@@ -137,7 +141,7 @@ export function ThemeBar() {
         <button
           type="button"
           onClick={reset}
-          className="ml-auto h-[var(--control-h-sm)] px-3 text-xs text-text-secondary hover:text-text-primary cursor-pointer focus-visible:outline-none focus-visible:shadow-focus rounded-md"
+          className="docs-themebar__reset"
         >
           Reset
         </button>

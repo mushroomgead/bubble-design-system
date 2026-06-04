@@ -1,0 +1,30 @@
+/* Tooltip */
+.pds-tooltip-positioner {
+  outline: none;
+  z-index: 50;
+}
+
+.pds-tooltip-popup {
+  z-index: 50;
+  max-width: 20rem;
+  border-radius: var(--radius-sm);
+  padding: 0.25rem 0.5rem;
+  font-size: var(--font-size-xs);
+  background-color: var(--color-bg-inverse);
+  color: var(--color-text-inverse);
+  box-shadow: var(--shadow-md);
+  transform-origin: var(--transform-origin);
+  transition-property: opacity, transform, scale;
+  transition-duration: var(--duration-fast);
+  transition-timing-function: var(--ease-out);
+}
+
+.pds-tooltip-popup[data-starting-style],
+.pds-tooltip-popup[data-ending-style] {
+  opacity: 0;
+  transform: scale(0.95);
+}
+
+.pds-tooltip-popup[data-instant] {
+  transition-duration: 0s;
+}

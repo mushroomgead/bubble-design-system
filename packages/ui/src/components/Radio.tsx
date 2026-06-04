@@ -5,27 +5,6 @@ import { cn } from "../utils/cn";
 
 type RadioSize = "sm" | "md" | "lg";
 
-const sizeClasses: Record<RadioSize, string> = {
-  sm: "size-4",
-  md: "size-[18px]",
-  lg: "size-5",
-};
-
-const indicatorSize: Record<RadioSize, string> = {
-  sm: "size-1.5",
-  md: "size-2",
-  lg: "size-2.5",
-};
-
-const rootClasses =
-  "inline-flex items-center justify-center shrink-0 rounded-full " +
-  "bg-bg-primary border border-border-primary " +
-  "transition-colors duration-fast ease-out cursor-pointer " +
-  "hover:border-border-brand " +
-  "focus-visible:outline-none focus-visible:shadow-focus " +
-  "data-[checked]:border-border-brand " +
-  "data-[disabled]:bg-bg-disabled data-[disabled]:border-border-secondary data-[disabled]:cursor-not-allowed data-[disabled]:hover:border-border-secondary";
-
 type BaseRadioRootProps = ComponentPropsWithoutRef<typeof BaseRadio.Root>;
 type BaseRadioGroupProps = ComponentPropsWithoutRef<typeof BaseRadioGroup>;
 
@@ -39,16 +18,10 @@ export const Radio = forwardRef<HTMLButtonElement, RadioProps>(
     return (
       <BaseRadio.Root
         ref={ref as never}
-        className={cn(rootClasses, sizeClasses[size], className)}
+        className={cn("pds-radio", `pds-radio--${size}`, className)}
         {...props}
       >
-        <BaseRadio.Indicator
-          className={cn(
-            "rounded-full bg-bg-brand",
-            indicatorSize[size],
-            "data-[unchecked]:scale-0 transition-transform duration-fast ease-out",
-          )}
-        />
+        <BaseRadio.Indicator className="pds-radio__indicator" />
       </BaseRadio.Root>
     );
   },
@@ -64,7 +37,7 @@ export const RadioGroup = forwardRef<HTMLDivElement, RadioGroupProps>(
     return (
       <BaseRadioGroup
         ref={ref}
-        className={cn("flex flex-col gap-2", className)}
+        className={cn("pds-radio-group", className)}
         {...props}
       />
     );

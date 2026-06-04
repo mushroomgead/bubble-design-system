@@ -1,0 +1,39 @@
+/*
+ * Plain Design System — top-level stylesheet.
+ *
+ * In source form this file @imports tokens.css, base.css, and each
+ * component's CSS module. The build pipeline (scripts/build-css.mjs)
+ * resolves these imports and emits a flat dist/styles.css so consumers
+ * don't need a PostCSS toolchain to use the library.
+ *
+ * Token-driven theming is preserved end-to-end: every component rule
+ * reads from CSS custom properties defined in tokens.css, so toggling
+ * [data-theme], [data-tone], [data-gray], [data-brand], [data-radius],
+ * [data-density], or [data-font] on any ancestor re-skins descendants
+ * with no rebuild.
+ */
+
+@import "./tokens.css";
+@import "./base.css";
+
+@import "./components/Alert.css";
+@import "./components/Avatar.css";
+@import "./components/Badge.css";
+@import "./components/Button.css";
+@import "./components/Card.css";
+@import "./components/Checkbox.css";
+@import "./components/Divider.css";
+@import "./components/DropdownMenu.css";
+@import "./components/Grid.css";
+@import "./components/Input.css";
+@import "./components/Modal.css";
+@import "./components/Radio.css";
+@import "./components/Segmented.css";
+@import "./components/Select.css";
+@import "./components/Skeleton.css";
+@import "./components/StatusPill.css";
+@import "./components/Switch.css";
+@import "./components/Tabs.css";
+@import "./components/Textarea.css";
+@import "./components/Toast.css";
+@import "./components/Tooltip.css";

@@ -1,0 +1,13 @@
+<svg width="220" height="56" viewBox="0 0 220 56" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Bubble">
+  <defs>
+    <linearGradient id="bubbleGradWM" x1="8" y1="8" x2="48" y2="48" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#FF8A9E"></stop>
+      <stop offset="0.25" stop-color="#FF6BA5"></stop>
+      <stop offset="0.55" stop-color="#C760D9"></stop>
+      <stop offset="1" stop-color="#8B6BE8"></stop>
+    </linearGradient>
+  </defs>
+  <circle cx="28" cy="28" r="18" fill="url(#bubbleGradWM)"></circle>
+  <circle cx="21" cy="21" r="5.2" fill="#FFFFFF" opacity="0.34"></circle>
+  <text x="60" y="36" font-family="&#39;Geist&#39;, system-ui, sans-serif" font-size="27" font-weight="600" letter-spacing="-0.6" fill="#181B23">bubble</text>
+</svg>

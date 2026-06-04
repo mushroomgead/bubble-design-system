@@ -1,8 +1,8 @@
-# Plain Design System — Progress
+# Bubble Design System — Progress
 
 > Read this first when resuming work. It catches you up on every decision, what's done, what's next, and how to verify everything still works.
 
-**Last updated:** 2026-05-25 (ThemeBar shipped — live data-attribute toggles in apps/docs with localStorage persistence)
+**Last updated:** 2026-06-04 (Removed Tailwind entirely — lib now ships a single hand-authored `styles.css` with stable BEM class names; `tailwindcss` peerDep + `tailwind-merge` runtime dep dropped; docs app also de-Tailwinded; v0.2.0 released)
 
 ---
 
@@ -15,6 +15,7 @@ A neutral, minimal, token-driven design system built as a **portfolio + learning
 ## 2. Status
 
 ### Done
+- [x] **Tailwind removed entirely — v0.2.0** (2026-06-04). The library no longer ships a Tailwind preset; it ships a single hand-authored `dist/styles.css` (63 KB) plus `dist/tokens.css` (29 KB) that consumers `@import` with zero PostCSS / Tailwind config. Components now emit stable BEM class names (`pds-btn`, `pds-btn--primary`, `pds-card__header`, …) so consumers can override defaults with plain CSS specificity instead of Tailwind utility precedence. `tailwindcss` peerDep + `@tailwindcss/postcss` + `tailwind-merge` removed. `cn()` shrunk to a clsx-only wrapper. New per-component CSS files at `src/components/*.css` are concatenated by `scripts/build-css.mjs` into the shipped `dist/styles.css`. Docs app also de-Tailwinded: globals.css now imports `styles.css` and adds a small set of `docs-*` page-chrome helpers; page.tsx + tokens/page.tsx rewritten without utility classes. See §3.13 for the full rationale.
 - [x] Monorepo skeleton (pnpm workspaces)
 - [x] Root `package.json` + `pnpm-workspace.yaml` + `.gitignore`
 - [x] `packages/ui/` scaffolded with library-style `package.json` (exports, peerDeps, sideEffects, files, publishConfig)
@@ -50,10 +51,8 @@ A neutral, minimal, token-driven design system built as a **portfolio + learning
 
 ### Todo (in order)
 - [ ] Codify component-authoring styleguide (see §10 "In-flight items" — three sub-decisions still pending)
+- [ ] Publish `@bubble-design-system/ui@0.2.0` to npm (breaking — `./preset.css` export renamed to `./styles.css`; `tailwindcss` peer dep dropped)
 - [ ] Push unpushed commits to origin
-- [ ] Polish for first publish (§8 Task 4)
-- [ ] Add a UI toggle in `apps/docs` for theme / brand / radius / density / font (currently driven via DevTools snippets)
-- [ ] Push the 2 unpushed commits to origin once the above feels stable
 
 ---
 
@@ -103,11 +102,56 @@ A neutral, minimal, token-driven design system built as a **portfolio + learning
 - **Why:** The token sheet uses plain `:root` + `[data-*]` attribute selectors so the cascade rebinds variables at runtime. If `@theme` resolved values at build time, every utility would freeze to the light/blue/slate/default state and `[data-theme="dark"]` switching would be a no-op. With `inline`, `.bg-bg-brand` compiles to `background-color: var(--color-bg-brand)` — and that variable re-resolves every time an ancestor's data-attribute changes. Verified in the docs app: toggling `document.documentElement.setAttribute("data-theme", "dark")` re-skins the gallery instantly without a rebuild.
 - **Note on non-Tailwind-namespace tokens:** `--control-h-*` and `--control-px-*` (density-driven control sizing) have no clean Tailwind namespace. Button.tsx uses arbitrary-value syntax instead: `h-[var(--control-h-md)] px-[var(--control-px-md)]`. These also respect `[data-density]` switching because the var resolves at runtime. `--space-*` is intentionally not registered — the user's spacing scale is 0.25rem-aligned so Tailwind's default `--spacing` multiplier already produces matching values.
 
-### 3.11 Drop Textarea and Card from the MVP component list
-- **Decision (2026-05-16):** remove `Textarea` and `Card` from §8 Task 1. Textarea folds into Input as a future `multiline` variant when needed. Card stays as a layout primitive expressible with Tailwind utilities and the `--card-p` / `--row-gap` density tokens — no controlled component required.
-- **Why:** §2 Design Principle "Composable, not opinionated" — a Card-as-component would prescribe structure (header/body/footer slots) that a layout primitive doesn't need. Textarea is the same control surface as Input with one prop flipped, so shipping a separate component duplicates a variant rather than earning its keep.
-- **Trade-off accepted:** Consumers who expect a `<Card>` or `<Textarea>` import by name won't find one. They compose with `<div>` + utilities, or pass `multiline` to Input. The MVP list shrinks from 10 to 8.
-- **Tokens stay:** `--card-p` and `--row-gap` remain in `tokens.css` — useful for the layout pattern even without a component wrapper.
+### 3.11 ~~Drop Textarea and Card from the MVP component list~~ → REVERSED by §3.12
+- **Original decision (2026-05-16):** remove `Textarea` and `Card` from §8 Task 1. Textarea folds into Input as a future `multiline` variant when needed. Card stays as a layout primitive expressible with Tailwind utilities and the `--card-p` / `--row-gap` density tokens — no controlled component required.
+- **Status:** Reversed on 2026-06-03 as part of the Bubble rebrand. See §3.12.
+
+### 3.12 Rebrand to Bubble — adopt soft+teal floating-pill identity (2026-06-03)
+- **Decision:** Replace the "plain" identity with **Bubble** — a soft-gray page with white pill-shaped surfaces floating via layered shadows + inset white top-highlight, accented by **teal `#00CEC8`** brand and a **pink→magenta→violet gradient blob** mark. Canonical defaults: `tone=soft · brand=teal · gray=slate · radius=default · density=default · font=geist · light`.
+- **Source:** Anthropic-bundled handoff from `claude.ai/design`, fetched as `https://api.anthropic.com/v1/design/h/wZZdIFAGPYUmVtFFYzFz3Q`. The bundle is a "bubble-design-system" project — vanilla JSX + plain CSS classes (no Base UI, no Tailwind). Its design tokens and visual spec transferred; its component code did **not** (we re-derived through our existing Base UI + Tailwind + `cn()` pattern).
+- **Net-new architectural piece — `data-tone` axis.** Three values:
+  - `soft` (default, the signature look) — pill controls via `--ctrl-radius: 9999px`, layered shadows w/ inset white top-highlight, gray page (`--color-bg-page: #ECEDEF`), white floating surfaces.
+  - `vivid` — current/flat shadcn-like look (the previous Plain identity), single-layer shadows.
+  - `pastel` — warm desaturated, off-white surfaces.
+  Wired through `@theme inline {}` like the other data-attribute axes so tone switches live in the browser with no rebuild.
+- **Net-new tokens:** `--gradient-accent` (pink→violet), `--gradient-accent-soft` (translucent overlay), `--ctrl-radius`, `--color-bg-page`, layout grid (`--grid-columns`, `--grid-gutter`, `--grid-margin*`, `--breakpoint-sm/md/lg/xl`, `--container-sm/md/lg/xl/prose`).
+- **Reversal of §3.11 — Card and Textarea reinstated.** Bubble's API ships both, and the soft-pill Card is the literal embodiment of the signature look (the floating white surface). Earned the components back. Both shipped as composable: `Card` is compound (`Card.Header` / `.Title` / `.Description` / `.Action` / `.Body` / `.Footer`); `Textarea` is a thin styled `<textarea>` mirroring Input's size + invalid props.
+- **2 more new components, both composable:**
+  - `StatusPill` — compound: `StatusPill` + `StatusPill.Indicator` + `StatusPill.Label`. Intent (`neutral|success|warning|danger|info`) drives CSS custom properties (`--pill-chip`, `--pill-text`) the sub-parts read. The colored chip is a slot — consumer can pass any inline SVG as `<StatusPill.Indicator>` children. Bubble's flat `<StatusPill intent icon text>` API was converted on composability grounds.
+  - `Segmented` — compound: `Segmented` + `Segmented.Item`. Wraps Base UI's `ToggleGroup` (single-select). Selected item flips to a white floating pill via `data-[pressed]`. Bubble's flat `<Segmented options={[...]} />` API was converted to children-based composition.
+- **Layout primitives.** `Container` (size variants sm/md/lg/xl/prose/fluid; centered with `--grid-margin` page padding) + `Grid` (12-column with `--grid-gutter` gap; tightens to `--grid-gutter-tight` below sm) + `Grid.Col` (span 1–12 / "full" with `smSpan` / `mdSpan` / `lgSpan` responsive overrides). Tailwind v4 scans the static span-class lookup tables so the classes ship without arbitrary-value gymnastics.
+- **No centralized icon module.** User decision. Bubble's bundle ships `CheckIcon`/`SunIcon`/etc. as a 10-icon namespace; we did not adopt it. Components keep their existing inline SVGs (Checkbox check + bar, Alert variant icons, Toast close, etc.). Consumers bring their own icons (Lucide is a clean visual match — same stroke weight + rounded caps).
+- **Visual retune of existing components.** Only Button needed direct edits — secondary becomes a white floating pill (`bg-bg-primary shadow-md hover:shadow-lg hover:-translate-y-px`), primary picks up the colored drop-glow under soft tone via the layered `--shadow-md`. All other components re-skin automatically through tokens. Input's `rounded-md` switched to `rounded-ctrl` so it pills in soft and stays rounded elsewhere.
+- **Assets.** `src/assets/logo-blob.svg` and `src/assets/logo-wordmark.svg` copied verbatim from the bundle and exposed via the package `exports` field as `@bubble-design-system/ui/assets/*`. Build script copies `src/assets/` → `dist/assets/`.
+- **Package rebrand.** `@plain-design-system/ui@0.1.1` → `@bubble-design-system/ui@0.1.0` (fresh start under the user's new `bubble-design-system` npm scope). `apps/docs` renamed to `@bubble-design-system/docs`, depends on the new lib via `workspace:*`. localStorage key bumped to `bubble-design-system:theme` so prior visitors don't get stale `plain-ds:theme` state. README rewritten with Bubble's narrative (5 design principles, soft tone identity, gradient blob).
+- **What's still on `@plain-design-system/ui` on npm:** version `0.1.1`, undisturbed. **Suggested follow-up** (not done automatically — user-driven): `npm deprecate @plain-design-system/ui@"*" "Renamed to @bubble-design-system/ui — install the new package."` and `npm publish --access public` from `packages/ui/`.
+
+### 3.13 Remove Tailwind, ship a single hand-authored CSS file (2026-06-04, v0.2.0)
+- **Decision:** Drop Tailwind v4 (and `tailwind-merge`) from the library and the docs app entirely. The lib now ships `dist/styles.css` — a flat, plain-CSS bundle containing the design tokens, a minimal reset, and every component rule keyed by stable BEM class names (`.pds-btn`, `.pds-btn--primary`, `.pds-card__header`, …). Consumers `@import "@bubble-design-system/ui/styles.css"` and need no PostCSS or Tailwind configuration. The `./preset.css` export is renamed to `./styles.css` — breaking; hence the `0.1.x` → `0.2.0` bump. Components stop emitting Tailwind utility strings in JSX and instead pass stable BEM names through `cn()` (which is now a thin clsx-only wrapper).
+- **Why:**
+  - **No peer dep.** Pre-removal, consumer apps were required to install `tailwindcss >= 4.0` and import the lib's preset. That's a substantial install + configuration burden for a UI library. Removing the peer dep makes adoption a single import.
+  - **Stable override surface.** With Tailwind utilities + `tailwind-merge`, consumers overrode component styling by stringing more utilities and trusting `twMerge`'s deduplication. Now they override by writing a plain CSS rule against `.pds-btn--primary` — single-class selector, specificity 0,1,0, deterministic. That's the override story design systems should ship.
+  - **No `@source` config in consumer apps.** The original setup needed Tailwind to scan the lib's bundled JS for utility classes (via `@source "./*.{js,cjs}"` in `preset.css`). That's gone — no more cross-package class detection to keep working.
+  - **Smaller runtime.** `tailwind-merge` was the heaviest runtime dep (~15 KB minified). Now the lib's only runtime dep is `clsx` (~250 bytes).
+  - **Immunity to Tailwind churn.** The v3 → v4 migration was already non-trivial. Future Tailwind majors no longer block library releases.
+- **What it cost:**
+  - The ergonomic of writing utility classes in JSX during component authoring. We now hand-author CSS for each component instead. ~233 distinct utility strings translated into ~1300 lines of CSS across 21 files. Net code volume is up; clarity is also up (the cascade is explicit).
+  - Consumers can no longer compose ad-hoc variants by stringing Tailwind utilities on a lib component at use-site (`<Button className="bg-red-500 px-10">`). They write a small CSS rule instead.
+  - README/keywords/marketing changed — the lib previously sold itself as a "Tailwind v4 design system". The new positioning is "single-stylesheet design system with token-driven theming, no build dependency".
+- **What it didn't change:**
+  - **Token-driven theming.** `tokens.css` is unchanged. Every component rule still reads `var(--color-bg-brand)`, `var(--control-h-md)`, etc. at use-site, so `data-theme` / `data-tone` / `data-gray` / `data-brand` / `data-radius` / `data-density` / `data-font` runtime switching keeps working with zero regression. Verified by booting the docs dev server and switching every axis from ThemeBar — every component re-skins instantly.
+  - **Public component API.** No props, refs, or composition shapes changed. All exports from `src/index.ts` remain stable.
+  - **Base UI integration.** Components still wrap their Base UI primitive identically.
+- **Implementation notes:**
+  - **BEM convention.** Block = `pds-<component>`. Element = `pds-<component>__<element>`. Modifier = `pds-<component>--<modifier>`. Multi-word component names are kebab-cased: `pds-status-pill`, `pds-dropdown-menu`. The block list is canonical; see `dist/styles.css` or `src/components/*.css`.
+  - **Build pipeline.** `scripts/build-css.mjs` (50-line Node script, zero dependencies) concatenates `src/tokens.css` + `src/base.css` + each `src/components/*.css` (alphabetical) into one `dist/styles.css`. It also emits a separate `dist/tokens.css` for consumers who only want the tokens. No PostCSS, no postcss-import — just `fs.readFileSync` + `fs.writeFileSync`.
+  - **`base.css`.** A minimal reset that sets `box-sizing: border-box` globally and applies `font-family: var(--font-sans)` + `color: var(--color-text-primary)` + `background-color: var(--color-bg-page)` to `<html>`. Components assume these.
+  - **`src/styles.css` source file.** A barrel that `@import`s tokens + base + every component CSS. It exists for authoring clarity and IDE preview only — consumers never see it; they receive the flattened `dist/styles.css`.
+  - **`cn()` shrink.** Was `twMerge(clsx(inputs))`; now `clsx(inputs)`. Tail-end `className` from the consumer still wins in the JSX attribute order, so override behaviour is preserved at the className level. CSS-level overrides win via plain specificity.
+  - **`tsup.config.ts`.** `tailwindcss` removed from the `external` array.
+  - **`sideEffects`.** Changed from `false` to `["./dist/styles.css", "./dist/tokens.css"]` so consumers' bundlers tree-shake the JS but keep the CSS when imported.
+  - **Docs app de-Tailwinded.** `apps/docs/postcss.config.mjs` deleted. `tailwindcss` + `@tailwindcss/postcss` removed from docs devDeps. `globals.css` now imports `styles.css` and adds ~250 lines of `docs-*` page-chrome helpers (themebar, token-row swatches, layout grids). `app/layout.tsx` body class moved into a CSS rule. `app/page.tsx` and `app/tokens/page.tsx` rewritten with `docs-*` class names — no utility soup, semantic markup. The tokens page's "How to use" section was rewritten too: the old "Tailwind utilities (recommended)" + "Raw CSS variables" pairing is now "Reference directly via var(...)" + "Use the component classes", which matches the new shipping model.
+- **Verification.** `pnpm -C packages/ui typecheck`, `pnpm -C packages/ui build`, `pnpm -C apps/docs typecheck`, `pnpm -C apps/docs build` — all pass. `grep tailwind` over `packages/ui/src`, `apps/docs/app`, and all three `package.json` files returns zero matches. The docs dev server boots cleanly; both `/` and `/tokens` return 200; the served HTML contains `pds-btn`, `pds-card`, `pds-alert`, etc.; the bundled CSS contains the BEM rules and references `--color-bg-brand` in 25+ places.
 
 ---
 
@@ -119,13 +163,11 @@ A neutral, minimal, token-driven design system built as a **portfolio + learning
 | Node | 25.9.0 (engines: `>=20`) | Runtime |
 | TypeScript | 6.0.3 | Language (with `ignoreDeprecations: "6.0"`) |
 | tsup | 8.5.1 | Library bundler (esbuild + rollup-plugin-dts) |
-| Tailwind CSS | 4.3.0 | Styling — v4 with CSS-first `@theme` config |
 | @base-ui/react | 1.5.0 | Headless primitives (peer dep) — renamed from `@base-ui-components/react` at 1.0 stable |
 | React / React DOM | 19.2.6 | Peer dep (`>=18.2`) |
-| clsx | 2.1.1 | Class composition (regular dep) |
-| tailwind-merge | 3.6.0 | Tailwind class conflict resolution (regular dep) |
+| clsx | 2.1.1 | Class composition (regular dep) — only runtime dep after Tailwind removal |
 
-**Note on Base UI rc.0:** npm flags it as deprecated, but it's still the latest published version — works fine. Bump when stable 1.0.0 ships.
+Styling is hand-authored CSS — see §3.13. The lib has no PostCSS / Tailwind / preprocessor dependency.
 
 ---
 
@@ -144,52 +186,61 @@ plain-design-system/
 │
 ├── packages/
 │   └── ui/
-│       ├── package.json            # name: @plain-design-system/ui, exports per-format + ./preset.css + ./tokens.css, peerDeps: react/dom/tailwind/base-ui, deps: clsx + tailwind-merge. build: `tsup && cp src/preset.css dist/ && cp src/tokens.css dist/`
+│       ├── package.json            # name: @bubble-design-system/ui@0.2.0, exports per-format + ./styles.css + ./tokens.css + ./assets/*, peerDeps: react/dom/@base-ui/react, deps: clsx. build: `tsup && node scripts/build-css.mjs && cp assets`
 │       ├── tsconfig.json           # extends ../../tsconfig.base.json, rootDir/outDir set
-│       ├── tsup.config.ts          # entry: src/index.ts, format: [esm, cjs], dts: true, external: peerDeps
+│       ├── tsup.config.ts          # entry: src/index.ts, format: [esm, cjs], dts: true, external: react/dom/@base-ui/react
+│       ├── scripts/
+│       │   └── build-css.mjs       # Concatenates tokens.css + base.css + components/*.css → dist/styles.css. Also copies tokens.css → dist/. Zero deps.
 │       ├── src/
 │       │   ├── index.ts            # exports cn + all components and their *Props types
-│       │   ├── tokens.css          # 558-line design-token sheet (primitives + semantics + data-attr switching). Vendored from user's design.
-│       │   ├── preset.css          # @import "tailwindcss" + @import "./tokens.css" + @theme inline {} mapping tokens to Tailwind utilities
-│       │   ├── components/
-│       │   │   ├── Button.tsx      # Base UI Button + variants/sizes via cn(); classes use --color-bg-*/text-*/border-* utilities
-│       │   │   ├── Input.tsx       # Base UI Input; size + invalid (aria-invalid); danger focus ring via color-mix
-│       │   │   ├── Checkbox.tsx    # Base UI Checkbox.Root/.Indicator; check + indeterminate icons toggled via group-data-[indeterminate]
-│       │   │   ├── Radio.tsx       # Base UI Radio.Root/.Indicator + RadioGroup; indicator dot scales in
-│       │   │   ├── Switch.tsx      # Base UI Switch.Root/.Thumb; track recolors and thumb translates on data-[checked]
-│       │   │   ├── Select.tsx      # Compound: { Root, Trigger, Value, Content, Item }. Content pre-wires Portal→Positioner→Popup.
-│       │   │   ├── Badge.tsx       # Pure CSS span; neutral/brand/success/warning/danger × sm/md/lg
-│       │   │   ├── Avatar.tsx      # Base UI Avatar.Root/.Image/.Fallback; exposed as Avatar + Avatar.Image + Avatar.Fallback
-│       │   │   ├── Divider.tsx     # Base UI Separator; horizontal/vertical via orientation prop
-│       │   │   ├── Modal.tsx       # Base UI Dialog; { Root, Trigger, Close, Content, Title, Description }. Content = Portal→Backdrop→Popup
-│       │   │   ├── Toast.tsx       # Base UI Toast manager; { Provider, Viewport, Toaster } + useToast hook (re-export of BaseToast.useToastManager)
-│       │   │   ├── Tooltip.tsx     # Base UI Tooltip; { Provider, Root, Trigger, Content }. Inverse bg/text so it adapts to theme
-│       │   │   ├── Tabs.tsx        # Base UI Tabs; Tabs (Root) with .List / .Tab / .Panel attached. List auto-renders Indicator
-│       │   │   ├── Alert.tsx       # Pure CSS div; info/success/warning/danger; default icon per variant; title slot via ReactNode (omits native title attr)
-│       │   │   ├── DropdownMenu.tsx# Base UI Menu; { Root, Trigger, Content, Item, CheckboxItem, RadioGroup, RadioItem, Group, Label, Separator }
-│       │   │   └── Skeleton.tsx    # Pure CSS; animate-pulse on bg-bg-tertiary; shapes line/circle/block
+│       │   ├── tokens.css          # ~750-line design-token sheet (primitives + semantics + data-attr switching). Vendored from user's design.
+│       │   ├── base.css            # Minimal reset: box-sizing, html font/color, button font-family inheritance
+│       │   ├── styles.css          # Source barrel: @import tokens + base + every component CSS. Build flattens this into dist/styles.css.
+│       │   ├── assets/             # logo-blob.svg + logo-wordmark.svg — copied to dist/assets/ by build script
+│       │   ├── components/         # One .tsx + one .css per component. JSX emits BEM class names; CSS owns the rules.
+│       │   │   ├── Alert.tsx + .css        # info/success/warning/danger; default icon per variant; title slot via ReactNode (omits native title attr)
+│       │   │   ├── Avatar.tsx + .css       # Base UI Avatar.Root/.Image/.Fallback; sizes sm/md/lg/xl
+│       │   │   ├── Badge.tsx + .css        # neutral/brand/success/warning/danger × sm/md/lg
+│       │   │   ├── Button.tsx + .css       # primary/secondary/destructive/ghost × sm/md/lg; floating-pill hover lift on primary/secondary
+│       │   │   ├── Card.tsx + .css         # elevated/muted root + Header/Title/Description/Action/Body/Footer subcomponents
+│       │   │   ├── Checkbox.tsx + .css     # Base UI Checkbox.Root/.Indicator; check + indeterminate icons toggled via [data-indeterminate] selectors
+│       │   │   ├── Divider.tsx + .css      # Base UI Separator; horizontal/vertical via orientation prop
+│       │   │   ├── DropdownMenu.tsx + .css # Base UI Menu; { Root, Trigger, Content, Item, CheckboxItem, RadioGroup, RadioItem, Group, Label, Separator }
+│       │   │   ├── Grid.tsx + .css         # Container (size variants) + Grid (12-col with gutter variants) + Grid.Col (span + responsive smSpan/mdSpan/lgSpan)
+│       │   │   ├── Input.tsx + .css        # Base UI Input; size + invalid (aria-invalid); danger focus ring via color-mix
+│       │   │   ├── Modal.tsx + .css        # Base UI Dialog; { Root, Trigger, Close, Content, Title, Description }. Content = Portal→Backdrop→Popup
+│       │   │   ├── Radio.tsx + .css        # Base UI Radio.Root/.Indicator + RadioGroup; indicator dot scales in on [data-unchecked]
+│       │   │   ├── Segmented.tsx + .css    # Compound: Segmented + Segmented.Item on Base UI ToggleGroup
+│       │   │   ├── Select.tsx + .css       # Compound: { Root, Trigger, Value, Content, Item }. Content pre-wires Portal→Positioner→Popup.
+│       │   │   ├── Skeleton.tsx + .css     # Pure CSS; pulse animation; shapes line/circle/block
+│       │   │   ├── StatusPill.tsx + .css   # Compound: StatusPill + Indicator + Label; intent drives --pill-chip + --pill-text CSS vars
+│       │   │   ├── Switch.tsx + .css       # Base UI Switch.Root/.Thumb; track recolors and thumb translates on [data-checked]
+│       │   │   ├── Tabs.tsx + .css         # Base UI Tabs; List auto-renders Indicator using --active-tab-width/--active-tab-left
+│       │   │   ├── Textarea.tsx + .css     # Plain styled <textarea>; size + invalid; min-heights via per-size CSS
+│       │   │   ├── Toast.tsx + .css        # Base UI Toast manager; { Provider, Viewport, Toaster } + useToast hook
+│       │   │   └── Tooltip.tsx + .css      # Base UI Tooltip; { Provider, Root, Trigger, Content }. Inverse bg/text so it adapts to theme
 │       │   └── utils/
-│       │       └── cn.ts           # the clsx + tailwind-merge utility
+│       │       └── cn.ts           # clsx-only wrapper (tailwind-merge removed in v0.2.0)
 │       └── dist/                   # generated by `pnpm build` — gitignored
 │           ├── index.js + .map     # ESM bundle
 │           ├── index.cjs + .map    # CJS bundle
 │           ├── index.d.ts          # ESM types
 │           ├── index.d.cts         # CJS types
-│           ├── preset.css          # copied from src/preset.css, exported as `@plain-design-system/ui/preset.css` (full Tailwind+tokens)
-│           └── tokens.css          # copied from src/tokens.css, exported as `@plain-design-system/ui/tokens.css` (tokens only, no Tailwind wrapper)
+│           ├── styles.css          # ~63 KB flat stylesheet: tokens + base + every component rule. Exported as `@bubble-design-system/ui/styles.css`.
+│           ├── tokens.css          # ~25 KB tokens-only file. Exported as `@bubble-design-system/ui/tokens.css`.
+│           └── assets/             # logo-blob.svg + logo-wordmark.svg. Exported as `@bubble-design-system/ui/assets/*`.
 │
 └── apps/
     └── docs/
-        ├── package.json            # @plain-design-system/docs, workspace:* dep on @plain-design-system/ui, Next.js 16 + MDX + Tailwind v4
+        ├── package.json            # @bubble-design-system/docs, workspace:* dep on @bubble-design-system/ui, Next.js 16 + MDX. No Tailwind.
         ├── tsconfig.json           # extends tsconfig.base.json, jsx: preserve, moduleResolution: bundler, Next plugin
         ├── next.config.mjs         # withMDX wrapper, pageExtensions: [ts, tsx, mdx]
-        ├── postcss.config.mjs      # @tailwindcss/postcss plugin
-        ├── .gitignore              # .next/, out/, next-env.d.ts, tsconfig.tsbuildinfo
         └── app/
-            ├── layout.tsx          # <html> sets data-* defaults + inline <script> reads localStorage["plain-ds:theme"] pre-paint to avoid flash
-            ├── globals.css         # @import preset.css + @source pointing at packages/ui/src
-            ├── ThemeBar.tsx        # "use client" — 6 Select dropdowns (theme/gray/brand/radius/density/font) + Reset; persists to localStorage
-            └── page.tsx            # Component gallery — "use client", wrapped in Toast.Provider + Tooltip.Provider, ThemeBar at top
+            ├── layout.tsx          # <html> sets all 7 data-* defaults + inline <script> reads localStorage["bubble-design-system:theme"] pre-paint
+            ├── globals.css         # @import "@bubble-design-system/ui/styles.css" + ~250 lines of docs-* helpers (themebar, layouts, token rows, code blocks)
+            ├── ThemeBar.tsx        # "use client" — 7 Select dropdowns (theme/tone/gray/brand/radius/density/font) + Reset; persists to localStorage
+            ├── page.tsx            # Component gallery — "use client", wrapped in Toast.Provider + Tooltip.Provider, ThemeBar at top
+            └── tokens/page.tsx     # Token reference with live swatches that react to data-* switches
 ```
 
 ---
@@ -221,42 +272,49 @@ pnpm -C packages/ui typecheck
 # 3. Build packages/ui
 pnpm -C packages/ui build
 # → expect:
-#   ESM dist/index.js      ~1.74 KB
-#   CJS dist/index.cjs     ~1.81 KB
-#   DTS dist/index.d.ts    ~971 B
-#   DTS dist/index.d.cts   ~971 B
-#   (then the cp steps copy preset.css and tokens.css silently)
+#   CJS dist/index.cjs     ~28 KB
+#   ESM dist/index.js      ~26 KB
+#   DTS dist/index.d.ts    ~18 KB
+#   DTS dist/index.d.cts   ~18 KB
+#   ✓ dist/styles.css      ~63 KB (21 components + tokens + base)
+#   ✓ dist/tokens.css      ~25 KB
 
 # 4. Confirm dist contents
 ls packages/ui/dist/
-# → index.js, index.cjs, index.d.ts, index.d.cts + sourcemaps + preset.css + tokens.css
+# → index.js, index.cjs, index.d.ts, index.d.cts + sourcemaps + styles.css + tokens.css + assets/
 
 # 5. Confirm both CSS files resolve via the package exports
 node --input-type=module -e "
   import { createRequire } from 'node:module';
-  const require = createRequire('\${PWD}/packages/ui/');
-  console.log(require.resolve('@plain-design-system/ui/preset.css'));
-  console.log(require.resolve('@plain-design-system/ui/tokens.css'));
+  const require = createRequire('${PWD}/packages/ui/');
+  console.log(require.resolve('@bubble-design-system/ui/styles.css'));
+  console.log(require.resolve('@bubble-design-system/ui/tokens.css'));
 "
-# → prints absolute paths to dist/preset.css and dist/tokens.css
+# → prints absolute paths to dist/styles.css and dist/tokens.css
 
-# 6. Typecheck + boot the docs app
+# 6. Confirm no Tailwind leak
+grep -r 'tailwind' packages/ui/src apps/docs/app 2>/dev/null
+grep tailwind packages/ui/package.json apps/docs/package.json
+# → both should return nothing
+
+# 7. Typecheck + build the docs app
 pnpm -C apps/docs typecheck
 # → expect no output (success)
+pnpm -C apps/docs build
+# → "✓ Compiled successfully" + "✓ Generating static pages"
+
+# 8. Boot the docs dev server
 lsof -ti :3000 | xargs kill -9 2>/dev/null; true
 pnpm -C apps/docs dev
 # → "Ready in ~300ms" on http://localhost:3000 (Next.js 16 Turbopack)
-#   The Button gallery should render with all 4 variants × 3 sizes
-#   on the slate/blue/default/default/geist defaults.
 
-# 7. Confirm runtime token switching works (open http://localhost:3000 in a browser, then in DevTools console):
+# 9. Confirm runtime token switching works (open http://localhost:3000 in a browser, then in DevTools console):
 #   document.documentElement.setAttribute("data-theme", "dark");
 #   document.documentElement.setAttribute("data-brand", "violet");
 #   document.documentElement.setAttribute("data-radius", "pill");
 #   document.documentElement.setAttribute("data-density", "compact");
 # → gallery re-skins instantly without reload. If anything stays frozen,
-#   @theme inline in preset.css was set up wrong (values were inlined
-#   at build time instead of kept as var(...) refs).
+#   a component CSS rule hard-coded a value instead of var(--…).
 ```
 
 If any step fails, that's a regression. Compare against the file states described in `Files map` above.
@@ -313,7 +371,7 @@ Shipped as `apps/docs/app/ThemeBar.tsx`. Six dropdowns (Theme / Gray / Brand / R
 - ~~Decide on docs framework (Storybook vs Next.js) when scaffolding `apps/docs`~~ → Decided 2026-05-14: **Next.js 16 + MDX**
 - Consider whether to add `Turborepo` for build caching once there's more than 1 package
 - License: currently `MIT` in `packages/ui/package.json` — confirm or change before first publish
-- Add a Tailwind v4 `@source` directive to `preset.css` once components ship, so consumers' Tailwind detects classes inside `node_modules/@plain-design-system/ui/dist/` without per-app configuration
+- ~~Add a Tailwind v4 `@source` directive to `preset.css`~~ → Moot 2026-06-04: Tailwind removed (§3.13). Consumers now import a flat `styles.css`; no scanning required.
 - ~~Dark mode: no dark palette designed yet~~ → Resolved 2026-05-14: dark tokens are wired in `tokens.css` under `[data-theme="dark"]`. Components inherit dark-mode behavior automatically through `@theme inline`. Adding a UI toggle in `apps/docs` is still open.
 
 ### In-flight items as of 2026-05-16 (resume here next session)

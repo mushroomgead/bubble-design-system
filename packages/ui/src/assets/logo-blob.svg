@@ -1,0 +1,12 @@
+<svg width="120" height="120" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Bubble logo mark">
+  <defs>
+    <linearGradient id="bubbleGrad" x1="14" y1="14" x2="106" y2="106" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#FF8A9E"></stop>
+      <stop offset="0.25" stop-color="#FF6BA5"></stop>
+      <stop offset="0.55" stop-color="#C760D9"></stop>
+      <stop offset="1" stop-color="#8B6BE8"></stop>
+    </linearGradient>
+  </defs>
+  <circle cx="60" cy="60" r="46" fill="url(#bubbleGrad)"></circle>
+  <circle cx="44" cy="44" r="13" fill="#FFFFFF" opacity="0.32"></circle>
+</svg>

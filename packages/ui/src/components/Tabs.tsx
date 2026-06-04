@@ -2,27 +2,6 @@ import { forwardRef, type ComponentPropsWithoutRef } from "react";
 import { Tabs as BaseTabs } from "@base-ui/react/tabs";
 import { cn } from "../utils/cn";
 
-const rootClasses = "w-full";
-
-const listClasses =
-  "relative inline-flex items-center gap-1 border-b border-border-secondary";
-
-const tabClasses =
-  "relative inline-flex items-center justify-center h-9 px-3 text-sm font-medium " +
-  "text-text-secondary cursor-pointer select-none " +
-  "transition-colors duration-fast ease-out " +
-  "hover:text-text-primary " +
-  "focus-visible:outline-none focus-visible:shadow-focus rounded-sm " +
-  "data-[selected]:text-text-primary " +
-  "data-[disabled]:text-text-disabled data-[disabled]:cursor-not-allowed data-[disabled]:hover:text-text-disabled";
-
-const indicatorClasses =
-  "absolute left-0 -bottom-px h-0.5 w-[var(--active-tab-width)] " +
-  "translate-x-[var(--active-tab-left)] bg-bg-brand " +
-  "transition-[transform,width] duration-normal ease-out";
-
-const panelClasses = "py-4 outline-none focus-visible:shadow-focus rounded-sm";
-
 type RootProps = ComponentPropsWithoutRef<typeof BaseTabs.Root>;
 type ListProps = ComponentPropsWithoutRef<typeof BaseTabs.List>;
 type TabProps = ComponentPropsWithoutRef<typeof BaseTabs.Tab>;
@@ -37,7 +16,7 @@ const TabsRoot = forwardRef<HTMLDivElement, TabsRootProps>(
     return (
       <BaseTabs.Root
         ref={ref}
-        className={cn(rootClasses, className)}
+        className={cn("pds-tabs", className)}
         {...props}
       />
     );
@@ -54,11 +33,11 @@ const TabsList = forwardRef<HTMLDivElement, TabsListProps>(
     return (
       <BaseTabs.List
         ref={ref}
-        className={cn(listClasses, className)}
+        className={cn("pds-tabs__list", className)}
         {...props}
       >
         {children}
-        <BaseTabs.Indicator className={indicatorClasses} />
+        <BaseTabs.Indicator className="pds-tabs__indicator" />
       </BaseTabs.List>
     );
   },
@@ -74,7 +53,7 @@ const TabsTab = forwardRef<HTMLButtonElement, TabsTabProps>(
     return (
       <BaseTabs.Tab
         ref={ref as never}
-        className={cn(tabClasses, className)}
+        className={cn("pds-tabs__tab", className)}
         {...props}
       />
     );
@@ -91,7 +70,7 @@ const TabsPanel = forwardRef<HTMLDivElement, TabsPanelProps>(
     return (
       <BaseTabs.Panel
         ref={ref}
-        className={cn(panelClasses, className)}
+        className={cn("pds-tabs__panel", className)}
         {...props}
       />
     );

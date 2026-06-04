@@ -1,0 +1,103 @@
+/* Button */
+.pds-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border: 0;
+  border-radius: var(--ctrl-radius);
+  font-family: inherit;
+  font-weight: var(--font-weight-medium);
+  white-space: nowrap;
+  user-select: none;
+  cursor: pointer;
+  transition-property: background-color, color, box-shadow, transform;
+  transition-duration: var(--duration-fast);
+  transition-timing-function: var(--ease-out);
+}
+
+.pds-btn:focus-visible {
+  outline: none;
+  box-shadow: var(--shadow-focus);
+}
+
+.pds-btn:disabled,
+.pds-btn[data-disabled] {
+  opacity: 0.55;
+  pointer-events: none;
+  cursor: not-allowed;
+}
+
+/* variants */
+.pds-btn--primary {
+  background-color: var(--color-bg-brand);
+  color: var(--color-text-on-brand);
+  box-shadow: var(--shadow-sm);
+}
+.pds-btn--primary:hover {
+  background-color: var(--color-bg-brand-hover);
+  box-shadow: var(--shadow-md);
+  transform: translateY(-1px);
+}
+.pds-btn--primary:active {
+  background-color: var(--color-bg-brand-active);
+  transform: translateY(0);
+  box-shadow: var(--shadow-xs);
+}
+
+.pds-btn--secondary {
+  background-color: var(--color-bg-primary);
+  color: var(--color-text-primary);
+  box-shadow: var(--shadow-md);
+}
+.pds-btn--secondary:hover {
+  box-shadow: var(--shadow-lg);
+  transform: translateY(-1px);
+}
+.pds-btn--secondary:active {
+  box-shadow: var(--shadow-sm);
+  transform: translateY(0);
+}
+
+.pds-btn--destructive {
+  background-color: var(--color-bg-danger-strong);
+  color: var(--color-text-on-danger);
+  box-shadow: var(--shadow-sm);
+}
+.pds-btn--destructive:hover {
+  background-color: var(--color-bg-danger-hover);
+  box-shadow: var(--shadow-md);
+  transform: translateY(-1px);
+}
+.pds-btn--destructive:active {
+  transform: translateY(0);
+  box-shadow: var(--shadow-xs);
+}
+
+.pds-btn--ghost {
+  background-color: transparent;
+  color: var(--color-text-primary);
+}
+.pds-btn--ghost:hover {
+  background-color: var(--color-bg-hover);
+}
+.pds-btn--ghost:active {
+  background-color: var(--color-bg-pressed);
+}
+
+/* sizes */
+.pds-btn--sm {
+  height: var(--control-h-sm);
+  padding-inline: var(--control-px-sm);
+  font-size: var(--font-size-xs);
+}
+.pds-btn--md {
+  height: var(--control-h-md);
+  padding-inline: var(--control-px-md);
+  font-size: var(--font-size-sm);
+}
+.pds-btn--lg {
+  height: var(--control-h-lg);
+  padding-inline: var(--control-px-lg);
+  font-size: var(--font-size-md);
+}

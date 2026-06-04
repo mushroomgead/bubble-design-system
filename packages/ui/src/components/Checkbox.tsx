@@ -4,28 +4,6 @@ import { cn } from "../utils/cn";
 
 type CheckboxSize = "sm" | "md" | "lg";
 
-const sizeClasses: Record<CheckboxSize, string> = {
-  sm: "size-4 rounded-xs",
-  md: "size-[18px] rounded-sm",
-  lg: "size-5 rounded-sm",
-};
-
-const rootClasses =
-  "inline-flex items-center justify-center shrink-0 " +
-  "bg-bg-primary border border-border-primary text-text-on-brand " +
-  "transition-colors duration-fast ease-out cursor-pointer " +
-  "hover:border-border-brand " +
-  "focus-visible:outline-none focus-visible:shadow-focus " +
-  "data-[checked]:bg-bg-brand data-[checked]:border-border-brand " +
-  "data-[indeterminate]:bg-bg-brand data-[indeterminate]:border-border-brand " +
-  "data-[disabled]:bg-bg-disabled data-[disabled]:border-border-secondary data-[disabled]:cursor-not-allowed data-[disabled]:hover:border-border-secondary";
-
-const iconSize: Record<CheckboxSize, string> = {
-  sm: "size-3",
-  md: "size-3.5",
-  lg: "size-4",
-};
-
 type BaseCheckboxRootProps = ComponentPropsWithoutRef<typeof BaseCheckbox.Root>;
 
 export interface CheckboxProps extends Omit<BaseCheckboxRootProps, "className" | "render"> {
@@ -38,14 +16,14 @@ export const Checkbox = forwardRef<HTMLButtonElement, CheckboxProps>(
     return (
       <BaseCheckbox.Root
         ref={ref as never}
-        className={cn(rootClasses, sizeClasses[size], className)}
+        className={cn("pds-checkbox", `pds-checkbox--${size}`, className)}
         {...props}
       >
-        <BaseCheckbox.Indicator className="flex items-center justify-center group">
+        <BaseCheckbox.Indicator className="pds-checkbox__indicator">
           <svg
             viewBox="0 0 16 16"
             fill="none"
-            className={cn(iconSize[size], "group-data-[indeterminate]:hidden")}
+            className="pds-checkbox__icon pds-checkbox__icon--check"
             aria-hidden="true"
           >
             <path
@@ -59,7 +37,7 @@ export const Checkbox = forwardRef<HTMLButtonElement, CheckboxProps>(
           <svg
             viewBox="0 0 16 16"
             fill="none"
-            className={cn(iconSize[size], "hidden group-data-[indeterminate]:block")}
+            className="pds-checkbox__icon pds-checkbox__icon--indeterminate"
             aria-hidden="true"
           >
             <path

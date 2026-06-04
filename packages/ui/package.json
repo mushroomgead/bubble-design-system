@@ -1,16 +1,18 @@
 {
-  "name": "@plain-design-system/ui",
-  "version": "0.1.1",
-  "description": "Plain Design System — components built on Base UI + Tailwind v4",
+  "name": "@bubble-design-system/ui",
+  "version": "0.2.0",
+  "description": "Plain Design System — soft + teal floating-pill UI on Base UI, with token-driven theming and a single shipped stylesheet (no Tailwind required).",
   "keywords": [
     "react",
     "design-system",
-    "tailwind",
-    "tailwindcss",
     "base-ui",
+    "bubble",
+    "plain-design-system",
     "components",
     "ui",
-    "headless"
+    "headless",
+    "tokens",
+    "css-variables"
   ],
   "homepage": "https://github.com/mushroomgead/plain-design-system#readme",
   "bugs": {
@@ -38,16 +40,20 @@
         "default": "./dist/index.cjs"
       }
     },
-    "./preset.css": "./dist/preset.css",
+    "./styles.css": "./dist/styles.css",
     "./tokens.css": "./dist/tokens.css",
+    "./assets/*": "./dist/assets/*",
     "./package.json": "./package.json"
   },
   "files": [
     "dist"
   ],
-  "sideEffects": false,
+  "sideEffects": [
+    "./dist/styles.css",
+    "./dist/tokens.css"
+  ],
   "scripts": {
-    "build": "tsup && cp src/preset.css dist/preset.css && cp src/tokens.css dist/tokens.css",
+    "build": "tsup && node scripts/build-css.mjs && mkdir -p dist/assets && cp src/assets/*.svg dist/assets/",
     "dev": "tsup --watch",
     "typecheck": "tsc --noEmit",
     "clean": "rm -rf dist"
@@ -55,12 +61,10 @@
   "peerDependencies": {
     "react": ">=18.2",
     "react-dom": ">=18.2",
-    "tailwindcss": ">=4.0",
     "@base-ui/react": ">=1.0.0"
   },
   "dependencies": {
-    "clsx": "^2.1.1",
-    "tailwind-merge": "^3.6.0"
+    "clsx": "^2.1.1"
   },
   "devDependencies": {
     "@base-ui/react": "^1.5.0",
@@ -68,7 +72,6 @@
     "@types/react-dom": "^19.0.0",
     "react": "^19.2.6",
     "react-dom": "^19.2.6",
-    "tailwindcss": "^4.3.0",
     "tsup": "^8.5.1",
     "typescript": "^6.0.3"
   },

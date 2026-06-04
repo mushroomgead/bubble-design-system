@@ -4,35 +4,6 @@ import { cn } from "../utils/cn";
 
 type SelectSize = "sm" | "md" | "lg";
 
-const triggerSizeClasses: Record<SelectSize, string> = {
-  sm: "h-[var(--control-h-sm)] px-[var(--control-px-sm)] text-xs",
-  md: "h-[var(--control-h-md)] px-[var(--control-px-md)] text-sm",
-  lg: "h-[var(--control-h-lg)] px-[var(--control-px-lg)] text-md",
-};
-
-const triggerClasses =
-  "inline-flex w-full items-center justify-between gap-2 " +
-  "bg-bg-primary text-text-primary border border-border-primary rounded-md " +
-  "transition-colors duration-fast ease-out cursor-pointer " +
-  "hover:bg-bg-hover " +
-  "focus-visible:outline-none focus-visible:border-border-focus focus-visible:shadow-focus " +
-  "data-[popup-open]:border-border-focus data-[popup-open]:shadow-focus " +
-  "data-[disabled]:bg-bg-disabled data-[disabled]:text-text-disabled data-[disabled]:cursor-not-allowed data-[disabled]:hover:bg-bg-disabled";
-
-const popupClasses =
-  "min-w-[var(--anchor-width)] max-h-[var(--available-height)] overflow-y-auto " +
-  "bg-bg-primary border border-border-primary rounded-md shadow-lg " +
-  "p-1 outline-none origin-[var(--transform-origin)] " +
-  "transition-[transform,opacity] duration-fast ease-out " +
-  "data-[starting-style]:opacity-0 data-[starting-style]:scale-95 " +
-  "data-[ending-style]:opacity-0 data-[ending-style]:scale-95";
-
-const itemClasses =
-  "relative flex items-center gap-2 rounded-sm pl-7 pr-2 py-1.5 text-sm cursor-pointer select-none " +
-  "outline-none text-text-primary " +
-  "data-[highlighted]:bg-bg-hover " +
-  "data-[disabled]:text-text-disabled data-[disabled]:cursor-not-allowed data-[disabled]:bg-transparent";
-
 type BaseTriggerProps = ComponentPropsWithoutRef<typeof BaseSelect.Trigger>;
 type BasePopupProps = ComponentPropsWithoutRef<typeof BaseSelect.Popup>;
 type BaseItemProps = ComponentPropsWithoutRef<typeof BaseSelect.Item>;
@@ -48,12 +19,16 @@ const SelectTrigger = forwardRef<HTMLButtonElement, SelectTriggerProps>(
     return (
       <BaseSelect.Trigger
         ref={ref}
-        className={cn(triggerClasses, triggerSizeClasses[size], className)}
+        className={cn(
+          "pds-select-trigger",
+          `pds-select-trigger--${size}`,
+          className,
+        )}
         {...props}
       >
         {children}
-        <BaseSelect.Icon className="text-text-tertiary shrink-0">
-          <svg viewBox="0 0 16 16" fill="none" className="size-4" aria-hidden="true">
+        <BaseSelect.Icon className="pds-select-icon">
+          <svg viewBox="0 0 16 16" fill="none" aria-hidden="true">
             <path
               d="M4 6l4 4 4-4"
               stroke="currentColor"
@@ -79,13 +54,13 @@ const SelectValue = forwardRef<HTMLSpanElement, SelectValueProps>(
     return (
       <BaseSelect.Value
         ref={ref}
-        className={cn("truncate", className)}
+        className={cn("pds-select-value", className)}
         {...props}
       >
         {children ??
           ((value: unknown) =>
             value === null || value === undefined || value === "" ? (
-              <span className="text-text-tertiary">{placeholder}</span>
+              <span className="pds-select-value-placeholder">{placeholder}</span>
             ) : (
               String(value)
             ))}
@@ -104,10 +79,10 @@ const SelectContent = forwardRef<HTMLDivElement, SelectContentProps>(
   ({ className, sideOffset = 6, children, ...props }, ref) => {
     return (
       <BaseSelect.Portal>
-        <BaseSelect.Positioner sideOffset={sideOffset} className="outline-none z-50">
+        <BaseSelect.Positioner sideOffset={sideOffset} className="pds-select-positioner">
           <BaseSelect.Popup
             ref={ref as never}
-            className={cn(popupClasses, className)}
+            className={cn("pds-select-popup", className)}
             {...props}
           >
             {children}
@@ -128,11 +103,11 @@ const SelectItem = forwardRef<HTMLDivElement, SelectItemProps>(
     return (
       <BaseSelect.Item
         ref={ref}
-        className={cn(itemClasses, className)}
+        className={cn("pds-select-item", className)}
         {...props}
       >
-        <BaseSelect.ItemIndicator className="absolute left-2 inline-flex items-center text-text-brand">
-          <svg viewBox="0 0 16 16" fill="none" className="size-3.5" aria-hidden="true">
+        <BaseSelect.ItemIndicator className="pds-select-item__indicator">
+          <svg viewBox="0 0 16 16" fill="none" aria-hidden="true">
             <path
               d="M3.5 8.5l3 3 6-6.5"
               stroke="currentColor"

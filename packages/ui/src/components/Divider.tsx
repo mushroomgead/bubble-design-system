@@ -15,8 +15,8 @@ export const Divider = forwardRef<HTMLDivElement, DividerProps>(
         ref={ref}
         orientation={orientation}
         className={cn(
-          "bg-border-secondary shrink-0",
-          orientation === "horizontal" ? "h-px w-full" : "w-px self-stretch",
+          "pds-divider",
+          orientation === "horizontal" ? "pds-divider--horizontal" : "pds-divider--vertical",
           className,
         )}
         {...props}

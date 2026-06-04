@@ -1,18 +1,39 @@
-# @plain-design-system/ui
+# @bubble-design-system/ui
 
-> Minimal, token-driven React component library built on [Base UI](https://base-ui.com/) and [Tailwind CSS v4](https://tailwindcss.com/).
+> Bubble — a **neutral, composable, token-driven UI foundation** built on [Base UI](https://base-ui.com/), shipped as a single plain CSS file.
 
-The entire visual language — color, brand, gray family, radius, density, typography, motion — is driven by CSS custom properties. Toggle a single `data-*` attribute on `<html>` and the whole app re-skins live, with no rebuild.
+Bubble's signature is the **soft tone with a teal brand**: a soft-gray page (`#ECEDEF`) on which **white pill-shaped surfaces float** via layered shadows + an inset white top-highlight, accented by teal (`#00CEC8`) and a pink→magenta→violet **gradient blob** mark. The canonical identity is `tone=soft · brand=teal · gray=slate · radius=default · density=default · font=geist · light`.
+
+Every visual decision — tone, color, brand, gray family, radius, density, typography, motion — is driven by CSS custom properties. Toggle a single `data-*` attribute on `<html>` and the whole app re-skins live, with no rebuild.
 
 ```tsx
-<html data-theme="dark" data-brand="violet" data-radius="soft" data-density="comfortable">
+<html
+  data-theme="light"
+  data-tone="soft"
+  data-brand="teal"
+  data-gray="slate"
+  data-radius="default"
+  data-density="default"
+  data-font="geist"
+>
 ```
 
-- **16 components** wrapped around [`@base-ui/react`](https://base-ui.com/) primitives — accessible by construction, styled with Tailwind v4 utilities.
-- **A 280+ CSS custom property token system** spanning color (light/dark, 3 gray families, 6 brand palettes), radius (4 scales), density (3 scales), typography (3 font pairs), shadow and motion.
-- **Live theme switching** via six `data-*` attributes on any ancestor. `@theme inline` keeps utilities resolving `var(--…)` at use-site, so swapping `data-theme="light"` for `data-theme="dark"` reflows the UI without re-rendering or rebuilding.
-- **Dual ESM + CJS** with per-format `.d.ts` / `.d.cts`. `sideEffects: false` so unused components tree-shake out.
-- **Composable by default** — components take `children`, spread `...props`, forward refs, and `tailwind-merge` lets your `className` win conflicts.
+- **21 components** — Button, Input, Textarea, Checkbox, Radio, Switch, Select, Badge, Avatar, Divider, Modal, Toast, Tooltip, Tabs, Alert, DropdownMenu, Skeleton, Card, StatusPill, Segmented (plus Container + Grid layout primitives). Each wraps an [`@base-ui/react`](https://base-ui.com/) primitive where one exists — accessible by construction, styled with a single shipped stylesheet.
+- **A 3-layer, multi-theme token system** spanning color (light/dark · 3 gray families · 6 brand palettes including teal), **3 tones** (vivid · pastel · soft — soft is the signature look), radius (4 scales), density (3 scales), typography (3 font pairs), layered shadows, and motion.
+- **Live theme switching** via seven `data-*` attributes on any ancestor. Every CSS rule reads `var(--…)` at use-site, so swapping `data-tone="vivid"` for `data-tone="soft"` reflows the UI without re-rendering or rebuilding.
+- **No build dependency in consumer apps.** One CSS import. No PostCSS, no Tailwind, no preprocessor required.
+- **Dual ESM + CJS** with per-format `.d.ts` / `.d.cts`. `sideEffects` is scoped to the CSS so unused components tree-shake.
+- **Composable, not opinionated** — components take `children`, spread `...props`, forward refs, expose compound sub-parts (`Card.Header`, `StatusPill.Indicator`, `Segmented.Item`), and emit stable BEM class names that you can target with plain CSS to override defaults.
+
+## Design principles
+
+The five rules every decision in Bubble traces back to:
+
+1. **Restraint over decoration.** Few colors, light shadows, moderate radius. Every visual element must justify itself.
+2. **Composable, not opinionated.** No business logic baked into components, so the next person can remix freely (a `Card` never forces a header).
+3. **Accessible by default.** Contrast, focus state, keyboard nav pass WCAG AA without extra thought.
+4. **Token-driven.** Nothing is hardcoded in a component — every value references a token, so a new theme re-skins the whole system instantly.
+5. **One way to do things.** If there are two ways to do the same thing, pick one.
 
 ---
 
@@ -24,7 +45,7 @@ The entire visual language — color, brand, gray family, radius, density, typog
 - [Runtime theming](#runtime-theming)
 - [Components](#components)
 - [Design tokens](#design-tokens)
-- [Project structure](#project-structure)
+- [Overriding styles](#overriding-styles)
 - [Local development](#local-development)
 - [Contributing](#contributing)
 - [License](#license)
@@ -37,9 +58,9 @@ The entire visual language — color, brand, gray family, radius, density, typog
 |---|---|
 | Framework | React 19 (works with ≥ 18.2) |
 | Primitives | `@base-ui/react` ≥ 1.0 (the post-rename successor to `@base-ui-components/react`) |
-| Styling | Tailwind CSS v4 with `@theme inline` |
-| Class composition | `clsx` + `tailwind-merge` (re-exported as `cn()`) |
-| Build tool | `tsup` (ESM + CJS + dual `.d.ts`) |
+| Styling | Plain CSS — one shipped stylesheet, hand-authored per component |
+| Class composition | `clsx` (re-exported as `cn()`) |
+| Build tool | `tsup` (ESM + CJS + dual `.d.ts`) + a 50-line Node script for CSS bundling |
 | Language | TypeScript 6 |
 | Package manager | `pnpm@10.33.0` |
 | Node | ≥ 20 |
@@ -50,45 +71,50 @@ The entire visual language — color, brand, gray family, radius, density, typog
 
 ```bash
 # npm
-npm install @plain-design-system/ui
+npm install @bubble-design-system/ui
 
 # pnpm
-pnpm add @plain-design-system/ui
+pnpm add @bubble-design-system/ui
 
 # yarn
-yarn add @plain-design-system/ui
+yarn add @bubble-design-system/ui
 ```
 
 Then install the peer dependencies your app must have:
 
 ```bash
-npm install react react-dom tailwindcss @base-ui/react
+npm install react react-dom @base-ui/react
 ```
 
 | Peer dependency | Required version |
 |---|---|
 | `react` | ≥ 18.2 |
 | `react-dom` | ≥ 18.2 |
-| `tailwindcss` | ≥ 4.0 |
 | `@base-ui/react` | ≥ 1.0.0 |
 
 ---
 
 ## Setup
 
-### 1. Import the preset into your global stylesheet
+### 1. Import the stylesheet
 
-The preset pulls in Tailwind v4, the design tokens, and registers them with Tailwind via `@theme inline`. One import wires everything up.
+The shipped CSS contains the design tokens, a minimal reset, and every component rule. One import wires everything up — no PostCSS plugin, no Tailwind config, no preprocessor.
 
 ```css
 /* app/globals.css — or wherever your global styles live */
-@import "@plain-design-system/ui/preset.css";
+@import "@bubble-design-system/ui/styles.css";
 ```
 
-If you only want the raw CSS custom properties (no Tailwind layer), import the tokens file directly:
+Or, in a TS/JS entry file (Vite, Next.js App Router, Webpack, Parcel, …):
+
+```ts
+import "@bubble-design-system/ui/styles.css";
+```
+
+If you only want the raw CSS custom properties (no component rules), import the tokens file directly:
 
 ```css
-@import "@plain-design-system/ui/tokens.css";
+@import "@bubble-design-system/ui/tokens.css";
 ```
 
 ### 2. Set the theme attributes on your root element
@@ -100,8 +126,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html
       lang="en"
       data-theme="light"
+      data-tone="soft"
+      data-brand="teal"
       data-gray="slate"
-      data-brand="blue"
       data-radius="default"
       data-density="default"
       data-font="geist"
@@ -117,7 +144,7 @@ Every attribute has a sensible default if omitted, but spelling them out makes t
 ### 3. Use components
 
 ```tsx
-import { Button, Modal, Divider } from "@plain-design-system/ui";
+import { Button, Modal, Divider } from "@bubble-design-system/ui";
 
 export function Example() {
   return (
@@ -140,13 +167,14 @@ export function Example() {
 
 ## Runtime theming
 
-Six `data-*` attributes on any ancestor element (typically `<html>` or `<body>`) re-skin every descendant at runtime, with no rebuild.
+Seven `data-*` attributes on any ancestor element (typically `<html>` or `<body>`) re-skin every descendant at runtime, with no rebuild.
 
 | Attribute | Values | Default | What it controls |
 |---|---|---|---|
 | `data-theme` | `light` · `dark` | `light` | Semantic color mapping (background, text, border, shadow). |
+| `data-tone` | `vivid` · `pastel` · `soft` | `soft` | Surface model, palette saturation, control radius. `soft` is the signature look. |
 | `data-gray` | `slate` · `neutral` · `stone` | `slate` | The gray family used for surfaces and text. |
-| `data-brand` | `blue` · `violet` · `emerald` · `orange` · `mono` · `teal` | `blue` | The brand palette (`--brand-50` through `--brand-950`). |
+| `data-brand` | `blue` · `violet` · `emerald` · `orange` · `mono` · `teal` | `teal` | The brand palette (`--brand-50` through `--brand-950`). |
 | `data-radius` | `default` · `sharp` · `soft` · `pill` | `default` | The corner radius scale (`--radius-xs` through `--radius-2xl`). |
 | `data-density` | `default` · `compact` · `comfortable` | `default` | Control heights and padding (`--control-h-*`, `--control-px-*`). |
 | `data-font` | `geist` · `plex` · `system` | `geist` | The font pair (`--font-sans` / `--font-mono`). |
@@ -168,17 +196,18 @@ Every component is exported from the package root:
 
 ```tsx
 import {
-  Alert, Avatar, Badge, Button, Checkbox, Divider, DropdownMenu,
-  Input, Modal, Radio, RadioGroup, Select, Skeleton, Switch,
-  Tabs, Toast, Tooltip, useToast, cn,
-} from "@plain-design-system/ui";
+  Alert, Avatar, Badge, Button, Card, Checkbox, Container, Divider,
+  DropdownMenu, Grid, Input, Modal, Radio, RadioGroup, Segmented,
+  Select, Skeleton, StatusPill, Switch, Tabs, Textarea, Toast, Tooltip,
+  useToast, cn,
+} from "@bubble-design-system/ui";
 ```
 
 Conventions shared by all components:
 
 - They `forwardRef` to the underlying Base UI primitive.
 - Native HTML attributes are spread via `...props` — `onClick`, `aria-*`, `id`, `style` all just work.
-- `className` is the last argument to `cn()`, so your overrides win via `tailwind-merge`.
+- Each component emits stable BEM class names (`pds-btn`, `pds-btn--primary`, `pds-card__header`, …). Your `className` is appended last in the final class string.
 - Variants and sizes are string-literal enums with documented defaults.
 - Both `:disabled` and `[data-disabled]` are styled (Base UI uses the data-attr form).
 
@@ -193,8 +222,8 @@ A static informational banner with a variant-specific icon, title, and body.
 | `variant` | `"info" \| "success" \| "warning" \| "danger"` | `"info"` | Visual tone and default icon. |
 | `icon` | `ReactNode \| false` | variant-specific | Override the default icon, or pass `false` to hide it. |
 | `title` | `ReactNode` | — | Optional bold header line. |
-| `children` | `ReactNode` | — | The body copy, rendered in `text-secondary`. |
-| `className` | `string` | — | Extra classes (merged via `cn`). |
+| `children` | `ReactNode` | — | The body copy, rendered in the secondary text color. |
+| `className` | `string` | — | Extra classes (appended after the library's). |
 | `...props` | `HTMLAttributes<HTMLDivElement>` (minus `title`) | — | All native div attributes. |
 
 ```tsx
@@ -272,6 +301,48 @@ Wraps `@base-ui/react/button`.
 
 ---
 
+### Card
+
+Compound component for floating-pill surface content.
+
+| Sub-component | Description |
+|---|---|
+| `Card` (root) | The floating surface. Variant controls fill + shadow. |
+| `Card.Header` | Row with title + optional action. |
+| `Card.Title` | `<h3>` heading. |
+| `Card.Description` | Supporting paragraph. |
+| `Card.Action` | Right-aligned controls inside the header. |
+| `Card.Body` | Main content area. |
+| `Card.Footer` | Bordered footer row with right-aligned controls. |
+
+**`Card` props:**
+
+| Prop | Type | Default | Description |
+|---|---|---|---|
+| `variant` | `"elevated" \| "muted"` | `"elevated"` | `elevated` = white surface with shadow. `muted` = `bg-secondary`, no shadow. |
+| `className` | `string` | — | Extra classes. |
+
+```tsx
+<Card>
+  <Card.Header>
+    <div>
+      <Card.Title>Soft-pill surface</Card.Title>
+      <Card.Description>White card floating on a gray page.</Card.Description>
+    </div>
+    <Card.Action>
+      <Button size="sm" variant="ghost">Manage</Button>
+    </Card.Action>
+  </Card.Header>
+  <Card.Body>…</Card.Body>
+  <Card.Footer>
+    <Button size="sm" variant="ghost">Cancel</Button>
+    <Button size="sm">Save</Button>
+  </Card.Footer>
+</Card>
+```
+
+---
+
 ### Checkbox
 
 Wraps `@base-ui/react/checkbox`. Supports checked, unchecked, and indeterminate states with built-in SVG indicators.
@@ -290,6 +361,29 @@ Wraps `@base-ui/react/checkbox`. Supports checked, unchecked, and indeterminate 
 
 ---
 
+### Container + Grid
+
+Layout primitives. `Container` centers content and applies page margins. `Grid` is a 12-column grid; `Grid.Col` spans columns with optional responsive overrides.
+
+```tsx
+<Container size="lg">
+  <Grid>
+    <Grid.Col span={12}>full row</Grid.Col>
+    <Grid.Col span={6} lgSpan={4}>half on mobile, third on lg</Grid.Col>
+    <Grid.Col span={6} lgSpan={4}>…</Grid.Col>
+    <Grid.Col span={12} lgSpan={4}>…</Grid.Col>
+  </Grid>
+</Container>
+```
+
+**`Container` props:** `size` = `"sm" | "md" | "lg" | "xl" | "prose" | "fluid"` (default `"xl"`).
+
+**`Grid` props:** `gutter` = `"default" | "tight" | "flush"` (default `"default"`).
+
+**`Grid.Col` props:** `span`, `smSpan`, `mdSpan`, `lgSpan` = `1 | 2 | … | 12 | "full"`. Default `span` is `12`.
+
+---
+
 ### Divider
 
 Horizontal or vertical separator with a semantic role from `@base-ui/react/separator`.
@@ -302,7 +396,9 @@ Horizontal or vertical separator with a semantic role from `@base-ui/react/separ
 
 ```tsx
 <Divider />
-<div className="flex h-8 items-center"><span>A</span><Divider orientation="vertical" /><span>B</span></div>
+<div style={{ display: "flex", height: "2rem", alignItems: "center" }}>
+  <span>A</span><Divider orientation="vertical" /><span>B</span>
+</div>
 ```
 
 ---
@@ -332,8 +428,6 @@ Compound component built on `@base-ui/react/menu`. Supports items, checkbox item
 | `align` | `"start" \| "center" \| "end"` | `"start"` | Alignment relative to the trigger. |
 | `className` | `string` | — | Extra classes on the popup. |
 | `...props` | Base UI `Menu.Popup` props | — | Spread to the popup. |
-
-Item components accept their Base UI props plus `className`.
 
 ```tsx
 <DropdownMenu.Root>
@@ -397,7 +491,7 @@ Compound component built on `@base-ui/react/dialog`. Renders into a portal, with
   <Modal.Content>
     <Modal.Title>Delete project?</Modal.Title>
     <Modal.Description>This action cannot be undone.</Modal.Description>
-    <div className="mt-4 flex justify-end gap-2">
+    <div style={{ marginTop: "1rem", display: "flex", justifyContent: "flex-end", gap: "0.5rem" }}>
       <Modal.Close render={<Button variant="secondary">Cancel</Button>} />
       <Button variant="destructive">Delete</Button>
     </div>
@@ -423,14 +517,42 @@ Wraps `@base-ui/react/radio` and `@base-ui/react/radio-group`.
 
 | Prop | Type | Default | Description |
 |---|---|---|---|
-| `className` | `string` | — | Defaults to `flex flex-col gap-2`. |
+| `className` | `string` | — | Override the default vertical stack. |
 | `...props` | Base UI `RadioGroup` props | — | `value`, `defaultValue`, `onValueChange`. |
 
 ```tsx
 <RadioGroup defaultValue="email">
-  <label className="flex items-center gap-2"><Radio value="email" /> Email</label>
-  <label className="flex items-center gap-2"><Radio value="sms" /> SMS</label>
+  <label><Radio value="email" /> Email</label>
+  <label><Radio value="sms" /> SMS</label>
 </RadioGroup>
+```
+
+---
+
+### Segmented
+
+Compound component built on `@base-ui/react/toggle-group` (single-select). The selected item rises as a white floating pill.
+
+| Sub-component | Description |
+|---|---|
+| `Segmented` (root) | The toggle group. |
+| `Segmented.Item` | A single segment. |
+
+**`Segmented` props:**
+
+| Prop | Type | Default | Description |
+|---|---|---|---|
+| `value` | `string` | — | Controlled selected value. |
+| `defaultValue` | `string` | — | Uncontrolled initial value. |
+| `onValueChange` | `(value: string) => void` | — | Fired with the new value. |
+| `size` | `"sm" \| "md" \| "lg"` | `"md"` | 24 / 28 / 32 px. |
+
+```tsx
+<Segmented value={range} onValueChange={setRange}>
+  <Segmented.Item value="day">Day</Segmented.Item>
+  <Segmented.Item value="week">Week</Segmented.Item>
+  <Segmented.Item value="month">Month</Segmented.Item>
+</Segmented>
 ```
 
 ---
@@ -447,26 +569,11 @@ Compound component built on `@base-ui/react/select`.
 | `Select.Content` | The portalled popup. |
 | `Select.Item` | A selectable row with a check indicator when selected. |
 
-**`Select.Trigger` props:**
+**`Select.Trigger` props:** `size` = `"sm" | "md" | "lg"` (default `"md"`), plus `className`.
 
-| Prop | Type | Default | Description |
-|---|---|---|---|
-| `size` | `"sm" \| "md" \| "lg"` | `"md"` | Density-aware control height. |
-| `className` | `string` | — | Extra classes. |
+**`Select.Value` props:** `placeholder?: ReactNode`, plus `className`.
 
-**`Select.Value` props:**
-
-| Prop | Type | Default | Description |
-|---|---|---|---|
-| `placeholder` | `ReactNode` | — | Rendered in `text-tertiary` when no value is selected. |
-| `className` | `string` | — | Extra classes. |
-
-**`Select.Content` props:**
-
-| Prop | Type | Default | Description |
-|---|---|---|---|
-| `sideOffset` | `number` | `6` | Distance from trigger. |
-| `className` | `string` | — | Extra classes on the popup. |
+**`Select.Content` props:** `sideOffset?: number` (default `6`), plus `className`.
 
 ```tsx
 <Select.Root value={fruit} onValueChange={setFruit}>
@@ -485,18 +592,39 @@ Compound component built on `@base-ui/react/select`.
 
 ### Skeleton
 
-Loading placeholder with `animate-pulse`.
+Loading placeholder with a pulse animation.
 
 | Prop | Type | Default | Description |
 |---|---|---|---|
 | `shape` | `"line" \| "circle" \| "block"` | `"line"` | Default dimensions and radius. |
-| `className` | `string` | — | Override width/height/radius. |
+| `className` | `string` | — | Override width/height/radius via your own CSS. |
 | `...props` | `HTMLAttributes<HTMLDivElement>` | — | Native div attributes. |
 
 ```tsx
 <Skeleton />
-<Skeleton shape="circle" className="size-10" />
-<Skeleton shape="block" className="h-24" />
+<Skeleton shape="circle" style={{ width: "2.5rem", height: "2.5rem" }} />
+<Skeleton shape="block" style={{ height: "6rem" }} />
+```
+
+---
+
+### StatusPill
+
+Compound floating-pill component for status indicators. Intent drives chip + label color via CSS custom properties.
+
+| Sub-component | Description |
+|---|---|
+| `StatusPill` (root) | The pill surface. |
+| `StatusPill.Indicator` | The leading colored chip. Children render an optional icon. |
+| `StatusPill.Label` | The colored text label. |
+
+**`StatusPill` props:** `intent` = `"neutral" | "success" | "warning" | "danger" | "info"` (default `"neutral"`).
+
+```tsx
+<StatusPill intent="success">
+  <StatusPill.Indicator />
+  <StatusPill.Label>On track</StatusPill.Label>
+</StatusPill>
 ```
 
 ---
@@ -546,6 +674,24 @@ All sub-components accept their Base UI props plus `className`.
 
 ---
 
+### Textarea
+
+A thin styled `<textarea>` mirroring Input's API.
+
+| Prop | Type | Default | Description |
+|---|---|---|---|
+| `size` | `"sm" \| "md" \| "lg"` | `"md"` | Density-aware control padding. |
+| `invalid` | `boolean` | — | Sets `aria-invalid` and applies the danger border + focus ring. |
+| `className` | `string` | — | Extra classes. |
+| `...props` | `TextareaHTMLAttributes` (minus `size`) | — | All native textarea attributes. |
+
+```tsx
+<Textarea placeholder="Notes" rows={4} />
+<Textarea invalid value={text} onChange={(e) => setText(e.target.value)} />
+```
+
+---
+
 ### Toast
 
 Built on `@base-ui/react/toast`. Provides a `<Toast.Provider>` boundary, a `<Toast.Viewport>` for positioning, a pre-built `<Toast.Toaster>` that renders the queue, and the `useToast()` hook to push toasts.
@@ -558,7 +704,7 @@ Built on `@base-ui/react/toast`. Provides a `<Toast.Provider>` boundary, a `<Toa
 | `useToast()` | Hook returning Base UI's toast manager (`.add({ title, description })`). |
 
 ```tsx
-import { Toast, useToast, Button } from "@plain-design-system/ui";
+import { Toast, useToast, Button } from "@bubble-design-system/ui";
 
 function Root({ children }) {
   return (
@@ -614,67 +760,66 @@ Compound component built on `@base-ui/react/tooltip`. Requires a `Tooltip.Provid
 
 ### `cn()` utility
 
-Re-exported helper that composes `clsx` with `tailwind-merge` — useful when building your own components on top of the design tokens.
+Re-exported `clsx` wrapper for composing class names — useful when building your own components against the design tokens.
 
 ```tsx
-import { cn } from "@plain-design-system/ui";
+import { cn } from "@bubble-design-system/ui";
 
-cn("p-4", isActive && "bg-bg-brand", className);
-cn("p-4", "p-8");               // → "p-8"
-cn("bg-blue-600", "bg-red-600"); // → "bg-red-600"
+cn("my-card", isActive && "my-card--active", className);
+// → "my-card my-card--active <consumer className>"
 ```
 
 ---
 
 ## Design tokens
 
-All tokens are CSS custom properties defined in `src/tokens.css` and registered with Tailwind v4 via `@theme inline` in `src/preset.css`. The 1:1 token-to-utility mapping (`--color-bg-brand` → `bg-bg-brand`) is intentional and load-bearing — token names mirror the design spec, so designers and engineers stay in sync.
+All tokens are CSS custom properties defined in `src/tokens.css`. Reference them directly in your CSS with `var(--…)`. The semantic tokens (those prefixed `--color-bg-*`, `--color-text-*`, `--color-border-*`) re-resolve automatically when an ancestor `data-*` attribute changes.
 
 ### Color tokens
 
 Semantic colors map to primitive palettes and are remapped by `[data-theme]`, `[data-gray]`, and `[data-brand]`.
 
-| Token | Tailwind utility | Purpose |
-|---|---|---|
-| `--color-bg-primary` | `bg-bg-primary` | Page background. |
-| `--color-bg-secondary` | `bg-bg-secondary` | Secondary surface (cards on page). |
-| `--color-bg-tertiary` | `bg-bg-tertiary` | Tertiary surface (inset wells). |
-| `--color-bg-inverse` | `bg-bg-inverse` | Inverted surface (tooltip, toast). |
-| `--color-bg-brand` | `bg-bg-brand` | Brand primary fill. |
-| `--color-bg-brand-hover` | `bg-bg-brand-hover` | Brand hover state. |
-| `--color-bg-brand-active` | `bg-bg-brand-active` | Brand pressed state. |
-| `--color-bg-brand-subtle` | `bg-bg-brand-subtle` | Tinted brand surface (info backgrounds, badges). |
-| `--color-bg-success` | `bg-bg-success` | Soft success surface. |
-| `--color-bg-success-strong` | `bg-bg-success-strong` | Solid success fill. |
-| `--color-bg-warning` | `bg-bg-warning` | Soft warning surface. |
-| `--color-bg-warning-strong` | `bg-bg-warning-strong` | Solid warning fill. |
-| `--color-bg-danger` | `bg-bg-danger` | Soft danger surface. |
-| `--color-bg-danger-strong` | `bg-bg-danger-strong` | Solid danger fill (destructive buttons). |
-| `--color-bg-danger-hover` | `bg-bg-danger-hover` | Danger hover state. |
-| `--color-bg-info` | `bg-bg-info` | Info alert surface. |
-| `--color-bg-hover` | `bg-bg-hover` | Neutral hover. |
-| `--color-bg-pressed` | `bg-bg-pressed` | Neutral pressed. |
-| `--color-bg-disabled` | `bg-bg-disabled` | Disabled surface. |
-| `--color-text-primary` | `text-text-primary` | Body text. |
-| `--color-text-secondary` | `text-text-secondary` | Supporting text. |
-| `--color-text-tertiary` | `text-text-tertiary` | Placeholder, hints. |
-| `--color-text-disabled` | `text-text-disabled` | Disabled text. |
-| `--color-text-inverse` | `text-text-inverse` | Text on `bg-inverse`. |
-| `--color-text-brand` | `text-text-brand` | Brand-colored text (links). |
-| `--color-text-success` | `text-text-success` | Success copy. |
-| `--color-text-warning` | `text-text-warning` | Warning copy. |
-| `--color-text-danger` | `text-text-danger` | Error copy. |
-| `--color-text-on-brand` | `text-text-on-brand` | Text on `bg-brand`. |
-| `--color-text-on-danger` | `text-text-on-danger` | Text on `bg-danger-strong`. |
-| `--color-text-on-success` | `text-text-on-success` | Text on `bg-success-strong`. |
-| `--color-border-primary` | `border-border-primary` | Default form/control border. |
-| `--color-border-secondary` | `border-border-secondary` | Section dividers, cards. |
-| `--color-border-tertiary` | `border-border-tertiary` | Subtle inner dividers. |
-| `--color-border-brand` | `border-border-brand` | Selected/active accent. |
-| `--color-border-success` | `border-border-success` | Success accent. |
-| `--color-border-warning` | `border-border-warning` | Warning accent. |
-| `--color-border-danger` | `border-border-danger` | Error accent (invalid inputs). |
-| `--color-border-focus` | `border-border-focus` | Focus ring color. |
+| Token | Purpose |
+|---|---|
+| `--color-bg-primary` | Page background. |
+| `--color-bg-secondary` | Secondary surface (cards on page). |
+| `--color-bg-tertiary` | Tertiary surface (inset wells). |
+| `--color-bg-inverse` | Inverted surface (tooltip, toast). |
+| `--color-bg-brand` | Brand primary fill. |
+| `--color-bg-brand-hover` | Brand hover state. |
+| `--color-bg-brand-active` | Brand pressed state. |
+| `--color-bg-brand-subtle` | Tinted brand surface (info backgrounds, badges). |
+| `--color-bg-success` | Soft success surface. |
+| `--color-bg-success-strong` | Solid success fill. |
+| `--color-bg-warning` | Soft warning surface. |
+| `--color-bg-warning-strong` | Solid warning fill. |
+| `--color-bg-danger` | Soft danger surface. |
+| `--color-bg-danger-strong` | Solid danger fill (destructive buttons). |
+| `--color-bg-danger-hover` | Danger hover state. |
+| `--color-bg-info` | Info alert surface. |
+| `--color-bg-hover` | Neutral hover. |
+| `--color-bg-pressed` | Neutral pressed. |
+| `--color-bg-disabled` | Disabled surface. |
+| `--color-text-primary` | Body text. |
+| `--color-text-secondary` | Supporting text. |
+| `--color-text-tertiary` | Placeholder, hints. |
+| `--color-text-disabled` | Disabled text. |
+| `--color-text-inverse` | Text on `bg-inverse`. |
+| `--color-text-brand` | Brand-colored text (links). |
+| `--color-text-success` | Success copy. |
+| `--color-text-warning` | Warning copy. |
+| `--color-text-danger` | Error copy. |
+| `--color-text-on-brand` | Text on `bg-brand`. |
+| `--color-text-on-danger` | Text on `bg-danger-strong`. |
+| `--color-text-on-success` | Text on `bg-success-strong`. |
+| `--color-border-primary` | Default form/control border. |
+| `--color-border-secondary` | Section dividers, cards. |
+| `--color-border-tertiary` | Subtle inner dividers. |
+| `--color-border-brand` | Selected/active accent. |
+| `--color-border-success` | Success accent. |
+| `--color-border-warning` | Warning accent. |
+| `--color-border-danger` | Error accent (invalid inputs). |
+| `--color-border-focus` | Focus ring color. |
 
 ### Primitive palettes
 
@@ -685,7 +830,7 @@ These are the raw color swatches that the semantic tokens reference. You usually
 | `--slate-*` | 50–950 | Default gray family. |
 | `--neutral-*` | 50–950 | True neutral (no temperature). |
 | `--stone-*` | 50–950 | Warm gray. |
-| `--blue-*` | 50–950 | Default brand. |
+| `--blue-*` | 50–950 | Brand option. |
 | `--violet-*` | 50–950 | Brand option. |
 | `--emerald-*` | 50–950 | Brand option. |
 | `--orange-*` | 50–950 | Brand option. |
@@ -700,86 +845,82 @@ Aliases follow the active `data-*` attribute: `--gray-*` resolves to whichever g
 
 Selected by `[data-radius]`. Each scale rewrites the same custom properties.
 
-| Token | Tailwind utility | default | sharp | soft | pill |
-|---|---|---|---|---|---|
-| `--radius-xs` | `rounded-xs` | 2px | 0px | 4px | 4px |
-| `--radius-sm` | `rounded-sm` | 4px | 1px | 8px | 9999px |
-| `--radius-md` | `rounded-md` | 6px | 2px | 12px | 9999px |
-| `--radius-lg` | `rounded-lg` | 8px | 3px | 14px | 9999px |
-| `--radius-xl` | `rounded-xl` | 12px | 4px | 18px | 18px |
-| `--radius-2xl` | `rounded-2xl` | 16px | 6px | 24px | 22px |
-| `--radius-full` | `rounded-full` | 9999px | 9999px | 9999px | 9999px |
+| Token | default | sharp | soft | pill |
+|---|---|---|---|---|
+| `--radius-xs`   | 2px    | 0px    | 4px    | 4px |
+| `--radius-sm`   | 4px    | 1px    | 8px    | 9999px |
+| `--radius-md`   | 6px    | 2px    | 12px   | 9999px |
+| `--radius-lg`   | 8px    | 3px    | 14px   | 9999px |
+| `--radius-xl`   | 12px   | 4px    | 18px   | 18px |
+| `--radius-2xl`  | 16px   | 6px    | 24px   | 22px |
+| `--radius-full` | 9999px | 9999px | 9999px | 9999px |
+
+Plus `--ctrl-radius` — the control radius used by Button/Input/Select. Pills under `[data-tone="soft"]`, `--radius-md` elsewhere.
 
 ### Shadow
 
-Light theme uses cool slate tints; dark theme uses opaque black. The focus ring tracks the brand color.
+Light theme uses cool slate tints; dark theme uses opaque black. The `soft` tone adds an inset white top-highlight on md/lg/xl. The focus ring tracks the brand color.
 
-| Token | Tailwind utility | Purpose |
-|---|---|---|
-| `--shadow-xs` | `shadow-xs` | Hairline lift. |
-| `--shadow-sm` | `shadow-sm` | Subtle card. |
-| `--shadow-md` | `shadow-md` | Standard card. |
-| `--shadow-lg` | `shadow-lg` | Popover, dropdown. |
-| `--shadow-xl` | `shadow-xl` | Modal. |
-| `--shadow-focus` | `shadow-focus` | Focus ring (3px brand-tinted). |
+| Token | Purpose |
+|---|---|
+| `--shadow-xs` | Hairline lift. |
+| `--shadow-sm` | Subtle card. |
+| `--shadow-md` | Standard card. |
+| `--shadow-lg` | Popover, dropdown. |
+| `--shadow-xl` | Modal. |
+| `--shadow-focus` | Focus ring (3–4px brand-tinted). |
 
 ### Typography
 
-| Token | Tailwind utility | Value |
-|---|---|---|
-| `--font-size-xs` | `text-xs` | 0.75rem |
-| `--font-size-sm` | `text-sm` | 0.875rem |
-| `--font-size-md` | `text-md` | 1rem |
-| `--font-size-lg` | `text-lg` | 1.125rem |
-| `--font-size-xl` | `text-xl` | 1.25rem |
-| `--font-size-2xl` | `text-2xl` | 1.5rem |
-| `--font-size-3xl` | `text-3xl` | 1.875rem |
-| `--font-size-4xl` | `text-4xl` | 2.25rem |
-| `--font-size-5xl` | `text-5xl` | 3rem |
-| `--font-size-6xl` | `text-6xl` | 3.75rem |
-| `--line-height-tight` | `leading-tight` | 1.15 |
-| `--line-height-snug` | `leading-snug` | 1.3 |
-| `--line-height-normal` | `leading-normal` | 1.5 |
-| `--line-height-relaxed` | `leading-relaxed` | 1.65 |
-| `--letter-tight` | `tracking-tight` | -0.022em |
-| `--letter-snug` | `tracking-snug` | -0.012em |
-| `--letter-normal` | `tracking-normal` | 0 |
-| `--letter-wide` | `tracking-wide` | 0.04em |
-| `--font-weight-regular` / `medium` / `semibold` / `bold` | `font-*` | 400 / 500 / 600 / 700 |
-| `--font-sans` / `--font-mono` | `font-sans` / `font-mono` | Set by `[data-font]` |
+| Token | Value |
+|---|---|
+| `--font-size-xs`  | 0.75rem |
+| `--font-size-sm`  | 0.875rem |
+| `--font-size-md`  | 1rem |
+| `--font-size-lg`  | 1.125rem |
+| `--font-size-xl`  | 1.25rem |
+| `--font-size-2xl` | 1.5rem |
+| `--font-size-3xl` | 1.875rem |
+| `--font-size-4xl` | 2.25rem |
+| `--font-size-5xl` | 3rem |
+| `--font-size-6xl` | 3.75rem |
+| `--line-height-tight` / `snug` / `normal` / `relaxed` | 1.15 / 1.3 / 1.5 / 1.65 |
+| `--letter-tight` / `snug` / `normal` / `wide` | -0.022em / -0.012em / 0 / 0.04em |
+| `--font-weight-regular` / `medium` / `semibold` / `bold` | 400 / 500 / 600 / 700 |
+| `--font-sans` / `--font-mono` | Set by `[data-font]` |
 
 ### Spacing
 
-`--space-0` through `--space-24` follow a 0.25rem (4px) scale, doubling to 0.5rem after 4. **Intentionally not registered with Tailwind** — Tailwind v4's default `--spacing` multiplier already produces identical values, so the standard `p-1`, `gap-4`, `m-8` utilities work as-is.
+`--space-0` through `--space-24` follow a 0.25rem (4px) scale, doubling to 0.5rem after 4. Reference them with `var(--space-4)`, etc. — they have no utility-class shorthand because the library doesn't ship one.
 
 ### Density (control sizing)
 
-Selected by `[data-density]`. These tokens have no Tailwind namespace, so components reference them with arbitrary values (`h-[var(--control-h-md)]`).
+Selected by `[data-density]`.
 
 | Token | default | compact | comfortable |
 |---|---|---|---|
-| `--control-h-sm` | 28px | 24px | 32px |
-| `--control-h-md` | 36px | 30px | 42px |
-| `--control-h-lg` | 44px | 38px | 52px |
-| `--control-px-sm` | 10px | 8px | 12px |
+| `--control-h-sm`  | 28px | 24px | 32px |
+| `--control-h-md`  | 36px | 30px | 42px |
+| `--control-h-lg`  | 44px | 38px | 52px |
+| `--control-px-sm` | 10px | 8px  | 12px |
 | `--control-px-md` | 14px | 12px | 18px |
 | `--control-px-lg` | 18px | 16px | 22px |
-| `--card-p` | 24px | 16px | 32px |
-| `--row-gap` | 16px | 12px | 20px |
+| `--card-p`        | 24px | 16px | 32px |
+| `--row-gap`       | 16px | 12px | 20px |
 
 ### Motion
 
-| Token | Tailwind utility | Value |
-|---|---|---|
-| `--duration-instant` | `duration-instant` | 50ms |
-| `--duration-fast` | `duration-fast` | 120ms |
-| `--duration-normal` | `duration-normal` | 200ms |
-| `--duration-slow` | `duration-slow` | 320ms |
-| `--duration-slower` | `duration-slower` | 500ms |
-| `--ease-linear` | `ease-linear` | `linear` |
-| `--ease-out` | `ease-out` | `cubic-bezier(0.16, 1, 0.3, 1)` |
-| `--ease-in-out` | `ease-in-out` | `cubic-bezier(0.65, 0, 0.35, 1)` |
-| `--ease-spring` | `ease-spring` | `cubic-bezier(0.34, 1.56, 0.64, 1)` |
+| Token | Value |
+|---|---|
+| `--duration-instant` | 50ms |
+| `--duration-fast`    | 120ms |
+| `--duration-normal`  | 200ms |
+| `--duration-slow`    | 320ms |
+| `--duration-slower`  | 500ms |
+| `--ease-linear`   | `linear` |
+| `--ease-out`      | `cubic-bezier(0.16, 1, 0.3, 1)` |
+| `--ease-in-out`   | `cubic-bezier(0.65, 0, 0.35, 1)` |
+| `--ease-spring`   | `cubic-bezier(0.34, 1.56, 0.64, 1)` |
 
 ### Browsing tokens visually
 
@@ -787,60 +928,42 @@ Clone the repository and run the docs app — `/tokens` renders live swatches th
 
 ```bash
 pnpm install
+pnpm -C packages/ui build   # build the lib first
 pnpm -C apps/docs dev
 # open http://localhost:3000/tokens
 ```
 
 ---
 
-## Project structure
+## Overriding styles
 
-The library lives inside a pnpm-workspaces monorepo. The published package only ships `dist/`; everything else is for development.
+Every component emits stable, low-specificity BEM class names. Override them from your own CSS with a single-class selector:
 
+```css
+/* Bump up button padding globally */
+.pds-btn--md {
+  padding-inline: 1.25rem;
+}
+
+/* Give your app's brand button a different shadow */
+.my-app .pds-btn--primary {
+  box-shadow: 0 6px 18px -4px rgba(0, 200, 200, 0.4);
+}
 ```
-plain-design-system/
-├── apps/
-│   └── docs/                        # Next.js 16 docs gallery (consumes the lib via workspace:*)
-│       ├── app/
-│       │   ├── layout.tsx           # Sets the six data-* attributes on <html>
-│       │   ├── ThemeBar.tsx         # Live theme switcher with localStorage persistence
-│       │   ├── globals.css          # @import "@plain-design-system/ui/preset.css"
-│       │   ├── page.tsx             # Component gallery
-│       │   └── tokens/page.tsx      # Token reference with live swatches
-│       └── package.json
-├── packages/
-│   └── ui/                          # @plain-design-system/ui — this package
-│       ├── src/
-│       │   ├── components/          # Button, Input, Modal, Toast, Tooltip, …
-│       │   │   ├── Alert.tsx
-│       │   │   ├── Avatar.tsx
-│       │   │   ├── Badge.tsx
-│       │   │   ├── Button.tsx
-│       │   │   ├── Checkbox.tsx
-│       │   │   ├── Divider.tsx
-│       │   │   ├── DropdownMenu.tsx
-│       │   │   ├── Input.tsx
-│       │   │   ├── Modal.tsx
-│       │   │   ├── Radio.tsx
-│       │   │   ├── Select.tsx
-│       │   │   ├── Skeleton.tsx
-│       │   │   ├── Switch.tsx
-│       │   │   ├── Tabs.tsx
-│       │   │   ├── Toast.tsx
-│       │   │   └── Tooltip.tsx
-│       │   ├── utils/cn.ts          # clsx + tailwind-merge
-│       │   ├── tokens.css           # 558 lines of CSS custom properties
-│       │   ├── preset.css           # @theme inline mapping → Tailwind utilities
-│       │   └── index.ts             # Public entry point
-│       ├── tsup.config.ts           # ESM + CJS + dual .d.ts build
-│       ├── tsconfig.json
-│       └── package.json
-├── tsconfig.base.json               # Shared strict TS config (TS 6, NodeNext)
-├── pnpm-workspace.yaml              # packages/*, apps/*
-├── package.json                     # Monorepo root (private)
-├── PROGRESS.md                      # Source of truth for project state + decisions
-└── CLAUDE.md                        # Instructions for AI-assisted edits
+
+Or pass `className` directly to a component — it's appended after the library's own classes:
+
+```tsx
+<Button className="my-special-button">Action</Button>
 ```
+
+```css
+.my-special-button {
+  letter-spacing: 0.05em;
+}
+```
+
+The full BEM block list lives in `dist/styles.css` if you want to grep it; the canonical authoring source is `packages/ui/src/components/*.css` in the repository.
 
 ---
 
@@ -853,8 +976,8 @@ pnpm install                          # install all workspaces
 
 # Library
 pnpm -C packages/ui typecheck         # tsc --noEmit
-pnpm -C packages/ui build             # tsup → dist/, then cp preset.css + tokens.css
-pnpm -C packages/ui dev               # tsup --watch
+pnpm -C packages/ui build             # tsup → dist/, then build-css.mjs concatenates styles.css
+pnpm -C packages/ui dev               # tsup --watch (CSS changes need a fresh `pnpm -C packages/ui build`)
 pnpm -C packages/ui clean             # rm -rf dist
 
 # Docs app
@@ -865,7 +988,7 @@ pnpm -C apps/docs build               # next build
 
 There is no test runner configured yet, and no root-level lint. Typecheck is the only static gate.
 
-The docs app uses `@source "../../../packages/ui/src/**/*.{ts,tsx}"` so Tailwind scans the library source during docs dev — no library rebuild is needed when editing components.
+The docs app imports `@bubble-design-system/ui/styles.css` directly from the lib's `dist/`, so any CSS change in the lib needs a fresh `pnpm -C packages/ui build` to show up in the docs dev server. (Component prop / JSX changes hot-reload normally.)
 
 ---
 
@@ -880,28 +1003,34 @@ The docs app uses `@source "../../../packages/ui/src/**/*.{ts,tsx}"` so Tailwind
    - Spread `...props` so consumers get every native HTML attribute for free.
    - `Omit<BaseProps, "className">` then re-add `className?: string` to narrow Base UI's union type.
    - Variant / size are discriminated string enums with sensible defaults.
-   - `cn(baseClasses, variantClasses[variant], sizeClasses[size], className)` — user `className` **last**, so `tailwind-merge` lets it win.
-   - Handle both `disabled:` and `data-[disabled]:` (Base UI uses the data-attr form).
-   - Density-driven sizing uses arbitrary values (`h-[var(--control-h-md)]`) because `--control-h-*` has no Tailwind namespace.
+   - `cn("pds-block", `pds-block--${variant}`, `pds-block--${size}`, className)` — user `className` **last**, so it appears after the library's defaults in the output string.
+   - Handle both `disabled:` and `[data-disabled]` (Base UI uses the data-attr form) in the component's CSS file.
    - Export the component and its `Props` type from `src/index.ts`.
 
-3. **Token rules:**
+3. **CSS authoring rules:**
 
-   - Token names are part of the design spec and round-trip 1:1 with code. Do **not** rename tokens to make Tailwind utilities prettier (see `PROGRESS.md` §3.9 — an earlier flat-naming attempt was reversed).
-   - Keep `@theme inline` in `preset.css`. Dropping the `inline` modifier silently breaks runtime theme switching by resolving tokens to literal values at build time.
+   - One CSS file per component under `src/components/`. The block name is `pds-<component>` (kebab-case for multi-word components, e.g. `pds-status-pill`).
+   - Use BEM: `.pds-btn`, `.pds-btn__icon`, `.pds-btn--primary`. Avoid descendant or nested selectors that raise specificity above (0, 1, 0).
+   - Reference tokens directly: `background-color: var(--color-bg-brand)`. Never hard-code a value that has a token.
+   - The build pipeline concatenates all component CSS plus `tokens.css` + `base.css` into one shipped `dist/styles.css`.
 
-4. **Stack gotchas:**
+4. **Token rules:**
+
+   - Token names are part of the design spec and round-trip 1:1 with code. Do **not** rename tokens for cosmetic reasons.
+   - Component CSS reads `var(--…)` at use-site so runtime `data-*` switching keeps working. If a rule resolves a token to a literal value, it freezes — never inline a token's resolved value.
+
+5. **Stack gotchas:**
 
    - TypeScript 6 needs `ignoreDeprecations: "6.0"` (already set in `tsconfig.base.json`) because `tsup`'s `rollup-plugin-dts` still uses the deprecated `baseUrl`. Leave the flag until that toolchain catches up.
    - `@base-ui/react` was renamed from `@base-ui-components/react` at the 1.0 stable release (2025-12-11). Import paths use the new scope: `@base-ui/react/<primitive>`.
-   - Tailwind v4 is required in consumer apps — this is an accepted architectural cost (shadcn-style override pattern).
+   - The library ships a global `box-sizing: border-box` in `base.css`. Component CSS assumes it.
 
-5. **Before opening a PR:**
+6. **Before opening a PR:**
 
    - `pnpm -C packages/ui typecheck`
    - `pnpm -C packages/ui build`
    - `pnpm -C apps/docs typecheck`
-   - Spot-check the docs gallery and verify toggling `data-theme` / `data-brand` / `data-radius` / `data-density` re-skins live (no rebuild needed). If live switching stops working, the most likely cause is that `@theme inline` lost its `inline` modifier.
+   - Spot-check the docs gallery and verify toggling `data-theme` / `data-brand` / `data-radius` / `data-density` re-skins live (no rebuild needed). If live switching stops working, the most likely cause is a CSS rule that hard-coded a value instead of referencing a token.
 
 ---
 

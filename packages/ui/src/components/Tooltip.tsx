@@ -2,15 +2,6 @@ import { forwardRef, type ComponentPropsWithoutRef } from "react";
 import { Tooltip as BaseTooltip } from "@base-ui/react/tooltip";
 import { cn } from "../utils/cn";
 
-const popupClasses =
-  "z-50 max-w-xs rounded-sm px-2 py-1 text-xs " +
-  "bg-bg-inverse text-text-inverse shadow-md " +
-  "origin-[var(--transform-origin)] " +
-  "transition-[opacity,transform,scale] duration-fast ease-out " +
-  "data-[starting-style]:opacity-0 data-[starting-style]:scale-95 " +
-  "data-[ending-style]:opacity-0 data-[ending-style]:scale-95 " +
-  "data-[instant]:duration-0";
-
 type BasePopupProps = ComponentPropsWithoutRef<typeof BaseTooltip.Popup>;
 
 export interface TooltipContentProps extends Omit<BasePopupProps, "className" | "render"> {
@@ -28,11 +19,11 @@ const TooltipContent = forwardRef<HTMLDivElement, TooltipContentProps>(
           sideOffset={sideOffset}
           side={side}
           align={align}
-          className="outline-none z-50"
+          className="pds-tooltip-positioner"
         >
           <BaseTooltip.Popup
             ref={ref}
-            className={cn(popupClasses, className)}
+            className={cn("pds-tooltip-popup", className)}
             {...props}
           >
             {children}

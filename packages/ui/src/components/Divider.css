@@ -1,0 +1,15 @@
+/* Divider */
+.pds-divider {
+  background-color: var(--color-border-secondary);
+  flex-shrink: 0;
+}
+
+.pds-divider--horizontal {
+  height: 1px;
+  width: 100%;
+}
+
+.pds-divider--vertical {
+  width: 1px;
+  align-self: stretch;
+}

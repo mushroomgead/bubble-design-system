@@ -1,0 +1,32 @@
+/* Avatar */
+.pds-avatar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border-radius: var(--radius-full);
+  background-color: var(--color-bg-tertiary);
+  color: var(--color-text-secondary);
+  font-weight: var(--font-weight-medium);
+  user-select: none;
+  vertical-align: middle;
+}
+
+.pds-avatar--sm { width: 1.5rem; height: 1.5rem; font-size: var(--font-size-xs); }
+.pds-avatar--md { width: 2rem; height: 2rem; font-size: var(--font-size-sm); }
+.pds-avatar--lg { width: 2.5rem; height: 2.5rem; font-size: var(--font-size-md); }
+.pds-avatar--xl { width: 3rem; height: 3rem; font-size: var(--font-size-lg); }
+
+.pds-avatar__image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.pds-avatar__fallback {
+  display: inline-flex;
+  width: 100%;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+}

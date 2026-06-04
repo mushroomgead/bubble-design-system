@@ -1,0 +1,97 @@
+/* Toast — viewport */
+.pds-toast-viewport {
+  position: fixed;
+  bottom: 1rem;
+  right: 1rem;
+  z-index: 50;
+  margin-inline: auto;
+  display: flex;
+  flex-direction: column-reverse;
+  width: min(420px, calc(100vw - 2rem));
+  outline: none;
+}
+
+/* item (root + content combined for a single Base UI Root) */
+.pds-toast-item {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: auto;
+  width: 100%;
+  border: 1px solid var(--color-border-secondary);
+  background-color: var(--color-bg-primary);
+  color: var(--color-text-primary);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-lg);
+  padding: 1rem 2.5rem 1rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+
+  transform:
+    translateX(var(--toast-swipe-movement-x))
+    translateY(calc(var(--toast-index) * -20% + var(--toast-swipe-movement-y)));
+  transition:
+    transform 350ms var(--ease-out),
+    opacity 350ms var(--ease-out),
+    background-color 200ms var(--ease-out),
+    color 200ms var(--ease-out);
+}
+
+.pds-toast-item[data-expanded] {
+  transform: translateY(calc(var(--toast-offset-y) * -1px - var(--toast-index) * var(--gap)));
+}
+
+.pds-toast-item[data-limited] {
+  opacity: 0;
+}
+
+.pds-toast-item::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 100%;
+  height: calc(var(--gap) + 1px);
+}
+
+.pds-toast-title {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--line-height-snug);
+}
+
+.pds-toast-description {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  line-height: var(--line-height-snug);
+}
+
+.pds-toast-close {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  display: inline-flex;
+  width: 1.75rem;
+  height: 1.75rem;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  background: transparent;
+  border-radius: var(--radius-md);
+  color: var(--color-text-tertiary);
+  cursor: pointer;
+  transition: background-color var(--duration-fast) var(--ease-out), color var(--duration-fast) var(--ease-out);
+}
+
+.pds-toast-close:hover {
+  background-color: var(--color-bg-hover);
+  color: var(--color-text-primary);
+}
+
+.pds-toast-close:focus-visible {
+  outline: none;
+  box-shadow: var(--shadow-focus);
+}
+
+.pds-toast-close svg { width: 1rem; height: 1rem; }

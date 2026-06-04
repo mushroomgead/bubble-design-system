@@ -12,7 +12,6 @@ export default defineConfig({
   external: [
     "react",
     "react-dom",
-    "tailwindcss",
     "@base-ui/react",
   ],
 });

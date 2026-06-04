@@ -4,17 +4,6 @@ import { cn } from "../utils/cn";
 
 type AvatarSize = "sm" | "md" | "lg" | "xl";
 
-const sizeClasses: Record<AvatarSize, string> = {
-  sm: "size-6 text-xs",
-  md: "size-8 text-sm",
-  lg: "size-10 text-md",
-  xl: "size-12 text-lg",
-};
-
-const rootClasses =
-  "inline-flex items-center justify-center overflow-hidden rounded-full " +
-  "bg-bg-tertiary text-text-secondary font-medium select-none align-middle";
-
 type BaseRootProps = ComponentPropsWithoutRef<typeof BaseAvatar.Root>;
 type BaseImageProps = ComponentPropsWithoutRef<typeof BaseAvatar.Image>;
 type BaseFallbackProps = ComponentPropsWithoutRef<typeof BaseAvatar.Fallback>;
@@ -29,7 +18,7 @@ const AvatarRoot = forwardRef<HTMLSpanElement, AvatarProps>(
     return (
       <BaseAvatar.Root
         ref={ref}
-        className={cn(rootClasses, sizeClasses[size], className)}
+        className={cn("pds-avatar", `pds-avatar--${size}`, className)}
         {...props}
       />
     );
@@ -46,7 +35,7 @@ const AvatarImage = forwardRef<HTMLImageElement, AvatarImageProps>(
     return (
       <BaseAvatar.Image
         ref={ref}
-        className={cn("size-full object-cover", className)}
+        className={cn("pds-avatar__image", className)}
         {...props}
       />
     );
@@ -63,7 +52,7 @@ const AvatarFallback = forwardRef<HTMLSpanElement, AvatarFallbackProps>(
     return (
       <BaseAvatar.Fallback
         ref={ref}
-        className={cn("inline-flex size-full items-center justify-center", className)}
+        className={cn("pds-avatar__fallback", className)}
         {...props}
       />
     );

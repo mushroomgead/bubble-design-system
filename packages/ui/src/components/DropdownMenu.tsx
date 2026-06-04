@@ -2,25 +2,6 @@ import { forwardRef, type ComponentPropsWithoutRef } from "react";
 import { Menu as BaseMenu } from "@base-ui/react/menu";
 import { cn } from "../utils/cn";
 
-const popupClasses =
-  "z-50 min-w-44 max-h-[var(--available-height)] overflow-y-auto " +
-  "bg-bg-primary border border-border-primary rounded-md shadow-lg " +
-  "p-1 outline-none origin-[var(--transform-origin)] " +
-  "transition-[opacity,transform,scale] duration-fast ease-out " +
-  "data-[starting-style]:opacity-0 data-[starting-style]:scale-95 " +
-  "data-[ending-style]:opacity-0 data-[ending-style]:scale-95";
-
-const itemClasses =
-  "relative flex items-center gap-2 rounded-sm px-2 py-1.5 text-sm cursor-pointer select-none " +
-  "outline-none text-text-primary " +
-  "data-[highlighted]:bg-bg-hover " +
-  "data-[disabled]:text-text-disabled data-[disabled]:cursor-not-allowed data-[disabled]:bg-transparent";
-
-const labelClasses =
-  "px-2 py-1.5 text-xs font-semibold text-text-tertiary uppercase tracking-wide";
-
-const separatorClasses = "my-1 h-px bg-border-tertiary";
-
 type PopupProps = ComponentPropsWithoutRef<typeof BaseMenu.Popup>;
 type ItemProps = ComponentPropsWithoutRef<typeof BaseMenu.Item>;
 type CheckboxItemProps = ComponentPropsWithoutRef<typeof BaseMenu.CheckboxItem>;
@@ -41,11 +22,11 @@ const DropdownMenuContent = forwardRef<HTMLDivElement, DropdownMenuContentProps>
         <BaseMenu.Positioner
           sideOffset={sideOffset}
           align={align}
-          className="outline-none z-50"
+          className="pds-menu-positioner"
         >
           <BaseMenu.Popup
             ref={ref as never}
-            className={cn(popupClasses, className)}
+            className={cn("pds-menu-popup", className)}
             {...props}
           >
             {children}
@@ -66,7 +47,7 @@ const DropdownMenuItem = forwardRef<HTMLDivElement, DropdownMenuItemProps>(
     return (
       <BaseMenu.Item
         ref={ref as never}
-        className={cn(itemClasses, className)}
+        className={cn("pds-menu-item", className)}
         {...props}
       />
     );
@@ -83,11 +64,11 @@ const DropdownMenuCheckboxItem = forwardRef<HTMLDivElement, DropdownMenuCheckbox
     return (
       <BaseMenu.CheckboxItem
         ref={ref as never}
-        className={cn(itemClasses, "pl-7", className)}
+        className={cn("pds-menu-item", "pds-menu-item--indented", className)}
         {...props}
       >
-        <BaseMenu.CheckboxItemIndicator className="absolute left-2 inline-flex items-center text-text-brand">
-          <svg viewBox="0 0 16 16" fill="none" className="size-3.5" aria-hidden="true">
+        <BaseMenu.CheckboxItemIndicator className="pds-menu-item__indicator">
+          <svg viewBox="0 0 16 16" fill="none" aria-hidden="true">
             <path
               d="M3.5 8.5l3 3 6-6.5"
               stroke="currentColor"
@@ -113,11 +94,11 @@ const DropdownMenuRadioItem = forwardRef<HTMLDivElement, DropdownMenuRadioItemPr
     return (
       <BaseMenu.RadioItem
         ref={ref as never}
-        className={cn(itemClasses, "pl-7", className)}
+        className={cn("pds-menu-item", "pds-menu-item--indented", className)}
         {...props}
       >
-        <BaseMenu.RadioItemIndicator className="absolute left-2 inline-flex items-center text-text-brand">
-          <svg viewBox="0 0 16 16" fill="currentColor" className="size-2" aria-hidden="true">
+        <BaseMenu.RadioItemIndicator className="pds-menu-item__indicator pds-menu-item__indicator--radio">
+          <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
             <circle cx="8" cy="8" r="8" />
           </svg>
         </BaseMenu.RadioItemIndicator>
@@ -137,7 +118,7 @@ const DropdownMenuLabel = forwardRef<HTMLDivElement, DropdownMenuLabelProps>(
     return (
       <BaseMenu.GroupLabel
         ref={ref}
-        className={cn(labelClasses, className)}
+        className={cn("pds-menu-label", className)}
         {...props}
       />
     );
@@ -154,7 +135,7 @@ const DropdownMenuSeparator = forwardRef<HTMLDivElement, DropdownMenuSeparatorPr
     return (
       <BaseMenu.Separator
         ref={ref}
-        className={cn(separatorClasses, className)}
+        className={cn("pds-menu-separator", className)}
         {...props}
       />
     );

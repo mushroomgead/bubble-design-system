@@ -1,0 +1,94 @@
+/* Container */
+.pds-container {
+  margin-inline: auto;
+  width: 100%;
+  padding-inline: var(--grid-margin);
+}
+
+@media (min-width: 1024px) {
+  .pds-container { padding-inline: var(--grid-margin-lg); }
+}
+
+.pds-container--sm    { max-width: var(--container-sm); }
+.pds-container--md    { max-width: var(--container-md); }
+.pds-container--lg    { max-width: var(--container-lg); }
+.pds-container--xl    { max-width: var(--container-xl); }
+.pds-container--prose { max-width: var(--container-prose); }
+.pds-container--fluid { max-width: none; }
+
+/* Grid root */
+.pds-grid {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: var(--grid-gutter-tight);
+}
+
+@media (min-width: 640px) {
+  .pds-grid--default { gap: var(--grid-gutter); }
+}
+
+.pds-grid--tight { gap: var(--grid-gutter-tight); }
+.pds-grid--flush { gap: 0; }
+
+/* Grid columns */
+.pds-grid__col--span-1  { grid-column: span 1 / span 1; }
+.pds-grid__col--span-2  { grid-column: span 2 / span 2; }
+.pds-grid__col--span-3  { grid-column: span 3 / span 3; }
+.pds-grid__col--span-4  { grid-column: span 4 / span 4; }
+.pds-grid__col--span-5  { grid-column: span 5 / span 5; }
+.pds-grid__col--span-6  { grid-column: span 6 / span 6; }
+.pds-grid__col--span-7  { grid-column: span 7 / span 7; }
+.pds-grid__col--span-8  { grid-column: span 8 / span 8; }
+.pds-grid__col--span-9  { grid-column: span 9 / span 9; }
+.pds-grid__col--span-10 { grid-column: span 10 / span 10; }
+.pds-grid__col--span-11 { grid-column: span 11 / span 11; }
+.pds-grid__col--span-12 { grid-column: span 12 / span 12; }
+.pds-grid__col--span-full { grid-column: 1 / -1; }
+
+@media (min-width: 640px) {
+  .pds-grid__col--sm-span-1  { grid-column: span 1 / span 1; }
+  .pds-grid__col--sm-span-2  { grid-column: span 2 / span 2; }
+  .pds-grid__col--sm-span-3  { grid-column: span 3 / span 3; }
+  .pds-grid__col--sm-span-4  { grid-column: span 4 / span 4; }
+  .pds-grid__col--sm-span-5  { grid-column: span 5 / span 5; }
+  .pds-grid__col--sm-span-6  { grid-column: span 6 / span 6; }
+  .pds-grid__col--sm-span-7  { grid-column: span 7 / span 7; }
+  .pds-grid__col--sm-span-8  { grid-column: span 8 / span 8; }
+  .pds-grid__col--sm-span-9  { grid-column: span 9 / span 9; }
+  .pds-grid__col--sm-span-10 { grid-column: span 10 / span 10; }
+  .pds-grid__col--sm-span-11 { grid-column: span 11 / span 11; }
+  .pds-grid__col--sm-span-12 { grid-column: span 12 / span 12; }
+  .pds-grid__col--sm-span-full { grid-column: 1 / -1; }
+}
+
+@media (min-width: 768px) {
+  .pds-grid__col--md-span-1  { grid-column: span 1 / span 1; }
+  .pds-grid__col--md-span-2  { grid-column: span 2 / span 2; }
+  .pds-grid__col--md-span-3  { grid-column: span 3 / span 3; }
+  .pds-grid__col--md-span-4  { grid-column: span 4 / span 4; }
+  .pds-grid__col--md-span-5  { grid-column: span 5 / span 5; }
+  .pds-grid__col--md-span-6  { grid-column: span 6 / span 6; }
+  .pds-grid__col--md-span-7  { grid-column: span 7 / span 7; }
+  .pds-grid__col--md-span-8  { grid-column: span 8 / span 8; }
+  .pds-grid__col--md-span-9  { grid-column: span 9 / span 9; }
+  .pds-grid__col--md-span-10 { grid-column: span 10 / span 10; }
+  .pds-grid__col--md-span-11 { grid-column: span 11 / span 11; }
+  .pds-grid__col--md-span-12 { grid-column: span 12 / span 12; }
+  .pds-grid__col--md-span-full { grid-column: 1 / -1; }
+}
+
+@media (min-width: 1024px) {
+  .pds-grid__col--lg-span-1  { grid-column: span 1 / span 1; }
+  .pds-grid__col--lg-span-2  { grid-column: span 2 / span 2; }
+  .pds-grid__col--lg-span-3  { grid-column: span 3 / span 3; }
+  .pds-grid__col--lg-span-4  { grid-column: span 4 / span 4; }
+  .pds-grid__col--lg-span-5  { grid-column: span 5 / span 5; }
+  .pds-grid__col--lg-span-6  { grid-column: span 6 / span 6; }
+  .pds-grid__col--lg-span-7  { grid-column: span 7 / span 7; }
+  .pds-grid__col--lg-span-8  { grid-column: span 8 / span 8; }
+  .pds-grid__col--lg-span-9  { grid-column: span 9 / span 9; }
+  .pds-grid__col--lg-span-10 { grid-column: span 10 / span 10; }
+  .pds-grid__col--lg-span-11 { grid-column: span 11 / span 11; }
+  .pds-grid__col--lg-span-12 { grid-column: span 12 / span 12; }
+  .pds-grid__col--lg-span-full { grid-column: 1 / -1; }
+}

@@ -50,3 +50,32 @@ export {
   type DropdownMenuSeparatorProps,
 } from "./components/DropdownMenu";
 export { Skeleton, type SkeletonProps } from "./components/Skeleton";
+export {
+  Card,
+  type CardProps,
+  type CardHeaderProps,
+  type CardTitleProps,
+  type CardDescriptionProps,
+  type CardActionProps,
+  type CardBodyProps,
+  type CardFooterProps,
+} from "./components/Card";
+export { Textarea, type TextareaProps } from "./components/Textarea";
+export {
+  StatusPill,
+  type StatusPillProps,
+  type StatusPillIndicatorProps,
+  type StatusPillLabelProps,
+} from "./components/StatusPill";
+export {
+  Segmented,
+  type SegmentedProps,
+  type SegmentedItemProps,
+} from "./components/Segmented";
+export {
+  Container,
+  Grid,
+  type ContainerProps,
+  type GridRootProps,
+  type GridColProps,
+} from "./components/Grid";

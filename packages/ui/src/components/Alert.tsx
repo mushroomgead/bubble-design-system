@@ -3,16 +3,6 @@ import { cn } from "../utils/cn";
 
 type AlertVariant = "info" | "success" | "warning" | "danger";
 
-const baseClasses =
-  "relative flex items-start gap-3 rounded-md border px-4 py-3 text-sm";
-
-const variantClasses: Record<AlertVariant, string> = {
-  info: "bg-bg-info border-border-secondary text-text-primary [&_[data-alert-icon]]:text-text-brand",
-  success: "bg-bg-success border-border-success text-text-primary [&_[data-alert-icon]]:text-text-success",
-  warning: "bg-bg-warning border-border-warning text-text-primary [&_[data-alert-icon]]:text-text-warning",
-  danger: "bg-bg-danger border-border-danger text-text-primary [&_[data-alert-icon]]:text-text-danger",
-};
-
 const icons: Record<AlertVariant, ReactNode> = {
   info: (
     <svg viewBox="0 0 16 16" fill="none" aria-hidden="true">
@@ -58,21 +48,16 @@ export const Alert = forwardRef<HTMLDivElement, AlertProps>(
       <div
         ref={ref}
         role="alert"
-        className={cn(baseClasses, variantClasses[variant], className)}
+        className={cn("pds-alert", `pds-alert--${variant}`, className)}
         {...props}
       >
         {renderedIcon ? (
-          <span
-            data-alert-icon
-            className="inline-flex size-5 shrink-0 items-center justify-center [&_svg]:size-5"
-          >
-            {renderedIcon}
-          </span>
+          <span className="pds-alert__icon">{renderedIcon}</span>
         ) : null}
-        <div className="flex-1 space-y-0.5">
-          {title ? <div className="font-semibold leading-snug">{title}</div> : null}
+        <div className="pds-alert__body">
+          {title ? <div className="pds-alert__title">{title}</div> : null}
           {children ? (
-            <div className="text-text-secondary leading-snug">{children}</div>
+            <div className="pds-alert__description">{children}</div>
           ) : null}
         </div>
       </div>
