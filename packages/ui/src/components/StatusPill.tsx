@@ -1,7 +1,5 @@
 import {
-  createContext,
   forwardRef,
-  useContext,
   type CSSProperties,
   type HTMLAttributes,
 } from "react";
@@ -32,8 +30,6 @@ const intentVars: Record<StatusPillIntent, CSSProperties> = {
   },
 };
 
-const StatusPillContext = createContext<StatusPillIntent>("neutral");
-
 export interface StatusPillProps extends HTMLAttributes<HTMLSpanElement> {
   intent?: StatusPillIntent;
 }
@@ -41,14 +37,12 @@ export interface StatusPillProps extends HTMLAttributes<HTMLSpanElement> {
 const StatusPillRoot = forwardRef<HTMLSpanElement, StatusPillProps>(
   ({ intent = "neutral", className, style, ...props }, ref) => {
     return (
-      <StatusPillContext.Provider value={intent}>
-        <span
-          ref={ref}
-          className={cn("pds-status-pill", className)}
-          style={{ ...intentVars[intent], ...style }}
-          {...props}
-        />
-      </StatusPillContext.Provider>
+      <span
+        ref={ref}
+        className={cn("pds-status-pill", className)}
+        style={{ ...intentVars[intent], ...style }}
+        {...props}
+      />
     );
   },
 );
@@ -57,27 +51,27 @@ StatusPillRoot.displayName = "StatusPill";
 export interface StatusPillIndicatorProps
   extends HTMLAttributes<HTMLSpanElement> {}
 
-const StatusPillIndicator = forwardRef<HTMLSpanElement, StatusPillIndicatorProps>(
-  ({ className, children, ...props }, ref) => {
-    return (
-      <span
-        ref={ref}
-        aria-hidden="true"
-        className={cn("pds-status-pill__indicator", className)}
-        {...props}
-      >
-        {children}
-      </span>
-    );
-  },
-);
+const StatusPillIndicator = forwardRef<
+  HTMLSpanElement,
+  StatusPillIndicatorProps
+>(({ className, children, ...props }, ref) => {
+  return (
+    <span
+      ref={ref}
+      aria-hidden="true"
+      className={cn("pds-status-pill__indicator", className)}
+      {...props}
+    >
+      {children}
+    </span>
+  );
+});
 StatusPillIndicator.displayName = "StatusPill.Indicator";
 
 export interface StatusPillLabelProps extends HTMLAttributes<HTMLSpanElement> {}
 
 const StatusPillLabel = forwardRef<HTMLSpanElement, StatusPillLabelProps>(
   ({ className, ...props }, ref) => {
-    useContext(StatusPillContext);
     return (
       <span
         ref={ref}

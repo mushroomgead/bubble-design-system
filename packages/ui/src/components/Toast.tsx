@@ -1,3 +1,5 @@
+"use client";
+
 import { forwardRef, type ComponentPropsWithoutRef } from "react";
 import { Toast as BaseToast } from "@base-ui/react/toast";
 import { cn } from "../utils/cn";

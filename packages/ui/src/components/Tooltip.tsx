@@ -1,3 +1,5 @@
+"use client";
+
 import { forwardRef, type ComponentPropsWithoutRef } from "react";
 import { Tooltip as BaseTooltip } from "@base-ui/react/tooltip";
 import { cn } from "../utils/cn";

@@ -3,7 +3,7 @@ import type { ReactNode } from "react";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Plain DS — Docs",
+  title: "Bubble DS — Docs",
   description: "Component gallery for @bubble-design-system/ui",
 };
 
@@ -24,6 +24,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       data-radius="default"
       data-density="default"
       data-font="geist"
+      suppressHydrationWarning
     >
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeBootstrap }} />

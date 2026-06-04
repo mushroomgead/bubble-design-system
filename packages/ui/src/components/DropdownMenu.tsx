@@ -1,3 +1,5 @@
+"use client";
+
 import { forwardRef, type ComponentPropsWithoutRef } from "react";
 import { Menu as BaseMenu } from "@base-ui/react/menu";
 import { cn } from "../utils/cn";

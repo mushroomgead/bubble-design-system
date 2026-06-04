@@ -1,3 +1,5 @@
+"use client";
+
 import { forwardRef, type ComponentPropsWithoutRef, type ReactNode } from "react";
 import { Select as BaseSelect } from "@base-ui/react/select";
 import { cn } from "../utils/cn";

@@ -48,6 +48,19 @@ fs.mkdirSync(distDir, { recursive: true });
 fs.writeFileSync(path.join(distDir, "styles.css"), stylesCss);
 fs.writeFileSync(path.join(distDir, "tokens.css"), tokens);
 
+// Prepend "use client" to the JS bundles so Next.js App Router treats the
+// entire package as a client module. esbuild strips the directive during
+// bundling, so we re-add it as a post-build step.
+for (const bundle of ["index.js", "index.cjs"]) {
+  const bundlePath = path.join(distDir, bundle);
+  if (fs.existsSync(bundlePath)) {
+    const content = fs.readFileSync(bundlePath, "utf8");
+    if (!content.startsWith('"use client"')) {
+      fs.writeFileSync(bundlePath, '"use client";\n' + content);
+    }
+  }
+}
+
 const kb = (stylesCss.length / 1024).toFixed(1);
 console.log(
   `✓ dist/styles.css (${kb} KB, ${componentFiles.length} components + tokens + base)`,

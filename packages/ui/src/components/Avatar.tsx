@@ -1,3 +1,5 @@
+"use client";
+
 import { forwardRef, type ComponentPropsWithoutRef } from "react";
 import { Avatar as BaseAvatar } from "@base-ui/react/avatar";
 import { cn } from "../utils/cn";
