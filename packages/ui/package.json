@@ -1,26 +1,26 @@
 {
   "name": "@bubble-design-system/ui",
   "version": "0.2.0",
-  "description": "Plain Design System — soft + teal floating-pill UI on Base UI, with token-driven theming and a single shipped stylesheet (no Tailwind required).",
+  "description": "Bubble Design System — soft + teal floating-pill UI on Base UI, with token-driven theming and a single shipped stylesheet (no Tailwind required).",
   "keywords": [
     "react",
     "design-system",
     "base-ui",
     "bubble",
-    "plain-design-system",
+    "bubble-design-system",
     "components",
     "ui",
     "headless",
     "tokens",
     "css-variables"
   ],
-  "homepage": "https://github.com/mushroomgead/plain-design-system#readme",
+  "homepage": "https://github.com/mushroomgead/bubble-design-system#readme",
   "bugs": {
-    "url": "https://github.com/mushroomgead/plain-design-system/issues"
+    "url": "https://github.com/mushroomgead/bubble-design-system/issues"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/mushroomgead/plain-design-system.git",
+    "url": "git+https://github.com/mushroomgead/bubble-design-system.git",
     "directory": "packages/ui"
   },
   "author": "mushroomgade <mushroom.gead@gmail.com>",

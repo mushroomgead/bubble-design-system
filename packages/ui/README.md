@@ -186,7 +186,7 @@ document.documentElement.setAttribute("data-theme", "dark");
 document.documentElement.setAttribute("data-brand", "violet");
 ```
 
-A working live-switcher implementation (with `localStorage` persistence and an SSR-safe bootstrap script) lives in the docs app — see `apps/docs/app/ThemeBar.tsx` and `apps/docs/app/layout.tsx` in the [repository](https://github.com/mushroomgead/plain-design-system).
+A working live-switcher implementation (with `localStorage` persistence and an SSR-safe bootstrap script) lives in the docs app — see `apps/docs/app/ThemeBar.tsx` and `apps/docs/app/layout.tsx` in the [repository](https://github.com/mushroomgead/bubble-design-system).
 
 ---
 

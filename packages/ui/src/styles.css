@@ -1,5 +1,5 @@
 /*
- * Plain Design System — top-level stylesheet.
+ * Bubble Design System — top-level stylesheet.
  *
  * In source form this file @imports tokens.css, base.css, and each
  * component's CSS module. The build pipeline (scripts/build-css.mjs)

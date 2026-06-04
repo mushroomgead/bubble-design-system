@@ -1,6 +1,6 @@
 // Concatenates tokens.css + base.css + every component CSS file into a
 // single dist/styles.css. Also copies tokens.css to dist/ for the
-// "@plain-design-system/ui/tokens.css" sub-path.
+// "@bubble-design-system/ui/tokens.css" sub-path.
 //
 // We intentionally don't depend on postcss-import — this keeps the build
 // pipeline dependency-free and easy to reason about. The source file
