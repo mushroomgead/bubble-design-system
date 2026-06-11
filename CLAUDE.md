@@ -49,7 +49,7 @@ This is a pnpm-workspaces monorepo for a token-driven React design system. Two w
    - `cn("pds-btn", `pds-btn--${variant}`, `pds-btn--${size}`, className)` — user `className` last so it wins via CSS class-name ordering inside the attribute
    - All hover/focus/disabled/data-state behaviour lives in the component's CSS file, not the JSX
 
-4. **`apps/docs/app/globals.css`** — `@import "@bubble-design-system/ui/styles.css"` plus a small set of `docs-*` helper classes (page chrome, ThemeBar styles, layout grids, token-row styles). The docs app is internal-only — it never reaches consumers. `app/layout.tsx` sets all seven `data-*` attributes on `<html>` (theme · tone · gray · brand · radius · density · font) — canonical Bubble defaults are `light · soft · slate · teal · default · default · geist`.
+4. **`apps/docs/app/globals.css`** — `@import "@bubble-design-system/ui/styles.css"` plus a small set of `docs-*` helper classes (page chrome, ThemeBar styles, layout grids, token-row styles). The docs app is internal-only — it never reaches consumers. `app/layout.tsx` sets all seven `data-*` attributes on `<html>` (theme · tone · gray · brand · radius · density · font) — canonical Bubble defaults are `light · soft · slate · teal · default · default · roboto`.
 
 ### Component-authoring rules
 

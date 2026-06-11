@@ -2,7 +2,7 @@
 
 > Bubble — a **neutral, composable, token-driven UI foundation** built on [Base UI](https://base-ui.com/), shipped as a single plain CSS file.
 
-Bubble's signature is the **soft tone with a teal brand**: a soft-gray page (`#ECEDEF`) on which **white pill-shaped surfaces float** via layered shadows + an inset white top-highlight, accented by teal (`#00CEC8`) and a pink→magenta→violet **gradient blob** mark. The canonical identity is `tone=soft · brand=teal · gray=slate · radius=default · density=default · font=geist · light`.
+Bubble's signature is the **soft tone with a teal brand**: a soft-gray page (`#ECEDEF`) on which **white pill-shaped surfaces float** via layered shadows + an inset white top-highlight, accented by teal (`#00CEC8`) and a pink→magenta→violet **gradient blob** mark. The canonical identity is `tone=soft · brand=teal · gray=slate · radius=default · density=default · font=roboto · light`.
 
 Every visual decision — tone, color, brand, gray family, radius, density, typography, motion — is driven by CSS custom properties. Toggle a single `data-*` attribute on `<html>` and the whole app re-skins live, with no rebuild.
 
@@ -14,12 +14,12 @@ Every visual decision — tone, color, brand, gray family, radius, density, typo
   data-gray="slate"
   data-radius="default"
   data-density="default"
-  data-font="geist"
+  data-font="roboto"
 >
 ```
 
 - **21 components** — Button, Input, Textarea, Checkbox, Radio, Switch, Select, Badge, Avatar, Divider, Modal, Toast, Tooltip, Tabs, Alert, DropdownMenu, Skeleton, Card, StatusPill, Segmented (plus Container + Grid layout primitives). Each wraps an [`@base-ui/react`](https://base-ui.com/) primitive where one exists — accessible by construction, styled with a single shipped stylesheet.
-- **A 3-layer, multi-theme token system** spanning color (light/dark · 3 gray families · 6 brand palettes including teal), **3 tones** (vivid · pastel · soft — soft is the signature look), radius (4 scales), density (3 scales), typography (3 font pairs), layered shadows, and motion.
+- **A 3-layer, multi-theme token system** spanning color (light/dark · 3 gray families · 6 brand palettes including teal), **3 tones** (vivid · pastel · soft — soft is the signature look), radius (4 scales), density (3 scales), typography (2 font pairs), layered shadows, and motion.
 - **Live theme switching** via seven `data-*` attributes on any ancestor. Every CSS rule reads `var(--…)` at use-site, so swapping `data-tone="vivid"` for `data-tone="soft"` reflows the UI without re-rendering or rebuilding.
 - **No build dependency in consumer apps.** One CSS import. No PostCSS, no Tailwind, no preprocessor required.
 - **Dual ESM + CJS** with per-format `.d.ts` / `.d.cts`. `sideEffects` is scoped to the CSS so unused components tree-shake.
@@ -131,7 +131,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       data-gray="slate"
       data-radius="default"
       data-density="default"
-      data-font="geist"
+      data-font="roboto"
     >
       <body>{children}</body>
     </html>
@@ -177,7 +177,7 @@ Seven `data-*` attributes on any ancestor element (typically `<html>` or `<body>
 | `data-brand` | `blue` · `violet` · `emerald` · `orange` · `mono` · `teal` | `teal` | The brand palette (`--brand-50` through `--brand-950`). |
 | `data-radius` | `default` · `sharp` · `soft` · `pill` | `default` | The corner radius scale (`--radius-xs` through `--radius-2xl`). |
 | `data-density` | `default` · `compact` · `comfortable` | `default` | Control heights and padding (`--control-h-*`, `--control-px-*`). |
-| `data-font` | `geist` · `plex` · `system` | `geist` | The font pair (`--font-sans` / `--font-mono`). |
+| `data-font` | `roboto` · `system` | `roboto` | The font pair (`--font-sans` / `--font-mono`). |
 
 Toggle them with any approach you like — `setAttribute`, React state, a media-query listener, a server cookie:
 

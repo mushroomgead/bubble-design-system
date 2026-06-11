@@ -23,7 +23,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       data-brand="teal"
       data-radius="default"
       data-density="default"
-      data-font="geist"
+      data-font="roboto"
       suppressHydrationWarning
     >
       <head>

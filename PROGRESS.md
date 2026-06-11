@@ -2,7 +2,7 @@
 
 > Read this first when resuming work. It catches you up on every decision, what's done, what's next, and how to verify everything still works.
 
-**Last updated:** 2026-06-04 (Removed Tailwind entirely — lib now ships a single hand-authored `styles.css` with stable BEM class names; `tailwindcss` peerDep + `tailwind-merge` runtime dep dropped; docs app also de-Tailwinded; v0.2.0 released)
+**Last updated:** 2026-06-11 (Switched the default `[data-font]` typeface from Geist to Roboto and dropped the `plex` option — `[data-font]` now has two values, `roboto` (default) and `system`)
 
 ---
 
@@ -48,6 +48,8 @@ A neutral, minimal, token-driven design system built as a **portfolio + learning
   - **`Skeleton`** — pure CSS. Tailwind's built-in `animate-pulse` over `bg-bg-tertiary`. Shapes `line` (h-4 w-full rounded-sm), `circle` (rounded-full, no default size — caller picks via className), `block` (rounded-md, no default size). Marked `aria-hidden="true"`.
   - All seven exported from `src/index.ts` with their `*Props` types. `apps/docs/app/page.tsx` wraps the gallery in `<Toast.Provider><Tooltip.Provider>` and adds a section per component (Modal has a destructive-confirm example, DropdownMenu exercises CheckboxItem + RadioGroup, Toast has a `ToastDemo` child component that calls `useToast().add()`).
 - [x] **ThemeBar — live token-switching UI in docs** (2026-05-25). Replaces the DevTools-snippet section. New file `apps/docs/app/ThemeBar.tsx` ("use client"): a sticky-top bar with six dropdowns (Theme / Gray / Brand / Radius / Density / Font) plus a Reset button. Each dropdown is a `<Select>` from `@bubble-design-system/ui` — dogfooding the lib's own primitive in the docs. On change, calls `document.documentElement.setAttribute(attr, value)` and persists the full state object to `localStorage` under key `plain-ds:theme`. **Flash-of-default avoidance:** `apps/docs/app/layout.tsx` injects a tiny synchronous `<script>` in `<head>` (via `dangerouslySetInnerHTML`) that reads localStorage and re-applies the data-attributes before first paint. Without that pre-paint script, the page would briefly render in the defaults (light/slate/orange/default/default/geist) before the React `useEffect` swapped them in on mount.
+
+- [x] **Default typeface switched to Roboto, `plex` removed** (2026-06-11). `[data-font]` in `tokens.css` now has two values: `roboto` (new `:root` default — `--font-sans: 'Roboto', ui-sans-serif, system-ui, -apple-system, sans-serif`, `--font-mono: 'Roboto Mono', ui-monospace, 'SF Mono', Menlo, monospace`) and `system` (unchanged). The `geist`/`plex` blocks were removed. Rationale: user preference for Roboto as the system typeface. CSS-variable-only, no font loading added — same as how `geist`/`plex` were handled (named font, falls back to system fonts where unavailable). Updated everywhere the axis is documented or exercised: `apps/docs/app/layout.tsx` (`data-font="roboto"`), `ThemeBar.tsx` (options `["roboto", "system"]`, default `roboto`), `apps/docs/app/tokens/page.tsx`, `packages/ui/README.md`, and `CLAUDE.md`'s canonical-defaults line. `packages/ui/src/assets/logo-wordmark.svg` still hard-codes `'Geist'` for the wordmark text — that's a static brand-mark asset independent of this token, left as-is.
 
 ### Todo (in order)
 - [ ] Codify component-authoring styleguide (see §10 "In-flight items" — three sub-decisions still pending)

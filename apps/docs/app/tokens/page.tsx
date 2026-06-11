@@ -174,7 +174,7 @@ const dataAttributes: { attr: string; values: string[]; effect: string }[] = [
   },
   {
     attr: "data-font",
-    values: ["geist", "plex", "system"],
+    values: ["roboto", "system"],
     effect: "Re-binds --font-sans and --font-mono.",
   },
 ];
@@ -328,7 +328,7 @@ export default function TokensPage() {
   data-brand="blue"
   data-radius="default"
   data-density="default"
-  data-font="geist"
+  data-font="roboto"
 >`}
         </pre>
       </Section>

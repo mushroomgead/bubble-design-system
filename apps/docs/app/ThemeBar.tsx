@@ -50,8 +50,8 @@ const axes: readonly Axis[] = [
   {
     attr: "data-font",
     label: "Font",
-    options: ["geist", "plex", "system"],
-    defaultValue: "geist",
+    options: ["roboto", "system"],
+    defaultValue: "roboto",
   },
 ];
 
