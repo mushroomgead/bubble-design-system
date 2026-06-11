@@ -1,6 +1,6 @@
 {
   "name": "@bubble-design-system/ui",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Bubble Design System — soft + teal floating-pill UI on Base UI, with token-driven theming and a single shipped stylesheet (no Tailwind required).",
   "keywords": [
     "react",
