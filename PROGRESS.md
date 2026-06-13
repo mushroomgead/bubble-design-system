@@ -2,7 +2,7 @@
 
 > Read this first when resuming work. It catches you up on every decision, what's done, what's next, and how to verify everything still works.
 
-**Last updated:** 2026-06-13 (Added three new components — `Popover`, `DataTable`, `CommandPalette` — from a second Anthropic design-bundle handoff)
+**Last updated:** 2026-06-13 (Published `@bubble-design-system/ui@1.1.0` to npm)
 
 ---
 
@@ -53,12 +53,11 @@ A neutral, minimal, token-driven design system built as a **portfolio + learning
 - [x] **Default typeface switched to Roboto, `plex` removed** (2026-06-11). `[data-font]` in `tokens.css` now has two values: `roboto` (new `:root` default — `--font-sans: 'Roboto', ui-sans-serif, system-ui, -apple-system, sans-serif`, `--font-mono: 'Roboto Mono', ui-monospace, 'SF Mono', Menlo, monospace`) and `system` (unchanged). The `geist`/`plex` blocks were removed. Rationale: user preference for Roboto as the system typeface. CSS-variable-only, no font loading added — same as how `geist`/`plex` were handled (named font, falls back to system fonts where unavailable). Updated everywhere the axis is documented or exercised: `apps/docs/app/layout.tsx` (`data-font="roboto"`), `ThemeBar.tsx` (options `["roboto", "system"]`, default `roboto`), `apps/docs/app/tokens/page.tsx`, `packages/ui/README.md`, and `CLAUDE.md`'s canonical-defaults line. `packages/ui/src/assets/logo-wordmark.svg` still hard-codes `'Geist'` for the wordmark text — that's a static brand-mark asset independent of this token, left as-is.
 - [x] **Prettier + ESLint added as repo-wide static gates, wired into a Claude Code `PostToolUse` hook** (2026-06-13). Root `.prettierrc.json` (double quotes, semicolons, trailing commas, printWidth 80, tabWidth 2) + `.prettierignore` (`dist`, `.next`, `.turbo`, `storybook-static`, `node_modules`, `pnpm-lock.yaml`, `CHANGELOG.md`). New root scripts: `pnpm format` (`prettier --write .`), `pnpm format:check` (`prettier --check .`), `pnpm lint` (`pnpm -r run lint`). Each workspace got its own ESLint 9 flat config (`packages/ui/eslint.config.mjs`, `apps/docs/eslint.config.mjs`) plus a `"lint": "eslint ."` script — flat-config resolution is cwd-based so a shared root config wouldn't resolve per-workspace. One-time full-repo `pnpm exec prettier --write .` reformatted 42 files (user-approved after reviewing the diff scope, including the 854-line `tokens.css` rewrite — hex colors lowercased, hand-aligned columns removed). New `.claude/hooks/format-and-lint.mjs` + `.claude/settings.json` (`PostToolUse` on `Edit|MultiEdit|Write`): Prettier `--write`s the touched file, then for JS/TS files under `packages/ui` or `apps/docs` runs ESLint `--fix` with `cwd` set to that workspace; if errors remain after `--fix`, the hook exits 2 with the ESLint output on stderr so Claude sees it as blocking feedback. See §3.14 for the full rationale and the rule-tuning decisions (`no-empty-object-type`, `no-undef`, `set-state-in-effect`).
 - [x] **3 new components — Popover, DataTable, CommandPalette** (2026-06-13). See §3.15 for source, rationale, and the non-obvious implementation choices.
+- [x] **Published `@bubble-design-system/ui@1.1.0` to npm** (2026-06-13). Minor bump from `1.0.1` — additive only (new `Popover`/`DataTable`/`CommandPalette` exports + the Prettier/ESLint formatting pass, no API removals or breaking changes). `npm publish --dry-run` verified the tarball (13 files, dist/ + README + LICENSE + package.json) before the real publish. Switched `~/.npmrc` from a stale `_authToken` to a fresh npm **Automation token** (Account Settings → Access Tokens → Classic Token → Automation) — automation tokens bypass the per-publish OTP/2FA prompt that a normal login token requires, since the regular web-OTP URL printed by `npm publish` is redacted as `***` by the npm CLI itself (no way to open it).
 
 ### Todo (in order)
 
 - [ ] Codify component-authoring styleguide (see §10 "In-flight items" — three sub-decisions still pending)
-- [ ] Publish `@bubble-design-system/ui@0.2.0` to npm (breaking — `./preset.css` export renamed to `./styles.css`; `tailwindcss` peer dep dropped)
-- [ ] Push unpushed commits to origin
 
 ---
 
