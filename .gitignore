@@ -20,6 +20,9 @@ npm-debug.log*
 yarn-debug.log*
 pnpm-debug.log*
 
+# Claude Code local settings
+.claude/settings.local.json
+
 # IDE
 .vscode/*
 !.vscode/settings.json

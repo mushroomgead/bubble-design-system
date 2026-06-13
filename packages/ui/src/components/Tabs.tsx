@@ -63,7 +63,10 @@ const TabsTab = forwardRef<HTMLButtonElement, TabsTabProps>(
 );
 TabsTab.displayName = "Tabs.Tab";
 
-export interface TabsPanelProps extends Omit<PanelProps, "className" | "render"> {
+export interface TabsPanelProps extends Omit<
+  PanelProps,
+  "className" | "render"
+> {
   className?: string;
 }
 

@@ -5,8 +5,10 @@ import { cn } from "../utils/cn";
 
 type TextareaSize = "sm" | "md" | "lg";
 
-export interface TextareaProps
-  extends Omit<TextareaHTMLAttributes<HTMLTextAreaElement>, "size"> {
+export interface TextareaProps extends Omit<
+  TextareaHTMLAttributes<HTMLTextAreaElement>,
+  "size"
+> {
   size?: TextareaSize;
   invalid?: boolean;
 }

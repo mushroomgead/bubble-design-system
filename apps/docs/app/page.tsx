@@ -30,9 +30,20 @@ import Link from "next/link";
 import { useState } from "react";
 import { ThemeBar } from "./ThemeBar";
 
-const buttonVariants = ["primary", "secondary", "destructive", "ghost"] as const;
+const buttonVariants = [
+  "primary",
+  "secondary",
+  "destructive",
+  "ghost",
+] as const;
 const sizes = ["sm", "md", "lg"] as const;
-const badgeVariants = ["neutral", "brand", "success", "warning", "danger"] as const;
+const badgeVariants = [
+  "neutral",
+  "brand",
+  "success",
+  "warning",
+  "danger",
+] as const;
 const alertVariants = ["info", "success", "warning", "danger"] as const;
 
 function ToastDemo() {
@@ -64,9 +75,7 @@ function ToastDemo() {
       </Button>
       <Button
         variant="ghost"
-        onClick={() =>
-          toast.add({ description: "Description-only toast" })
-        }
+        onClick={() => toast.add({ description: "Description-only toast" })}
       >
         No title
       </Button>
@@ -88,8 +97,8 @@ export default function HomePage() {
             <h1 className="docs-h1">Plain DS</h1>
             <p className="docs-muted">
               Component gallery — verifying tokens render as expected. Use the
-              bar above to switch theme, brand, radius, density, gray family,
-              or font live.
+              bar above to switch theme, brand, radius, density, gray family, or
+              font live.
             </p>
             <p className="docs-text-sm">
               <Link href="/tokens" className="docs-link">
@@ -106,7 +115,11 @@ export default function HomePage() {
                   <span className="docs-variant-label">{variant}</span>
                   {sizes.map((size) => (
                     <Button key={size} variant={variant} size={size}>
-                      {size === "sm" ? "Small" : size === "md" ? "Medium" : "Large"}
+                      {size === "sm"
+                        ? "Small"
+                        : size === "md"
+                          ? "Medium"
+                          : "Large"}
                     </Button>
                   ))}
                 </div>
@@ -160,7 +173,10 @@ export default function HomePage() {
 
           <section className="docs-section">
             <h2 className="docs-h2">Radio</h2>
-            <RadioGroup defaultValue="m" style={{ flexDirection: "row", gap: "1.5rem" }}>
+            <RadioGroup
+              defaultValue="m"
+              style={{ flexDirection: "row", gap: "1.5rem" }}
+            >
               {sizes.map((size) => (
                 <label key={size} className="docs-inline-label">
                   <Radio size={size} value={size[0]} />
@@ -209,9 +225,15 @@ export default function HomePage() {
               {badgeVariants.map((variant) => (
                 <div key={variant} className="docs-row-tight">
                   <span className="docs-variant-label">{variant}</span>
-                  <Badge variant={variant} size="sm">Small</Badge>
-                  <Badge variant={variant} size="md">Medium</Badge>
-                  <Badge variant={variant} size="lg">Large</Badge>
+                  <Badge variant={variant} size="sm">
+                    Small
+                  </Badge>
+                  <Badge variant={variant} size="md">
+                    Medium
+                  </Badge>
+                  <Badge variant={variant} size="lg">
+                    Large
+                  </Badge>
                 </div>
               ))}
             </div>
@@ -220,12 +242,23 @@ export default function HomePage() {
           <section className="docs-section">
             <h2 className="docs-h2">Avatar</h2>
             <div className="docs-row">
-              <Avatar size="sm"><Avatar.Fallback>KK</Avatar.Fallback></Avatar>
-              <Avatar size="md"><Avatar.Fallback>KK</Avatar.Fallback></Avatar>
-              <Avatar size="lg"><Avatar.Fallback>KK</Avatar.Fallback></Avatar>
-              <Avatar size="xl"><Avatar.Fallback>KK</Avatar.Fallback></Avatar>
+              <Avatar size="sm">
+                <Avatar.Fallback>KK</Avatar.Fallback>
+              </Avatar>
+              <Avatar size="md">
+                <Avatar.Fallback>KK</Avatar.Fallback>
+              </Avatar>
               <Avatar size="lg">
-                <Avatar.Image src="https://i.pravatar.cc/120?img=12" alt="User" />
+                <Avatar.Fallback>KK</Avatar.Fallback>
+              </Avatar>
+              <Avatar size="xl">
+                <Avatar.Fallback>KK</Avatar.Fallback>
+              </Avatar>
+              <Avatar size="lg">
+                <Avatar.Image
+                  src="https://i.pravatar.cc/120?img=12"
+                  alt="User"
+                />
                 <Avatar.Fallback delay={600}>JD</Avatar.Fallback>
               </Avatar>
             </div>
@@ -249,9 +282,16 @@ export default function HomePage() {
 
           <section className="docs-section">
             <h2 className="docs-h2">Alert</h2>
-            <div className="docs-section-stack-tight" style={{ maxWidth: "42rem" }}>
+            <div
+              className="docs-section-stack-tight"
+              style={{ maxWidth: "42rem" }}
+            >
               {alertVariants.map((variant) => (
-                <Alert key={variant} variant={variant} title={`${variant} alert`}>
+                <Alert
+                  key={variant}
+                  variant={variant}
+                  title={`${variant} alert`}
+                >
                   Token-driven background, border, and icon color via{" "}
                   <code className="docs-mono">--color-bg-{variant}</code> /{" "}
                   <code className="docs-mono">--color-text-{variant}</code>.
@@ -269,18 +309,22 @@ export default function HomePage() {
               <Modal.Content>
                 <Modal.Title>Confirm deletion</Modal.Title>
                 <Modal.Description>
-                  This action can&apos;t be undone. The selected items will be removed
-                  from your workspace.
+                  This action can&apos;t be undone. The selected items will be
+                  removed from your workspace.
                 </Modal.Description>
                 <div className="docs-modal-actions">
                   <Modal.Close
                     render={(props) => (
-                      <Button {...props} variant="ghost">Cancel</Button>
+                      <Button {...props} variant="ghost">
+                        Cancel
+                      </Button>
                     )}
                   />
                   <Modal.Close
                     render={(props) => (
-                      <Button {...props} variant="destructive">Delete</Button>
+                      <Button {...props} variant="destructive">
+                        Delete
+                      </Button>
                     )}
                   />
                 </div>
@@ -293,19 +337,31 @@ export default function HomePage() {
             <div className="docs-row">
               <Tooltip.Root>
                 <Tooltip.Trigger
-                  render={(props) => <Button {...props} variant="secondary">Hover me</Button>}
+                  render={(props) => (
+                    <Button {...props} variant="secondary">
+                      Hover me
+                    </Button>
+                  )}
                 />
                 <Tooltip.Content>Top tooltip</Tooltip.Content>
               </Tooltip.Root>
               <Tooltip.Root>
                 <Tooltip.Trigger
-                  render={(props) => <Button {...props} variant="secondary">Right</Button>}
+                  render={(props) => (
+                    <Button {...props} variant="secondary">
+                      Right
+                    </Button>
+                  )}
                 />
                 <Tooltip.Content side="right">On the right</Tooltip.Content>
               </Tooltip.Root>
               <Tooltip.Root>
                 <Tooltip.Trigger
-                  render={(props) => <Button {...props} variant="secondary">Bottom</Button>}
+                  render={(props) => (
+                    <Button {...props} variant="secondary">
+                      Bottom
+                    </Button>
+                  )}
                 />
                 <Tooltip.Content side="bottom">Bottom side</Tooltip.Content>
               </Tooltip.Root>
@@ -319,20 +375,25 @@ export default function HomePage() {
                 <Tabs.Tab value="overview">Overview</Tabs.Tab>
                 <Tabs.Tab value="usage">Usage</Tabs.Tab>
                 <Tabs.Tab value="settings">Settings</Tabs.Tab>
-                <Tabs.Tab value="locked" disabled>Locked</Tabs.Tab>
+                <Tabs.Tab value="locked" disabled>
+                  Locked
+                </Tabs.Tab>
               </Tabs.List>
               <Tabs.Panel value="overview">
                 <p className="docs-prose docs-text-sm">
                   Overview panel content. The animated indicator under the
-                  active tab uses <code className="docs-mono">--active-tab-width</code>{" "}
-                  and <code className="docs-mono">--active-tab-left</code> CSS vars.
+                  active tab uses{" "}
+                  <code className="docs-mono">--active-tab-width</code> and{" "}
+                  <code className="docs-mono">--active-tab-left</code> CSS vars.
                 </p>
               </Tabs.Panel>
               <Tabs.Panel value="usage">
                 <p className="docs-prose docs-text-sm">Usage panel content.</p>
               </Tabs.Panel>
               <Tabs.Panel value="settings">
-                <p className="docs-prose docs-text-sm">Settings panel content.</p>
+                <p className="docs-prose docs-text-sm">
+                  Settings panel content.
+                </p>
               </Tabs.Panel>
             </Tabs>
           </section>
@@ -341,10 +402,16 @@ export default function HomePage() {
             <h2 className="docs-h2">Dropdown Menu</h2>
             <DropdownMenu.Root>
               <DropdownMenu.Trigger
-                render={(props) => <Button {...props} variant="secondary">Open menu</Button>}
+                render={(props) => (
+                  <Button {...props} variant="secondary">
+                    Open menu
+                  </Button>
+                )}
               />
               <DropdownMenu.Content>
-                <DropdownMenu.Item onClick={() => console.log("New")}>New file</DropdownMenu.Item>
+                <DropdownMenu.Item onClick={() => console.log("New")}>
+                  New file
+                </DropdownMenu.Item>
                 <DropdownMenu.Item>Open…</DropdownMenu.Item>
                 <DropdownMenu.Item disabled>Save (disabled)</DropdownMenu.Item>
                 <DropdownMenu.Separator />
@@ -364,11 +431,20 @@ export default function HomePage() {
                   </DropdownMenu.CheckboxItem>
                 </DropdownMenu.Group>
                 <DropdownMenu.Separator />
-                <DropdownMenu.RadioGroup value={radioVal} onValueChange={setRadioVal}>
+                <DropdownMenu.RadioGroup
+                  value={radioVal}
+                  onValueChange={setRadioVal}
+                >
                   <DropdownMenu.Label>Density</DropdownMenu.Label>
-                  <DropdownMenu.RadioItem value="compact">Compact</DropdownMenu.RadioItem>
-                  <DropdownMenu.RadioItem value="default">Default</DropdownMenu.RadioItem>
-                  <DropdownMenu.RadioItem value="comfortable">Comfortable</DropdownMenu.RadioItem>
+                  <DropdownMenu.RadioItem value="compact">
+                    Compact
+                  </DropdownMenu.RadioItem>
+                  <DropdownMenu.RadioItem value="default">
+                    Default
+                  </DropdownMenu.RadioItem>
+                  <DropdownMenu.RadioItem value="comfortable">
+                    Comfortable
+                  </DropdownMenu.RadioItem>
                 </DropdownMenu.RadioGroup>
               </DropdownMenu.Content>
             </DropdownMenu.Root>
@@ -405,7 +481,9 @@ export default function HomePage() {
                     </Card.Description>
                   </div>
                   <Card.Action>
-                    <Button size="sm" variant="ghost">Manage</Button>
+                    <Button size="sm" variant="ghost">
+                      Manage
+                    </Button>
                   </Card.Action>
                 </Card.Header>
                 <Card.Body>
@@ -417,7 +495,9 @@ export default function HomePage() {
                   <code className="docs-mono">Card.Footer</code>.
                 </Card.Body>
                 <Card.Footer>
-                  <Button size="sm" variant="ghost">Cancel</Button>
+                  <Button size="sm" variant="ghost">
+                    Cancel
+                  </Button>
                   <Button size="sm">Save</Button>
                 </Card.Footer>
               </Card>
@@ -426,8 +506,8 @@ export default function HomePage() {
                   <Card.Title>Muted variant</Card.Title>
                 </Card.Header>
                 <Card.Body>
-                  Sits on <code className="docs-mono">bg-secondary</code>{" "}
-                  with no shadow — useful for nested or supporting panels.
+                  Sits on <code className="docs-mono">bg-secondary</code> with
+                  no shadow — useful for nested or supporting panels.
                 </Card.Body>
               </Card>
             </div>
@@ -443,7 +523,12 @@ export default function HomePage() {
             <div className="docs-grid-cards docs-grid-cards--three">
               <Textarea placeholder="Default" rows={3} />
               <Textarea placeholder="Disabled" rows={3} disabled />
-              <Textarea placeholder="Invalid" rows={3} invalid defaultValue="bad input" />
+              <Textarea
+                placeholder="Invalid"
+                rows={3}
+                invalid
+                defaultValue="bad input"
+              />
             </div>
           </section>
 
@@ -452,8 +537,8 @@ export default function HomePage() {
             <p className="docs-prose docs-text-sm">
               Compound: <code className="docs-mono">StatusPill</code> +{" "}
               <code className="docs-mono">StatusPill.Indicator</code> +{" "}
-              <code className="docs-mono">StatusPill.Label</code>.
-              Intent drives the chip color and label text via CSS variables.
+              <code className="docs-mono">StatusPill.Label</code>. Intent drives
+              the chip color and label text via CSS variables.
             </p>
             <div className="docs-row-tight">
               <StatusPill intent="success">
@@ -479,7 +564,13 @@ export default function HomePage() {
               <StatusPill intent="success">
                 <StatusPill.Indicator>
                   <svg viewBox="0 0 12 12" fill="none" aria-hidden="true">
-                    <path d="M3 6l2 2 4-4.5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+                    <path
+                      d="M3 6l2 2 4-4.5"
+                      stroke="currentColor"
+                      strokeWidth="1.6"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
                   </svg>
                 </StatusPill.Indicator>
                 <StatusPill.Label>Custom icon</StatusPill.Label>
@@ -513,11 +604,11 @@ export default function HomePage() {
           <section className="docs-section">
             <h2 className="docs-h2">Container + Grid</h2>
             <p className="docs-prose docs-text-sm">
-              <code className="docs-mono">Container</code> centers content
-              and applies page margins. <code className="docs-mono">Grid</code>{" "}
-              is a 12-column grid with token-driven gutters;{" "}
-              <code className="docs-mono">Grid.Col</code> spans columns
-              with optional responsive overrides.
+              <code className="docs-mono">Container</code> centers content and
+              applies page margins. <code className="docs-mono">Grid</code> is a
+              12-column grid with token-driven gutters;{" "}
+              <code className="docs-mono">Grid.Col</code> spans columns with
+              optional responsive overrides.
             </p>
             <Container size="lg" className="docs-container-flush">
               <Grid>
@@ -540,9 +631,13 @@ export default function HomePage() {
           <section className="docs-section">
             <h2 className="docs-h2">Brand mark · gradient blob</h2>
             <p className="docs-prose docs-text-sm">
-              Bubble&apos;s signature pink → magenta → violet gradient, exposed as{" "}
-              <code className="docs-mono">--gradient-accent</code> and
-              shipped as <code className="docs-mono">@bubble-design-system/ui/assets/logo-blob.svg</code>.
+              Bubble&apos;s signature pink → magenta → violet gradient, exposed
+              as <code className="docs-mono">--gradient-accent</code> and
+              shipped as{" "}
+              <code className="docs-mono">
+                @bubble-design-system/ui/assets/logo-blob.svg
+              </code>
+              .
             </p>
             <div className="docs-row">
               <div className="docs-blob-lg" aria-hidden="true" />
@@ -551,7 +646,6 @@ export default function HomePage() {
               <code className="docs-mono">bubble</code>
             </div>
           </section>
-
         </main>
         <Toast.Toaster />
       </Tooltip.Provider>

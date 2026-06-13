@@ -62,8 +62,14 @@
   align-items: center;
   color: var(--color-text-brand);
 }
-.pds-menu-item__indicator svg { width: 0.875rem; height: 0.875rem; }
-.pds-menu-item__indicator--radio svg { width: 0.5rem; height: 0.5rem; }
+.pds-menu-item__indicator svg {
+  width: 0.875rem;
+  height: 0.875rem;
+}
+.pds-menu-item__indicator--radio svg {
+  width: 0.5rem;
+  height: 0.5rem;
+}
 
 .pds-menu-label {
   padding: 0.375rem 0.5rem;

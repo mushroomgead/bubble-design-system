@@ -18,11 +18,10 @@ const SegmentedSizeContext = createContext<SegmentedSize>("md");
 
 type ToggleGroupProps = ComponentPropsWithoutRef<typeof ToggleGroup>;
 
-export interface SegmentedProps
-  extends Omit<
-    ToggleGroupProps,
-    "className" | "value" | "defaultValue" | "onValueChange" | "multiple"
-  > {
+export interface SegmentedProps extends Omit<
+  ToggleGroupProps,
+  "className" | "value" | "defaultValue" | "onValueChange" | "multiple"
+> {
   /** Selected item value. */
   value?: string;
   /** Uncontrolled initial selected item. */
@@ -56,9 +55,7 @@ const SegmentedRoot = forwardRef<HTMLDivElement, SegmentedProps>(
         <ToggleGroup
           ref={ref}
           value={value !== undefined ? [value] : undefined}
-          defaultValue={
-            defaultValue !== undefined ? [defaultValue] : undefined
-          }
+          defaultValue={defaultValue !== undefined ? [defaultValue] : undefined}
           onValueChange={handleChange}
           className={cn("pds-segmented", `pds-segmented--${size}`, className)}
           {...props}
@@ -71,8 +68,10 @@ SegmentedRoot.displayName = "Segmented";
 
 type ToggleItemProps = ComponentPropsWithoutRef<typeof Toggle>;
 
-export interface SegmentedItemProps
-  extends Omit<ToggleItemProps, "className" | "value"> {
+export interface SegmentedItemProps extends Omit<
+  ToggleItemProps,
+  "className" | "value"
+> {
   value: string;
   className?: string;
 }

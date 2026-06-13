@@ -22,9 +22,24 @@ pnpm -C packages/ui clean             # rm -rf dist
 pnpm -C apps/docs typecheck
 pnpm -C apps/docs dev                 # Next.js 16 Turbopack on :3000
 pnpm -C apps/docs build               # next build
+
+pnpm lint                              # eslint . in each workspace (flat config, ESLint 9)
+pnpm -C packages/ui lint
+pnpm -C apps/docs lint
+
+pnpm format                           # prettier --write . (whole repo)
+pnpm format:check                     # prettier --check .
 ```
 
-There is no test runner configured yet, and no root-level lint script. Typecheck is the only static gate.
+There is no test runner configured yet. Typecheck, lint, and format are the static gates.
+
+### Formatting & linting
+
+- **Prettier** (`.prettierrc.json` at root) is the formatting source of truth for the whole repo.
+- **ESLint 9 flat config**, one `eslint.config.mjs` per workspace (flat-config resolution is cwd-based, so each workspace needs its own):
+  - `packages/ui/eslint.config.mjs` — `@eslint/js` + `typescript-eslint` recommended + `eslint-plugin-react`/`react-hooks`, with `@typescript-eslint/no-empty-object-type` set to `allowInterfaces: "with-single-extends"` (covers the `interface FooProps extends BaseProps {}` re-export pattern below).
+  - `apps/docs/eslint.config.mjs` — just `eslint-config-next`'s flat array (already bundles react/react-hooks/jsx-a11y/import/@next rules) + `eslint-config-prettier`. Don't add `@eslint/js` recommended here — its `no-undef` false-positives on TS ambient globals like `React.ReactNode`.
+- **`.claude/hooks/format-and-lint.mjs`** runs as a `PostToolUse` hook (configured in `.claude/settings.json`) on every Edit/MultiEdit/Write: Prettier `--write`s the touched file, then (for JS/TS files under `packages/ui` or `apps/docs`) runs ESLint `--fix` with cwd set to that workspace. If ESLint still reports errors after `--fix`, it exits 2 so the error is fed back into the conversation.
 
 When booting the docs dev server, free the port first per the user's global rule:
 `lsof -ti :3000 | xargs kill -9 2>/dev/null; true`

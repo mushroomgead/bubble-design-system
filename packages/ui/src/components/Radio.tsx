@@ -10,7 +10,10 @@ type RadioSize = "sm" | "md" | "lg";
 type BaseRadioRootProps = ComponentPropsWithoutRef<typeof BaseRadio.Root>;
 type BaseRadioGroupProps = ComponentPropsWithoutRef<typeof BaseRadioGroup>;
 
-export interface RadioProps extends Omit<BaseRadioRootProps, "className" | "render"> {
+export interface RadioProps extends Omit<
+  BaseRadioRootProps,
+  "className" | "render"
+> {
   size?: RadioSize;
   className?: string;
 }
@@ -30,7 +33,10 @@ export const Radio = forwardRef<HTMLButtonElement, RadioProps>(
 );
 Radio.displayName = "Radio";
 
-export interface RadioGroupProps extends Omit<BaseRadioGroupProps, "className"> {
+export interface RadioGroupProps extends Omit<
+  BaseRadioGroupProps,
+  "className"
+> {
   className?: string;
 }
 

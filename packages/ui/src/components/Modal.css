@@ -3,7 +3,11 @@
   position: fixed;
   inset: 0;
   z-index: 50;
-  background-color: color-mix(in srgb, var(--color-bg-inverse) 50%, transparent);
+  background-color: color-mix(
+    in srgb,
+    var(--color-bg-inverse) 50%,
+    transparent
+  );
   backdrop-filter: blur(4px);
   transition: opacity var(--duration-normal) var(--ease-out);
 }

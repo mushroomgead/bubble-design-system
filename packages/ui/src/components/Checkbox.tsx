@@ -8,7 +8,10 @@ type CheckboxSize = "sm" | "md" | "lg";
 
 type BaseCheckboxRootProps = ComponentPropsWithoutRef<typeof BaseCheckbox.Root>;
 
-export interface CheckboxProps extends Omit<BaseCheckboxRootProps, "className" | "render"> {
+export interface CheckboxProps extends Omit<
+  BaseCheckboxRootProps,
+  "className" | "render"
+> {
   size?: CheckboxSize;
   className?: string;
 }

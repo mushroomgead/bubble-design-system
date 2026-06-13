@@ -8,7 +8,10 @@ type BasePopupProps = ComponentPropsWithoutRef<typeof BaseDialog.Popup>;
 type BaseTitleProps = ComponentPropsWithoutRef<typeof BaseDialog.Title>;
 type BaseDescProps = ComponentPropsWithoutRef<typeof BaseDialog.Description>;
 
-export interface ModalContentProps extends Omit<BasePopupProps, "className" | "render"> {
+export interface ModalContentProps extends Omit<
+  BasePopupProps,
+  "className" | "render"
+> {
   className?: string;
   backdropClassName?: string;
 }
@@ -17,7 +20,9 @@ const ModalContent = forwardRef<HTMLDivElement, ModalContentProps>(
   ({ className, backdropClassName, children, ...props }, ref) => {
     return (
       <BaseDialog.Portal>
-        <BaseDialog.Backdrop className={cn("pds-modal-backdrop", backdropClassName)} />
+        <BaseDialog.Backdrop
+          className={cn("pds-modal-backdrop", backdropClassName)}
+        />
         <BaseDialog.Popup
           ref={ref}
           className={cn("pds-modal-popup", className)}
@@ -31,7 +36,10 @@ const ModalContent = forwardRef<HTMLDivElement, ModalContentProps>(
 );
 ModalContent.displayName = "Modal.Content";
 
-export interface ModalTitleProps extends Omit<BaseTitleProps, "className" | "render"> {
+export interface ModalTitleProps extends Omit<
+  BaseTitleProps,
+  "className" | "render"
+> {
   className?: string;
 }
 
@@ -48,21 +56,25 @@ const ModalTitle = forwardRef<HTMLHeadingElement, ModalTitleProps>(
 );
 ModalTitle.displayName = "Modal.Title";
 
-export interface ModalDescriptionProps extends Omit<BaseDescProps, "className" | "render"> {
+export interface ModalDescriptionProps extends Omit<
+  BaseDescProps,
+  "className" | "render"
+> {
   className?: string;
 }
 
-const ModalDescription = forwardRef<HTMLParagraphElement, ModalDescriptionProps>(
-  ({ className, ...props }, ref) => {
-    return (
-      <BaseDialog.Description
-        ref={ref}
-        className={cn("pds-modal-description", className)}
-        {...props}
-      />
-    );
-  },
-);
+const ModalDescription = forwardRef<
+  HTMLParagraphElement,
+  ModalDescriptionProps
+>(({ className, ...props }, ref) => {
+  return (
+    <BaseDialog.Description
+      ref={ref}
+      className={cn("pds-modal-description", className)}
+      {...props}
+    />
+  );
+});
 ModalDescription.displayName = "Modal.Description";
 
 export const Modal = {

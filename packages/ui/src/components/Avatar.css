@@ -12,10 +12,26 @@
   vertical-align: middle;
 }
 
-.pds-avatar--sm { width: 1.5rem; height: 1.5rem; font-size: var(--font-size-xs); }
-.pds-avatar--md { width: 2rem; height: 2rem; font-size: var(--font-size-sm); }
-.pds-avatar--lg { width: 2.5rem; height: 2.5rem; font-size: var(--font-size-md); }
-.pds-avatar--xl { width: 3rem; height: 3rem; font-size: var(--font-size-lg); }
+.pds-avatar--sm {
+  width: 1.5rem;
+  height: 1.5rem;
+  font-size: var(--font-size-xs);
+}
+.pds-avatar--md {
+  width: 2rem;
+  height: 2rem;
+  font-size: var(--font-size-sm);
+}
+.pds-avatar--lg {
+  width: 2.5rem;
+  height: 2.5rem;
+  font-size: var(--font-size-md);
+}
+.pds-avatar--xl {
+  width: 3rem;
+  height: 3rem;
+  font-size: var(--font-size-lg);
+}
 
 .pds-avatar__image {
   width: 100%;

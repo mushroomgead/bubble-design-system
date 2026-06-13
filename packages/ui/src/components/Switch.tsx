@@ -8,7 +8,10 @@ type SwitchSize = "sm" | "md" | "lg";
 
 type BaseSwitchRootProps = ComponentPropsWithoutRef<typeof BaseSwitch.Root>;
 
-export interface SwitchProps extends Omit<BaseSwitchRootProps, "className" | "render"> {
+export interface SwitchProps extends Omit<
+  BaseSwitchRootProps,
+  "className" | "render"
+> {
   size?: SwitchSize;
   className?: string;
 }

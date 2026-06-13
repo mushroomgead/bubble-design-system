@@ -1,8 +1,4 @@
-import {
-  forwardRef,
-  type CSSProperties,
-  type HTMLAttributes,
-} from "react";
+import { forwardRef, type CSSProperties, type HTMLAttributes } from "react";
 import { cn } from "../utils/cn";
 
 type StatusPillIntent = "neutral" | "success" | "warning" | "danger" | "info";
@@ -48,8 +44,7 @@ const StatusPillRoot = forwardRef<HTMLSpanElement, StatusPillProps>(
 );
 StatusPillRoot.displayName = "StatusPill";
 
-export interface StatusPillIndicatorProps
-  extends HTMLAttributes<HTMLSpanElement> {}
+export interface StatusPillIndicatorProps extends HTMLAttributes<HTMLSpanElement> {}
 
 const StatusPillIndicator = forwardRef<
   HTMLSpanElement,

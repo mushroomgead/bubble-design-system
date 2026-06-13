@@ -19,5 +19,7 @@
 }
 
 @keyframes pds-skeleton-pulse {
-  50% { opacity: 0.5; }
+  50% {
+    opacity: 0.5;
+  }
 }

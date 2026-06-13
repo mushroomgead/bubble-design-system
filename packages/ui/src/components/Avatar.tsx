@@ -10,7 +10,10 @@ type BaseRootProps = ComponentPropsWithoutRef<typeof BaseAvatar.Root>;
 type BaseImageProps = ComponentPropsWithoutRef<typeof BaseAvatar.Image>;
 type BaseFallbackProps = ComponentPropsWithoutRef<typeof BaseAvatar.Fallback>;
 
-export interface AvatarProps extends Omit<BaseRootProps, "className" | "render"> {
+export interface AvatarProps extends Omit<
+  BaseRootProps,
+  "className" | "render"
+> {
   size?: AvatarSize;
   className?: string;
 }
@@ -28,7 +31,10 @@ const AvatarRoot = forwardRef<HTMLSpanElement, AvatarProps>(
 );
 AvatarRoot.displayName = "Avatar";
 
-export interface AvatarImageProps extends Omit<BaseImageProps, "className" | "render"> {
+export interface AvatarImageProps extends Omit<
+  BaseImageProps,
+  "className" | "render"
+> {
   className?: string;
 }
 
@@ -45,7 +51,10 @@ const AvatarImage = forwardRef<HTMLImageElement, AvatarImageProps>(
 );
 AvatarImage.displayName = "Avatar.Image";
 
-export interface AvatarFallbackProps extends Omit<BaseFallbackProps, "className" | "render"> {
+export interface AvatarFallbackProps extends Omit<
+  BaseFallbackProps,
+  "className" | "render"
+> {
   className?: string;
 }
 

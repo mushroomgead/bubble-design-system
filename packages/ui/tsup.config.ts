@@ -9,9 +9,5 @@ export default defineConfig({
   splitting: false,
   treeshake: true,
   target: "es2022",
-  external: [
-    "react",
-    "react-dom",
-    "@base-ui/react",
-  ],
+  external: ["react", "react-dom", "@base-ui/react"],
 });

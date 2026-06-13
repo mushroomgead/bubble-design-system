@@ -59,7 +59,10 @@
   flex-shrink: 0;
   display: inline-flex;
 }
-.pds-select-icon svg { width: 1rem; height: 1rem; }
+.pds-select-icon svg {
+  width: 1rem;
+  height: 1rem;
+}
 
 /* value */
 .pds-select-value {
@@ -131,4 +134,7 @@
   align-items: center;
   color: var(--color-text-brand);
 }
-.pds-select-item__indicator svg { width: 0.875rem; height: 0.875rem; }
+.pds-select-item__indicator svg {
+  width: 0.875rem;
+  height: 0.875rem;
+}

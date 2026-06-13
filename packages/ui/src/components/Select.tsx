@@ -1,6 +1,10 @@
 "use client";
 
-import { forwardRef, type ComponentPropsWithoutRef, type ReactNode } from "react";
+import {
+  forwardRef,
+  type ComponentPropsWithoutRef,
+  type ReactNode,
+} from "react";
 import { Select as BaseSelect } from "@base-ui/react/select";
 import { cn } from "../utils/cn";
 
@@ -11,7 +15,10 @@ type BasePopupProps = ComponentPropsWithoutRef<typeof BaseSelect.Popup>;
 type BaseItemProps = ComponentPropsWithoutRef<typeof BaseSelect.Item>;
 type BaseValueProps = ComponentPropsWithoutRef<typeof BaseSelect.Value>;
 
-export interface SelectTriggerProps extends Omit<BaseTriggerProps, "className" | "render"> {
+export interface SelectTriggerProps extends Omit<
+  BaseTriggerProps,
+  "className" | "render"
+> {
   size?: SelectSize;
   className?: string;
 }
@@ -62,7 +69,9 @@ const SelectValue = forwardRef<HTMLSpanElement, SelectValueProps>(
         {children ??
           ((value: unknown) =>
             value === null || value === undefined || value === "" ? (
-              <span className="pds-select-value-placeholder">{placeholder}</span>
+              <span className="pds-select-value-placeholder">
+                {placeholder}
+              </span>
             ) : (
               String(value)
             ))}
@@ -72,7 +81,10 @@ const SelectValue = forwardRef<HTMLSpanElement, SelectValueProps>(
 );
 SelectValue.displayName = "Select.Value";
 
-export interface SelectContentProps extends Omit<BasePopupProps, "className" | "render"> {
+export interface SelectContentProps extends Omit<
+  BasePopupProps,
+  "className" | "render"
+> {
   className?: string;
   sideOffset?: number;
 }
@@ -81,7 +93,10 @@ const SelectContent = forwardRef<HTMLDivElement, SelectContentProps>(
   ({ className, sideOffset = 6, children, ...props }, ref) => {
     return (
       <BaseSelect.Portal>
-        <BaseSelect.Positioner sideOffset={sideOffset} className="pds-select-positioner">
+        <BaseSelect.Positioner
+          sideOffset={sideOffset}
+          className="pds-select-positioner"
+        >
           <BaseSelect.Popup
             ref={ref as never}
             className={cn("pds-select-popup", className)}
@@ -96,7 +111,10 @@ const SelectContent = forwardRef<HTMLDivElement, SelectContentProps>(
 );
 SelectContent.displayName = "Select.Content";
 
-export interface SelectItemProps extends Omit<BaseItemProps, "className" | "render"> {
+export interface SelectItemProps extends Omit<
+  BaseItemProps,
+  "className" | "render"
+> {
   className?: string;
 }
 

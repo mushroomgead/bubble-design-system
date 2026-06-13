@@ -54,16 +54,16 @@ The five rules every decision in Bubble traces back to:
 
 ## Tech stack
 
-| Concern | Tool |
-|---|---|
-| Framework | React 19 (works with ≥ 18.2) |
-| Primitives | `@base-ui/react` ≥ 1.0 (the post-rename successor to `@base-ui-components/react`) |
-| Styling | Plain CSS — one shipped stylesheet, hand-authored per component |
-| Class composition | `clsx` (re-exported as `cn()`) |
-| Build tool | `tsup` (ESM + CJS + dual `.d.ts`) + a 50-line Node script for CSS bundling |
-| Language | TypeScript 6 |
-| Package manager | `pnpm@10.33.0` |
-| Node | ≥ 20 |
+| Concern           | Tool                                                                              |
+| ----------------- | --------------------------------------------------------------------------------- |
+| Framework         | React 19 (works with ≥ 18.2)                                                      |
+| Primitives        | `@base-ui/react` ≥ 1.0 (the post-rename successor to `@base-ui-components/react`) |
+| Styling           | Plain CSS — one shipped stylesheet, hand-authored per component                   |
+| Class composition | `clsx` (re-exported as `cn()`)                                                    |
+| Build tool        | `tsup` (ESM + CJS + dual `.d.ts`) + a 50-line Node script for CSS bundling        |
+| Language          | TypeScript 6                                                                      |
+| Package manager   | `pnpm@10.33.0`                                                                    |
+| Node              | ≥ 20                                                                              |
 
 ---
 
@@ -86,11 +86,11 @@ Then install the peer dependencies your app must have:
 npm install react react-dom @base-ui/react
 ```
 
-| Peer dependency | Required version |
-|---|---|
-| `react` | ≥ 18.2 |
-| `react-dom` | ≥ 18.2 |
-| `@base-ui/react` | ≥ 1.0.0 |
+| Peer dependency  | Required version |
+| ---------------- | ---------------- |
+| `react`          | ≥ 18.2           |
+| `react-dom`      | ≥ 18.2           |
+| `@base-ui/react` | ≥ 1.0.0          |
 
 ---
 
@@ -121,7 +121,11 @@ If you only want the raw CSS custom properties (no component rules), import the 
 
 ```tsx
 // app/layout.tsx (Next.js App Router example)
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
     <html
       lang="en"
@@ -152,7 +156,9 @@ export function Example() {
       <Button variant="primary">Save</Button>
       <Divider />
       <Modal.Root>
-        <Modal.Trigger render={<Button variant="secondary" />}>Open</Modal.Trigger>
+        <Modal.Trigger render={<Button variant="secondary" />}>
+          Open
+        </Modal.Trigger>
         <Modal.Content>
           <Modal.Title>Confirm</Modal.Title>
           <Modal.Description>Are you sure?</Modal.Description>
@@ -169,15 +175,15 @@ export function Example() {
 
 Seven `data-*` attributes on any ancestor element (typically `<html>` or `<body>`) re-skin every descendant at runtime, with no rebuild.
 
-| Attribute | Values | Default | What it controls |
-|---|---|---|---|
-| `data-theme` | `light` · `dark` | `light` | Semantic color mapping (background, text, border, shadow). |
-| `data-tone` | `vivid` · `pastel` · `soft` | `soft` | Surface model, palette saturation, control radius. `soft` is the signature look. |
-| `data-gray` | `slate` · `neutral` · `stone` | `slate` | The gray family used for surfaces and text. |
-| `data-brand` | `blue` · `violet` · `emerald` · `orange` · `mono` · `teal` | `teal` | The brand palette (`--brand-50` through `--brand-950`). |
-| `data-radius` | `default` · `sharp` · `soft` · `pill` | `default` | The corner radius scale (`--radius-xs` through `--radius-2xl`). |
-| `data-density` | `default` · `compact` · `comfortable` | `default` | Control heights and padding (`--control-h-*`, `--control-px-*`). |
-| `data-font` | `roboto` · `system` | `roboto` | The font pair (`--font-sans` / `--font-mono`). |
+| Attribute      | Values                                                     | Default   | What it controls                                                                 |
+| -------------- | ---------------------------------------------------------- | --------- | -------------------------------------------------------------------------------- |
+| `data-theme`   | `light` · `dark`                                           | `light`   | Semantic color mapping (background, text, border, shadow).                       |
+| `data-tone`    | `vivid` · `pastel` · `soft`                                | `soft`    | Surface model, palette saturation, control radius. `soft` is the signature look. |
+| `data-gray`    | `slate` · `neutral` · `stone`                              | `slate`   | The gray family used for surfaces and text.                                      |
+| `data-brand`   | `blue` · `violet` · `emerald` · `orange` · `mono` · `teal` | `teal`    | The brand palette (`--brand-50` through `--brand-950`).                          |
+| `data-radius`  | `default` · `sharp` · `soft` · `pill`                      | `default` | The corner radius scale (`--radius-xs` through `--radius-2xl`).                  |
+| `data-density` | `default` · `compact` · `comfortable`                      | `default` | Control heights and padding (`--control-h-*`, `--control-px-*`).                 |
+| `data-font`    | `roboto` · `system`                                        | `roboto`  | The font pair (`--font-sans` / `--font-mono`).                                   |
 
 Toggle them with any approach you like — `setAttribute`, React state, a media-query listener, a server cookie:
 
@@ -196,10 +202,31 @@ Every component is exported from the package root:
 
 ```tsx
 import {
-  Alert, Avatar, Badge, Button, Card, Checkbox, Container, Divider,
-  DropdownMenu, Grid, Input, Modal, Radio, RadioGroup, Segmented,
-  Select, Skeleton, StatusPill, Switch, Tabs, Textarea, Toast, Tooltip,
-  useToast, cn,
+  Alert,
+  Avatar,
+  Badge,
+  Button,
+  Card,
+  Checkbox,
+  Container,
+  Divider,
+  DropdownMenu,
+  Grid,
+  Input,
+  Modal,
+  Radio,
+  RadioGroup,
+  Segmented,
+  Select,
+  Skeleton,
+  StatusPill,
+  Switch,
+  Tabs,
+  Textarea,
+  Toast,
+  Tooltip,
+  useToast,
+  cn,
 } from "@bubble-design-system/ui";
 ```
 
@@ -217,14 +244,14 @@ Conventions shared by all components:
 
 A static informational banner with a variant-specific icon, title, and body.
 
-| Prop | Type | Default | Description |
-|---|---|---|---|
-| `variant` | `"info" \| "success" \| "warning" \| "danger"` | `"info"` | Visual tone and default icon. |
-| `icon` | `ReactNode \| false` | variant-specific | Override the default icon, or pass `false` to hide it. |
-| `title` | `ReactNode` | — | Optional bold header line. |
-| `children` | `ReactNode` | — | The body copy, rendered in the secondary text color. |
-| `className` | `string` | — | Extra classes (appended after the library's). |
-| `...props` | `HTMLAttributes<HTMLDivElement>` (minus `title`) | — | All native div attributes. |
+| Prop        | Type                                             | Default          | Description                                            |
+| ----------- | ------------------------------------------------ | ---------------- | ------------------------------------------------------ |
+| `variant`   | `"info" \| "success" \| "warning" \| "danger"`   | `"info"`         | Visual tone and default icon.                          |
+| `icon`      | `ReactNode \| false`                             | variant-specific | Override the default icon, or pass `false` to hide it. |
+| `title`     | `ReactNode`                                      | —                | Optional bold header line.                             |
+| `children`  | `ReactNode`                                      | —                | The body copy, rendered in the secondary text color.   |
+| `className` | `string`                                         | —                | Extra classes (appended after the library's).          |
+| `...props`  | `HTMLAttributes<HTMLDivElement>` (minus `title`) | —                | All native div attributes.                             |
 
 ```tsx
 <Alert variant="success" title="Saved">Your changes are live.</Alert>
@@ -239,19 +266,19 @@ A static informational banner with a variant-specific icon, title, and body.
 
 Compound component built on `@base-ui/react/avatar` — handles image load failure with a fallback.
 
-| Sub-component | Description |
-|---|---|
-| `Avatar` (root) | Sized circular surface. |
-| `Avatar.Image` | The image element. |
+| Sub-component     | Description                                         |
+| ----------------- | --------------------------------------------------- |
+| `Avatar` (root)   | Sized circular surface.                             |
+| `Avatar.Image`    | The image element.                                  |
 | `Avatar.Fallback` | Shown while the image is loading or after it fails. |
 
 **`Avatar` props:**
 
-| Prop | Type | Default | Description |
-|---|---|---|---|
-| `size` | `"sm" \| "md" \| "lg" \| "xl"` | `"md"` | 24 / 32 / 40 / 48 px. |
-| `className` | `string` | — | Extra classes. |
-| `...props` | Base UI `Avatar.Root` props | — | Spread to the root. |
+| Prop        | Type                           | Default | Description           |
+| ----------- | ------------------------------ | ------- | --------------------- |
+| `size`      | `"sm" \| "md" \| "lg" \| "xl"` | `"md"`  | 24 / 32 / 40 / 48 px. |
+| `className` | `string`                       | —       | Extra classes.        |
+| `...props`  | Base UI `Avatar.Root` props    | —       | Spread to the root.   |
 
 `Avatar.Image` and `Avatar.Fallback` accept their Base UI props plus `className`.
 
@@ -268,12 +295,12 @@ Compound component built on `@base-ui/react/avatar` — handles image load failu
 
 Small inline pill for status, counts, or labels.
 
-| Prop | Type | Default | Description |
-|---|---|---|---|
-| `variant` | `"neutral" \| "brand" \| "success" \| "warning" \| "danger"` | `"neutral"` | Background and text color. |
-| `size` | `"sm" \| "md" \| "lg"` | `"md"` | Pill height and padding. |
-| `className` | `string` | — | Extra classes. |
-| `...props` | `HTMLAttributes<HTMLSpanElement>` | — | Native span attributes. |
+| Prop        | Type                                                         | Default     | Description                |
+| ----------- | ------------------------------------------------------------ | ----------- | -------------------------- |
+| `variant`   | `"neutral" \| "brand" \| "success" \| "warning" \| "danger"` | `"neutral"` | Background and text color. |
+| `size`      | `"sm" \| "md" \| "lg"`                                       | `"md"`      | Pill height and padding.   |
+| `className` | `string`                                                     | —           | Extra classes.             |
+| `...props`  | `HTMLAttributes<HTMLSpanElement>`                            | —           | Native span attributes.    |
 
 ```tsx
 <Badge variant="success">Active</Badge>
@@ -286,12 +313,12 @@ Small inline pill for status, counts, or labels.
 
 Wraps `@base-ui/react/button`.
 
-| Prop | Type | Default | Description |
-|---|---|---|---|
-| `variant` | `"primary" \| "secondary" \| "destructive" \| "ghost"` | `"primary"` | Visual style. |
-| `size` | `"sm" \| "md" \| "lg"` | `"md"` | Maps to `--control-h-*` / `--control-px-*` so density attribute affects it. |
-| `className` | `string` | — | Extra classes. |
-| `...props` | Base UI `Button` props | — | Includes `disabled`, `type`, `onClick`, etc. |
+| Prop        | Type                                                   | Default     | Description                                                                 |
+| ----------- | ------------------------------------------------------ | ----------- | --------------------------------------------------------------------------- |
+| `variant`   | `"primary" \| "secondary" \| "destructive" \| "ghost"` | `"primary"` | Visual style.                                                               |
+| `size`      | `"sm" \| "md" \| "lg"`                                 | `"md"`      | Maps to `--control-h-*` / `--control-px-*` so density attribute affects it. |
+| `className` | `string`                                               | —           | Extra classes.                                                              |
+| `...props`  | Base UI `Button` props                                 | —           | Includes `disabled`, `type`, `onClick`, etc.                                |
 
 ```tsx
 <Button variant="primary" size="lg" onClick={save}>Save</Button>
@@ -305,22 +332,22 @@ Wraps `@base-ui/react/button`.
 
 Compound component for floating-pill surface content.
 
-| Sub-component | Description |
-|---|---|
-| `Card` (root) | The floating surface. Variant controls fill + shadow. |
-| `Card.Header` | Row with title + optional action. |
-| `Card.Title` | `<h3>` heading. |
-| `Card.Description` | Supporting paragraph. |
-| `Card.Action` | Right-aligned controls inside the header. |
-| `Card.Body` | Main content area. |
-| `Card.Footer` | Bordered footer row with right-aligned controls. |
+| Sub-component      | Description                                           |
+| ------------------ | ----------------------------------------------------- |
+| `Card` (root)      | The floating surface. Variant controls fill + shadow. |
+| `Card.Header`      | Row with title + optional action.                     |
+| `Card.Title`       | `<h3>` heading.                                       |
+| `Card.Description` | Supporting paragraph.                                 |
+| `Card.Action`      | Right-aligned controls inside the header.             |
+| `Card.Body`        | Main content area.                                    |
+| `Card.Footer`      | Bordered footer row with right-aligned controls.      |
 
 **`Card` props:**
 
-| Prop | Type | Default | Description |
-|---|---|---|---|
-| `variant` | `"elevated" \| "muted"` | `"elevated"` | `elevated` = white surface with shadow. `muted` = `bg-secondary`, no shadow. |
-| `className` | `string` | — | Extra classes. |
+| Prop        | Type                    | Default      | Description                                                                  |
+| ----------- | ----------------------- | ------------ | ---------------------------------------------------------------------------- |
+| `variant`   | `"elevated" \| "muted"` | `"elevated"` | `elevated` = white surface with shadow. `muted` = `bg-secondary`, no shadow. |
+| `className` | `string`                | —            | Extra classes.                                                               |
 
 ```tsx
 <Card>
@@ -330,12 +357,16 @@ Compound component for floating-pill surface content.
       <Card.Description>White card floating on a gray page.</Card.Description>
     </div>
     <Card.Action>
-      <Button size="sm" variant="ghost">Manage</Button>
+      <Button size="sm" variant="ghost">
+        Manage
+      </Button>
     </Card.Action>
   </Card.Header>
   <Card.Body>…</Card.Body>
   <Card.Footer>
-    <Button size="sm" variant="ghost">Cancel</Button>
+    <Button size="sm" variant="ghost">
+      Cancel
+    </Button>
     <Button size="sm">Save</Button>
   </Card.Footer>
 </Card>
@@ -347,11 +378,11 @@ Compound component for floating-pill surface content.
 
 Wraps `@base-ui/react/checkbox`. Supports checked, unchecked, and indeterminate states with built-in SVG indicators.
 
-| Prop | Type | Default | Description |
-|---|---|---|---|
-| `size` | `"sm" \| "md" \| "lg"` | `"md"` | 16 / 18 / 20 px. |
-| `className` | `string` | — | Extra classes on the root button. |
-| `...props` | Base UI `Checkbox.Root` props | — | `checked`, `defaultChecked`, `indeterminate`, `onCheckedChange`, etc. |
+| Prop        | Type                          | Default | Description                                                           |
+| ----------- | ----------------------------- | ------- | --------------------------------------------------------------------- |
+| `size`      | `"sm" \| "md" \| "lg"`        | `"md"`  | 16 / 18 / 20 px.                                                      |
+| `className` | `string`                      | —       | Extra classes on the root button.                                     |
+| `...props`  | Base UI `Checkbox.Root` props | —       | `checked`, `defaultChecked`, `indeterminate`, `onCheckedChange`, etc. |
 
 ```tsx
 <Checkbox defaultChecked />
@@ -369,9 +400,15 @@ Layout primitives. `Container` centers content and applies page margins. `Grid` 
 <Container size="lg">
   <Grid>
     <Grid.Col span={12}>full row</Grid.Col>
-    <Grid.Col span={6} lgSpan={4}>half on mobile, third on lg</Grid.Col>
-    <Grid.Col span={6} lgSpan={4}>…</Grid.Col>
-    <Grid.Col span={12} lgSpan={4}>…</Grid.Col>
+    <Grid.Col span={6} lgSpan={4}>
+      half on mobile, third on lg
+    </Grid.Col>
+    <Grid.Col span={6} lgSpan={4}>
+      …
+    </Grid.Col>
+    <Grid.Col span={12} lgSpan={4}>
+      …
+    </Grid.Col>
   </Grid>
 </Container>
 ```
@@ -388,11 +425,11 @@ Layout primitives. `Container` centers content and applies page margins. `Grid` 
 
 Horizontal or vertical separator with a semantic role from `@base-ui/react/separator`.
 
-| Prop | Type | Default | Description |
-|---|---|---|---|
-| `orientation` | `"horizontal" \| "vertical"` | `"horizontal"` | Layout direction. |
-| `className` | `string` | — | Extra classes. |
-| `...props` | Base UI `Separator` props | — | Spread to the underlying element. |
+| Prop          | Type                         | Default        | Description                       |
+| ------------- | ---------------------------- | -------------- | --------------------------------- |
+| `orientation` | `"horizontal" \| "vertical"` | `"horizontal"` | Layout direction.                 |
+| `className`   | `string`                     | —              | Extra classes.                    |
+| `...props`    | Base UI `Separator` props    | —              | Spread to the underlying element. |
 
 ```tsx
 <Divider />
@@ -407,27 +444,27 @@ Horizontal or vertical separator with a semantic role from `@base-ui/react/separ
 
 Compound component built on `@base-ui/react/menu`. Supports items, checkbox items, radio groups, labels, and separators.
 
-| Sub-component | Description |
-|---|---|
-| `DropdownMenu.Root` | The state container. |
-| `DropdownMenu.Trigger` | The element that opens the menu. |
-| `DropdownMenu.Content` | The portalled popup. |
-| `DropdownMenu.Item` | A selectable row. |
+| Sub-component               | Description                              |
+| --------------------------- | ---------------------------------------- |
+| `DropdownMenu.Root`         | The state container.                     |
+| `DropdownMenu.Trigger`      | The element that opens the menu.         |
+| `DropdownMenu.Content`      | The portalled popup.                     |
+| `DropdownMenu.Item`         | A selectable row.                        |
 | `DropdownMenu.CheckboxItem` | A toggleable row with a check indicator. |
-| `DropdownMenu.RadioGroup` | Wrapper for radio items. |
-| `DropdownMenu.RadioItem` | A single radio choice. |
-| `DropdownMenu.Group` | Logical group of items. |
-| `DropdownMenu.Label` | Uppercase group label. |
-| `DropdownMenu.Separator` | Thin horizontal divider. |
+| `DropdownMenu.RadioGroup`   | Wrapper for radio items.                 |
+| `DropdownMenu.RadioItem`    | A single radio choice.                   |
+| `DropdownMenu.Group`        | Logical group of items.                  |
+| `DropdownMenu.Label`        | Uppercase group label.                   |
+| `DropdownMenu.Separator`    | Thin horizontal divider.                 |
 
 **`DropdownMenu.Content` props:**
 
-| Prop | Type | Default | Description |
-|---|---|---|---|
-| `sideOffset` | `number` | `6` | Distance in px from the trigger. |
-| `align` | `"start" \| "center" \| "end"` | `"start"` | Alignment relative to the trigger. |
-| `className` | `string` | — | Extra classes on the popup. |
-| `...props` | Base UI `Menu.Popup` props | — | Spread to the popup. |
+| Prop         | Type                           | Default   | Description                        |
+| ------------ | ------------------------------ | --------- | ---------------------------------- |
+| `sideOffset` | `number`                       | `6`       | Distance in px from the trigger.   |
+| `align`      | `"start" \| "center" \| "end"` | `"start"` | Alignment relative to the trigger. |
+| `className`  | `string`                       | —         | Extra classes on the popup.        |
+| `...props`   | Base UI `Menu.Popup` props     | —         | Spread to the popup.               |
 
 ```tsx
 <DropdownMenu.Root>
@@ -448,12 +485,12 @@ Compound component built on `@base-ui/react/menu`. Supports items, checkbox item
 
 Wraps `@base-ui/react/input`. Includes built-in invalid styling via `aria-invalid`.
 
-| Prop | Type | Default | Description |
-|---|---|---|---|
-| `size` | `"sm" \| "md" \| "lg"` | `"md"` | Density-aware control height. |
-| `invalid` | `boolean` | — | Sets `aria-invalid` and applies the danger border + focus ring. |
-| `className` | `string` | — | Extra classes. |
-| `...props` | Base UI `Input` props (minus `size`) | — | All native input attributes: `value`, `placeholder`, `type`, `onChange`, `disabled`, etc. |
+| Prop        | Type                                 | Default | Description                                                                               |
+| ----------- | ------------------------------------ | ------- | ----------------------------------------------------------------------------------------- |
+| `size`      | `"sm" \| "md" \| "lg"`               | `"md"`  | Density-aware control height.                                                             |
+| `invalid`   | `boolean`                            | —       | Sets `aria-invalid` and applies the danger border + focus ring.                           |
+| `className` | `string`                             | —       | Extra classes.                                                                            |
+| `...props`  | Base UI `Input` props (minus `size`) | —       | All native input attributes: `value`, `placeholder`, `type`, `onChange`, `disabled`, etc. |
 
 ```tsx
 <Input placeholder="Email" />
@@ -466,22 +503,22 @@ Wraps `@base-ui/react/input`. Includes built-in invalid styling via `aria-invali
 
 Compound component built on `@base-ui/react/dialog`. Renders into a portal, with backdrop blur and scale-in animation.
 
-| Sub-component | Description |
-|---|---|
-| `Modal.Root` | Open-state container. |
-| `Modal.Trigger` | Element that opens the modal. |
-| `Modal.Close` | Element that closes the modal. |
-| `Modal.Content` | The portalled popup with backdrop. |
-| `Modal.Title` | Heading text. |
-| `Modal.Description` | Sub-text under the title. |
+| Sub-component       | Description                        |
+| ------------------- | ---------------------------------- |
+| `Modal.Root`        | Open-state container.              |
+| `Modal.Trigger`     | Element that opens the modal.      |
+| `Modal.Close`       | Element that closes the modal.     |
+| `Modal.Content`     | The portalled popup with backdrop. |
+| `Modal.Title`       | Heading text.                      |
+| `Modal.Description` | Sub-text under the title.          |
 
 **`Modal.Content` props:**
 
-| Prop | Type | Default | Description |
-|---|---|---|---|
-| `className` | `string` | — | Extra classes on the popup. |
-| `backdropClassName` | `string` | — | Extra classes on the backdrop. |
-| `...props` | Base UI `Dialog.Popup` props | — | Spread to the popup. |
+| Prop                | Type                         | Default | Description                    |
+| ------------------- | ---------------------------- | ------- | ------------------------------ |
+| `className`         | `string`                     | —       | Extra classes on the popup.    |
+| `backdropClassName` | `string`                     | —       | Extra classes on the backdrop. |
+| `...props`          | Base UI `Dialog.Popup` props | —       | Spread to the popup.           |
 
 `Modal.Title` and `Modal.Description` accept their Base UI props plus `className`.
 
@@ -491,7 +528,14 @@ Compound component built on `@base-ui/react/dialog`. Renders into a portal, with
   <Modal.Content>
     <Modal.Title>Delete project?</Modal.Title>
     <Modal.Description>This action cannot be undone.</Modal.Description>
-    <div style={{ marginTop: "1rem", display: "flex", justifyContent: "flex-end", gap: "0.5rem" }}>
+    <div
+      style={{
+        marginTop: "1rem",
+        display: "flex",
+        justifyContent: "flex-end",
+        gap: "0.5rem",
+      }}
+    >
       <Modal.Close render={<Button variant="secondary">Cancel</Button>} />
       <Button variant="destructive">Delete</Button>
     </div>
@@ -507,23 +551,27 @@ Wraps `@base-ui/react/radio` and `@base-ui/react/radio-group`.
 
 **`Radio` props:**
 
-| Prop | Type | Default | Description |
-|---|---|---|---|
-| `size` | `"sm" \| "md" \| "lg"` | `"md"` | 16 / 18 / 20 px. |
-| `className` | `string` | — | Extra classes. |
-| `...props` | Base UI `Radio.Root` props | — | `value`, `disabled`, etc. |
+| Prop        | Type                       | Default | Description               |
+| ----------- | -------------------------- | ------- | ------------------------- |
+| `size`      | `"sm" \| "md" \| "lg"`     | `"md"`  | 16 / 18 / 20 px.          |
+| `className` | `string`                   | —       | Extra classes.            |
+| `...props`  | Base UI `Radio.Root` props | —       | `value`, `disabled`, etc. |
 
 **`RadioGroup` props:**
 
-| Prop | Type | Default | Description |
-|---|---|---|---|
-| `className` | `string` | — | Override the default vertical stack. |
-| `...props` | Base UI `RadioGroup` props | — | `value`, `defaultValue`, `onValueChange`. |
+| Prop        | Type                       | Default | Description                               |
+| ----------- | -------------------------- | ------- | ----------------------------------------- |
+| `className` | `string`                   | —       | Override the default vertical stack.      |
+| `...props`  | Base UI `RadioGroup` props | —       | `value`, `defaultValue`, `onValueChange`. |
 
 ```tsx
 <RadioGroup defaultValue="email">
-  <label><Radio value="email" /> Email</label>
-  <label><Radio value="sms" /> SMS</label>
+  <label>
+    <Radio value="email" /> Email
+  </label>
+  <label>
+    <Radio value="sms" /> SMS
+  </label>
 </RadioGroup>
 ```
 
@@ -533,19 +581,19 @@ Wraps `@base-ui/react/radio` and `@base-ui/react/radio-group`.
 
 Compound component built on `@base-ui/react/toggle-group` (single-select). The selected item rises as a white floating pill.
 
-| Sub-component | Description |
-|---|---|
+| Sub-component      | Description       |
+| ------------------ | ----------------- |
 | `Segmented` (root) | The toggle group. |
-| `Segmented.Item` | A single segment. |
+| `Segmented.Item`   | A single segment. |
 
 **`Segmented` props:**
 
-| Prop | Type | Default | Description |
-|---|---|---|---|
-| `value` | `string` | — | Controlled selected value. |
-| `defaultValue` | `string` | — | Uncontrolled initial value. |
-| `onValueChange` | `(value: string) => void` | — | Fired with the new value. |
-| `size` | `"sm" \| "md" \| "lg"` | `"md"` | 24 / 28 / 32 px. |
+| Prop            | Type                      | Default | Description                 |
+| --------------- | ------------------------- | ------- | --------------------------- |
+| `value`         | `string`                  | —       | Controlled selected value.  |
+| `defaultValue`  | `string`                  | —       | Uncontrolled initial value. |
+| `onValueChange` | `(value: string) => void` | —       | Fired with the new value.   |
+| `size`          | `"sm" \| "md" \| "lg"`    | `"md"`  | 24 / 28 / 32 px.            |
 
 ```tsx
 <Segmented value={range} onValueChange={setRange}>
@@ -561,13 +609,13 @@ Compound component built on `@base-ui/react/toggle-group` (single-select). The s
 
 Compound component built on `@base-ui/react/select`.
 
-| Sub-component | Description |
-|---|---|
-| `Select.Root` | State container (`value`, `onValueChange`). |
-| `Select.Trigger` | The clickable trigger; renders a chevron icon. |
-| `Select.Value` | The selected value's display. |
-| `Select.Content` | The portalled popup. |
-| `Select.Item` | A selectable row with a check indicator when selected. |
+| Sub-component    | Description                                            |
+| ---------------- | ------------------------------------------------------ |
+| `Select.Root`    | State container (`value`, `onValueChange`).            |
+| `Select.Trigger` | The clickable trigger; renders a chevron icon.         |
+| `Select.Value`   | The selected value's display.                          |
+| `Select.Content` | The portalled popup.                                   |
+| `Select.Item`    | A selectable row with a check indicator when selected. |
 
 **`Select.Trigger` props:** `size` = `"sm" | "md" | "lg"` (default `"md"`), plus `className`.
 
@@ -594,11 +642,11 @@ Compound component built on `@base-ui/react/select`.
 
 Loading placeholder with a pulse animation.
 
-| Prop | Type | Default | Description |
-|---|---|---|---|
-| `shape` | `"line" \| "circle" \| "block"` | `"line"` | Default dimensions and radius. |
-| `className` | `string` | — | Override width/height/radius via your own CSS. |
-| `...props` | `HTMLAttributes<HTMLDivElement>` | — | Native div attributes. |
+| Prop        | Type                             | Default  | Description                                    |
+| ----------- | -------------------------------- | -------- | ---------------------------------------------- |
+| `shape`     | `"line" \| "circle" \| "block"`  | `"line"` | Default dimensions and radius.                 |
+| `className` | `string`                         | —        | Override width/height/radius via your own CSS. |
+| `...props`  | `HTMLAttributes<HTMLDivElement>` | —        | Native div attributes.                         |
 
 ```tsx
 <Skeleton />
@@ -612,11 +660,11 @@ Loading placeholder with a pulse animation.
 
 Compound floating-pill component for status indicators. Intent drives chip + label color via CSS custom properties.
 
-| Sub-component | Description |
-|---|---|
-| `StatusPill` (root) | The pill surface. |
+| Sub-component          | Description                                                 |
+| ---------------------- | ----------------------------------------------------------- |
+| `StatusPill` (root)    | The pill surface.                                           |
 | `StatusPill.Indicator` | The leading colored chip. Children render an optional icon. |
-| `StatusPill.Label` | The colored text label. |
+| `StatusPill.Label`     | The colored text label.                                     |
 
 **`StatusPill` props:** `intent` = `"neutral" | "success" | "warning" | "danger" | "info"` (default `"neutral"`).
 
@@ -633,11 +681,11 @@ Compound floating-pill component for status indicators. Intent drives chip + lab
 
 Wraps `@base-ui/react/switch` — a thumb that slides on `data-[checked]`.
 
-| Prop | Type | Default | Description |
-|---|---|---|---|
-| `size` | `"sm" \| "md" \| "lg"` | `"md"` | 16 / 20 / 24 px tall. |
-| `className` | `string` | — | Extra classes on the root. |
-| `...props` | Base UI `Switch.Root` props | — | `checked`, `defaultChecked`, `onCheckedChange`, `disabled`. |
+| Prop        | Type                        | Default | Description                                                 |
+| ----------- | --------------------------- | ------- | ----------------------------------------------------------- |
+| `size`      | `"sm" \| "md" \| "lg"`      | `"md"`  | 16 / 20 / 24 px tall.                                       |
+| `className` | `string`                    | —       | Extra classes on the root.                                  |
+| `...props`  | Base UI `Switch.Root` props | —       | `checked`, `defaultChecked`, `onCheckedChange`, `disabled`. |
 
 ```tsx
 <Switch defaultChecked />
@@ -650,12 +698,12 @@ Wraps `@base-ui/react/switch` — a thumb that slides on `data-[checked]`.
 
 Compound component built on `@base-ui/react/tabs`. The list renders an animated indicator that slides between active tabs.
 
-| Sub-component | Description |
-|---|---|
+| Sub-component | Description                                                     |
+| ------------- | --------------------------------------------------------------- |
 | `Tabs` (root) | State container; pass `value`, `defaultValue`, `onValueChange`. |
-| `Tabs.List` | Horizontal tab strip with a sliding indicator. |
-| `Tabs.Tab` | A single tab button. |
-| `Tabs.Panel` | The panel paired with a tab `value`. |
+| `Tabs.List`   | Horizontal tab strip with a sliding indicator.                  |
+| `Tabs.Tab`    | A single tab button.                                            |
+| `Tabs.Panel`  | The panel paired with a tab `value`.                            |
 
 All sub-components accept their Base UI props plus `className`.
 
@@ -678,12 +726,12 @@ All sub-components accept their Base UI props plus `className`.
 
 A thin styled `<textarea>` mirroring Input's API.
 
-| Prop | Type | Default | Description |
-|---|---|---|---|
-| `size` | `"sm" \| "md" \| "lg"` | `"md"` | Density-aware control padding. |
-| `invalid` | `boolean` | — | Sets `aria-invalid` and applies the danger border + focus ring. |
-| `className` | `string` | — | Extra classes. |
-| `...props` | `TextareaHTMLAttributes` (minus `size`) | — | All native textarea attributes. |
+| Prop        | Type                                    | Default | Description                                                     |
+| ----------- | --------------------------------------- | ------- | --------------------------------------------------------------- |
+| `size`      | `"sm" \| "md" \| "lg"`                  | `"md"`  | Density-aware control padding.                                  |
+| `invalid`   | `boolean`                               | —       | Sets `aria-invalid` and applies the danger border + focus ring. |
+| `className` | `string`                                | —       | Extra classes.                                                  |
+| `...props`  | `TextareaHTMLAttributes` (minus `size`) | —       | All native textarea attributes.                                 |
 
 ```tsx
 <Textarea placeholder="Notes" rows={4} />
@@ -696,12 +744,12 @@ A thin styled `<textarea>` mirroring Input's API.
 
 Built on `@base-ui/react/toast`. Provides a `<Toast.Provider>` boundary, a `<Toast.Viewport>` for positioning, a pre-built `<Toast.Toaster>` that renders the queue, and the `useToast()` hook to push toasts.
 
-| Sub-component | Description |
-|---|---|
-| `Toast.Provider` | Wrap your app to enable toasts. |
-| `Toast.Viewport` | Positioned region where toasts mount (bottom-right by default). |
-| `Toast.Toaster` | Pre-styled queue renderer — drop this inside `Provider`. |
-| `useToast()` | Hook returning Base UI's toast manager (`.add({ title, description })`). |
+| Sub-component    | Description                                                              |
+| ---------------- | ------------------------------------------------------------------------ |
+| `Toast.Provider` | Wrap your app to enable toasts.                                          |
+| `Toast.Viewport` | Positioned region where toasts mount (bottom-right by default).          |
+| `Toast.Toaster`  | Pre-styled queue renderer — drop this inside `Provider`.                 |
+| `useToast()`     | Hook returning Base UI's toast manager (`.add({ title, description })`). |
 
 ```tsx
 import { Toast, useToast, Button } from "@bubble-design-system/ui";
@@ -718,7 +766,11 @@ function Root({ children }) {
 function SaveButton() {
   const toast = useToast();
   return (
-    <Button onClick={() => toast.add({ title: "Saved", description: "Changes are live." })}>
+    <Button
+      onClick={() =>
+        toast.add({ title: "Saved", description: "Changes are live." })
+      }
+    >
       Save
     </Button>
   );
@@ -731,21 +783,21 @@ function SaveButton() {
 
 Compound component built on `@base-ui/react/tooltip`. Requires a `Tooltip.Provider` ancestor (typically once at the app root).
 
-| Sub-component | Description |
-|---|---|
-| `Tooltip.Provider` | App-level provider. |
-| `Tooltip.Root` | Single tooltip state container. |
-| `Tooltip.Trigger` | The hovered/focused element. |
-| `Tooltip.Content` | The portalled popup. |
+| Sub-component      | Description                     |
+| ------------------ | ------------------------------- |
+| `Tooltip.Provider` | App-level provider.             |
+| `Tooltip.Root`     | Single tooltip state container. |
+| `Tooltip.Trigger`  | The hovered/focused element.    |
+| `Tooltip.Content`  | The portalled popup.            |
 
 **`Tooltip.Content` props:**
 
-| Prop | Type | Default | Description |
-|---|---|---|---|
-| `side` | `"top" \| "bottom" \| "left" \| "right"` | `"top"` | Preferred side. |
-| `align` | `"start" \| "center" \| "end"` | `"center"` | Alignment along the side. |
-| `sideOffset` | `number` | `6` | Distance from the trigger. |
-| `className` | `string` | — | Extra classes on the popup. |
+| Prop         | Type                                     | Default    | Description                 |
+| ------------ | ---------------------------------------- | ---------- | --------------------------- |
+| `side`       | `"top" \| "bottom" \| "left" \| "right"` | `"top"`    | Preferred side.             |
+| `align`      | `"start" \| "center" \| "end"`           | `"center"` | Alignment along the side.   |
+| `sideOffset` | `number`                                 | `6`        | Distance from the trigger.  |
+| `className`  | `string`                                 | —          | Extra classes on the popup. |
 
 ```tsx
 <Tooltip.Provider>
@@ -779,65 +831,65 @@ All tokens are CSS custom properties defined in `src/tokens.css`. Reference them
 
 Semantic colors map to primitive palettes and are remapped by `[data-theme]`, `[data-gray]`, and `[data-brand]`.
 
-| Token | Purpose |
-|---|---|
-| `--color-bg-primary` | Page background. |
-| `--color-bg-secondary` | Secondary surface (cards on page). |
-| `--color-bg-tertiary` | Tertiary surface (inset wells). |
-| `--color-bg-inverse` | Inverted surface (tooltip, toast). |
-| `--color-bg-brand` | Brand primary fill. |
-| `--color-bg-brand-hover` | Brand hover state. |
-| `--color-bg-brand-active` | Brand pressed state. |
-| `--color-bg-brand-subtle` | Tinted brand surface (info backgrounds, badges). |
-| `--color-bg-success` | Soft success surface. |
-| `--color-bg-success-strong` | Solid success fill. |
-| `--color-bg-warning` | Soft warning surface. |
-| `--color-bg-warning-strong` | Solid warning fill. |
-| `--color-bg-danger` | Soft danger surface. |
-| `--color-bg-danger-strong` | Solid danger fill (destructive buttons). |
-| `--color-bg-danger-hover` | Danger hover state. |
-| `--color-bg-info` | Info alert surface. |
-| `--color-bg-hover` | Neutral hover. |
-| `--color-bg-pressed` | Neutral pressed. |
-| `--color-bg-disabled` | Disabled surface. |
-| `--color-text-primary` | Body text. |
-| `--color-text-secondary` | Supporting text. |
-| `--color-text-tertiary` | Placeholder, hints. |
-| `--color-text-disabled` | Disabled text. |
-| `--color-text-inverse` | Text on `bg-inverse`. |
-| `--color-text-brand` | Brand-colored text (links). |
-| `--color-text-success` | Success copy. |
-| `--color-text-warning` | Warning copy. |
-| `--color-text-danger` | Error copy. |
-| `--color-text-on-brand` | Text on `bg-brand`. |
-| `--color-text-on-danger` | Text on `bg-danger-strong`. |
-| `--color-text-on-success` | Text on `bg-success-strong`. |
-| `--color-border-primary` | Default form/control border. |
-| `--color-border-secondary` | Section dividers, cards. |
-| `--color-border-tertiary` | Subtle inner dividers. |
-| `--color-border-brand` | Selected/active accent. |
-| `--color-border-success` | Success accent. |
-| `--color-border-warning` | Warning accent. |
-| `--color-border-danger` | Error accent (invalid inputs). |
-| `--color-border-focus` | Focus ring color. |
+| Token                       | Purpose                                          |
+| --------------------------- | ------------------------------------------------ |
+| `--color-bg-primary`        | Page background.                                 |
+| `--color-bg-secondary`      | Secondary surface (cards on page).               |
+| `--color-bg-tertiary`       | Tertiary surface (inset wells).                  |
+| `--color-bg-inverse`        | Inverted surface (tooltip, toast).               |
+| `--color-bg-brand`          | Brand primary fill.                              |
+| `--color-bg-brand-hover`    | Brand hover state.                               |
+| `--color-bg-brand-active`   | Brand pressed state.                             |
+| `--color-bg-brand-subtle`   | Tinted brand surface (info backgrounds, badges). |
+| `--color-bg-success`        | Soft success surface.                            |
+| `--color-bg-success-strong` | Solid success fill.                              |
+| `--color-bg-warning`        | Soft warning surface.                            |
+| `--color-bg-warning-strong` | Solid warning fill.                              |
+| `--color-bg-danger`         | Soft danger surface.                             |
+| `--color-bg-danger-strong`  | Solid danger fill (destructive buttons).         |
+| `--color-bg-danger-hover`   | Danger hover state.                              |
+| `--color-bg-info`           | Info alert surface.                              |
+| `--color-bg-hover`          | Neutral hover.                                   |
+| `--color-bg-pressed`        | Neutral pressed.                                 |
+| `--color-bg-disabled`       | Disabled surface.                                |
+| `--color-text-primary`      | Body text.                                       |
+| `--color-text-secondary`    | Supporting text.                                 |
+| `--color-text-tertiary`     | Placeholder, hints.                              |
+| `--color-text-disabled`     | Disabled text.                                   |
+| `--color-text-inverse`      | Text on `bg-inverse`.                            |
+| `--color-text-brand`        | Brand-colored text (links).                      |
+| `--color-text-success`      | Success copy.                                    |
+| `--color-text-warning`      | Warning copy.                                    |
+| `--color-text-danger`       | Error copy.                                      |
+| `--color-text-on-brand`     | Text on `bg-brand`.                              |
+| `--color-text-on-danger`    | Text on `bg-danger-strong`.                      |
+| `--color-text-on-success`   | Text on `bg-success-strong`.                     |
+| `--color-border-primary`    | Default form/control border.                     |
+| `--color-border-secondary`  | Section dividers, cards.                         |
+| `--color-border-tertiary`   | Subtle inner dividers.                           |
+| `--color-border-brand`      | Selected/active accent.                          |
+| `--color-border-success`    | Success accent.                                  |
+| `--color-border-warning`    | Warning accent.                                  |
+| `--color-border-danger`     | Error accent (invalid inputs).                   |
+| `--color-border-focus`      | Focus ring color.                                |
 
 ### Primitive palettes
 
 These are the raw color swatches that the semantic tokens reference. You usually shouldn't touch them directly, but they're exposed if you need to.
 
-| Family | Stops | Notes |
-|---|---|---|
-| `--slate-*` | 50–950 | Default gray family. |
-| `--neutral-*` | 50–950 | True neutral (no temperature). |
-| `--stone-*` | 50–950 | Warm gray. |
-| `--blue-*` | 50–950 | Brand option. |
-| `--violet-*` | 50–950 | Brand option. |
-| `--emerald-*` | 50–950 | Brand option. |
-| `--orange-*` | 50–950 | Brand option. |
-| `--green-*` | 50–950 | Success palette. |
-| `--amber-*` | 50–950 | Warning palette. |
-| `--red-*` | 50–950 | Danger palette. |
-| `--white`, `--black` | — | Pure values. |
+| Family               | Stops  | Notes                          |
+| -------------------- | ------ | ------------------------------ |
+| `--slate-*`          | 50–950 | Default gray family.           |
+| `--neutral-*`        | 50–950 | True neutral (no temperature). |
+| `--stone-*`          | 50–950 | Warm gray.                     |
+| `--blue-*`           | 50–950 | Brand option.                  |
+| `--violet-*`         | 50–950 | Brand option.                  |
+| `--emerald-*`        | 50–950 | Brand option.                  |
+| `--orange-*`         | 50–950 | Brand option.                  |
+| `--green-*`          | 50–950 | Success palette.               |
+| `--amber-*`          | 50–950 | Warning palette.               |
+| `--red-*`            | 50–950 | Danger palette.                |
+| `--white`, `--black` | —      | Pure values.                   |
 
 Aliases follow the active `data-*` attribute: `--gray-*` resolves to whichever gray family is selected, `--brand-*` to whichever brand. The `mono` and `teal` brands have special-case treatment for contrast on light/dark themes.
 
@@ -845,15 +897,15 @@ Aliases follow the active `data-*` attribute: `--gray-*` resolves to whichever g
 
 Selected by `[data-radius]`. Each scale rewrites the same custom properties.
 
-| Token | default | sharp | soft | pill |
-|---|---|---|---|---|
-| `--radius-xs`   | 2px    | 0px    | 4px    | 4px |
-| `--radius-sm`   | 4px    | 1px    | 8px    | 9999px |
-| `--radius-md`   | 6px    | 2px    | 12px   | 9999px |
-| `--radius-lg`   | 8px    | 3px    | 14px   | 9999px |
-| `--radius-xl`   | 12px   | 4px    | 18px   | 18px |
-| `--radius-2xl`  | 16px   | 6px    | 24px   | 22px |
-| `--radius-full` | 9999px | 9999px | 9999px | 9999px |
+| Token           | default | sharp  | soft   | pill   |
+| --------------- | ------- | ------ | ------ | ------ |
+| `--radius-xs`   | 2px     | 0px    | 4px    | 4px    |
+| `--radius-sm`   | 4px     | 1px    | 8px    | 9999px |
+| `--radius-md`   | 6px     | 2px    | 12px   | 9999px |
+| `--radius-lg`   | 8px     | 3px    | 14px   | 9999px |
+| `--radius-xl`   | 12px    | 4px    | 18px   | 18px   |
+| `--radius-2xl`  | 16px    | 6px    | 24px   | 22px   |
+| `--radius-full` | 9999px  | 9999px | 9999px | 9999px |
 
 Plus `--ctrl-radius` — the control radius used by Button/Input/Select. Pills under `[data-tone="soft"]`, `--radius-md` elsewhere.
 
@@ -861,33 +913,33 @@ Plus `--ctrl-radius` — the control radius used by Button/Input/Select. Pills u
 
 Light theme uses cool slate tints; dark theme uses opaque black. The `soft` tone adds an inset white top-highlight on md/lg/xl. The focus ring tracks the brand color.
 
-| Token | Purpose |
-|---|---|
-| `--shadow-xs` | Hairline lift. |
-| `--shadow-sm` | Subtle card. |
-| `--shadow-md` | Standard card. |
-| `--shadow-lg` | Popover, dropdown. |
-| `--shadow-xl` | Modal. |
+| Token            | Purpose                          |
+| ---------------- | -------------------------------- |
+| `--shadow-xs`    | Hairline lift.                   |
+| `--shadow-sm`    | Subtle card.                     |
+| `--shadow-md`    | Standard card.                   |
+| `--shadow-lg`    | Popover, dropdown.               |
+| `--shadow-xl`    | Modal.                           |
 | `--shadow-focus` | Focus ring (3–4px brand-tinted). |
 
 ### Typography
 
-| Token | Value |
-|---|---|
-| `--font-size-xs`  | 0.75rem |
-| `--font-size-sm`  | 0.875rem |
-| `--font-size-md`  | 1rem |
-| `--font-size-lg`  | 1.125rem |
-| `--font-size-xl`  | 1.25rem |
-| `--font-size-2xl` | 1.5rem |
-| `--font-size-3xl` | 1.875rem |
-| `--font-size-4xl` | 2.25rem |
-| `--font-size-5xl` | 3rem |
-| `--font-size-6xl` | 3.75rem |
-| `--line-height-tight` / `snug` / `normal` / `relaxed` | 1.15 / 1.3 / 1.5 / 1.65 |
-| `--letter-tight` / `snug` / `normal` / `wide` | -0.022em / -0.012em / 0 / 0.04em |
-| `--font-weight-regular` / `medium` / `semibold` / `bold` | 400 / 500 / 600 / 700 |
-| `--font-sans` / `--font-mono` | Set by `[data-font]` |
+| Token                                                    | Value                            |
+| -------------------------------------------------------- | -------------------------------- |
+| `--font-size-xs`                                         | 0.75rem                          |
+| `--font-size-sm`                                         | 0.875rem                         |
+| `--font-size-md`                                         | 1rem                             |
+| `--font-size-lg`                                         | 1.125rem                         |
+| `--font-size-xl`                                         | 1.25rem                          |
+| `--font-size-2xl`                                        | 1.5rem                           |
+| `--font-size-3xl`                                        | 1.875rem                         |
+| `--font-size-4xl`                                        | 2.25rem                          |
+| `--font-size-5xl`                                        | 3rem                             |
+| `--font-size-6xl`                                        | 3.75rem                          |
+| `--line-height-tight` / `snug` / `normal` / `relaxed`    | 1.15 / 1.3 / 1.5 / 1.65          |
+| `--letter-tight` / `snug` / `normal` / `wide`            | -0.022em / -0.012em / 0 / 0.04em |
+| `--font-weight-regular` / `medium` / `semibold` / `bold` | 400 / 500 / 600 / 700            |
+| `--font-sans` / `--font-mono`                            | Set by `[data-font]`             |
 
 ### Spacing
 
@@ -897,30 +949,30 @@ Light theme uses cool slate tints; dark theme uses opaque black. The `soft` tone
 
 Selected by `[data-density]`.
 
-| Token | default | compact | comfortable |
-|---|---|---|---|
-| `--control-h-sm`  | 28px | 24px | 32px |
-| `--control-h-md`  | 36px | 30px | 42px |
-| `--control-h-lg`  | 44px | 38px | 52px |
-| `--control-px-sm` | 10px | 8px  | 12px |
-| `--control-px-md` | 14px | 12px | 18px |
-| `--control-px-lg` | 18px | 16px | 22px |
-| `--card-p`        | 24px | 16px | 32px |
-| `--row-gap`       | 16px | 12px | 20px |
+| Token             | default | compact | comfortable |
+| ----------------- | ------- | ------- | ----------- |
+| `--control-h-sm`  | 28px    | 24px    | 32px        |
+| `--control-h-md`  | 36px    | 30px    | 42px        |
+| `--control-h-lg`  | 44px    | 38px    | 52px        |
+| `--control-px-sm` | 10px    | 8px     | 12px        |
+| `--control-px-md` | 14px    | 12px    | 18px        |
+| `--control-px-lg` | 18px    | 16px    | 22px        |
+| `--card-p`        | 24px    | 16px    | 32px        |
+| `--row-gap`       | 16px    | 12px    | 20px        |
 
 ### Motion
 
-| Token | Value |
-|---|---|
-| `--duration-instant` | 50ms |
-| `--duration-fast`    | 120ms |
-| `--duration-normal`  | 200ms |
-| `--duration-slow`    | 320ms |
-| `--duration-slower`  | 500ms |
-| `--ease-linear`   | `linear` |
-| `--ease-out`      | `cubic-bezier(0.16, 1, 0.3, 1)` |
-| `--ease-in-out`   | `cubic-bezier(0.65, 0, 0.35, 1)` |
-| `--ease-spring`   | `cubic-bezier(0.34, 1.56, 0.64, 1)` |
+| Token                | Value                               |
+| -------------------- | ----------------------------------- |
+| `--duration-instant` | 50ms                                |
+| `--duration-fast`    | 120ms                               |
+| `--duration-normal`  | 200ms                               |
+| `--duration-slow`    | 320ms                               |
+| `--duration-slower`  | 500ms                               |
+| `--ease-linear`      | `linear`                            |
+| `--ease-out`         | `cubic-bezier(0.16, 1, 0.3, 1)`     |
+| `--ease-in-out`      | `cubic-bezier(0.65, 0, 0.35, 1)`    |
+| `--ease-spring`      | `cubic-bezier(0.34, 1.56, 0.64, 1)` |
 
 ### Browsing tokens visually
 

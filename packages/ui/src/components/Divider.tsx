@@ -6,7 +6,10 @@ import { cn } from "../utils/cn";
 
 type BaseSeparatorProps = ComponentPropsWithoutRef<typeof Separator>;
 
-export interface DividerProps extends Omit<BaseSeparatorProps, "className" | "render"> {
+export interface DividerProps extends Omit<
+  BaseSeparatorProps,
+  "className" | "render"
+> {
   className?: string;
 }
 
@@ -18,7 +21,9 @@ export const Divider = forwardRef<HTMLDivElement, DividerProps>(
         orientation={orientation}
         className={cn(
           "pds-divider",
-          orientation === "horizontal" ? "pds-divider--horizontal" : "pds-divider--vertical",
+          orientation === "horizontal"
+            ? "pds-divider--horizontal"
+            : "pds-divider--vertical",
           className,
         )}
         {...props}

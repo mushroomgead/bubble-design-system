@@ -38,9 +38,21 @@
 }
 
 /* sizes */
-.pds-checkbox--sm { width: 1rem;     height: 1rem;     border-radius: var(--radius-xs); }
-.pds-checkbox--md { width: 1.125rem; height: 1.125rem; border-radius: var(--radius-sm); }
-.pds-checkbox--lg { width: 1.25rem;  height: 1.25rem;  border-radius: var(--radius-sm); }
+.pds-checkbox--sm {
+  width: 1rem;
+  height: 1rem;
+  border-radius: var(--radius-xs);
+}
+.pds-checkbox--md {
+  width: 1.125rem;
+  height: 1.125rem;
+  border-radius: var(--radius-sm);
+}
+.pds-checkbox--lg {
+  width: 1.25rem;
+  height: 1.25rem;
+  border-radius: var(--radius-sm);
+}
 
 /* indicator wrapper */
 .pds-checkbox__indicator {
@@ -50,12 +62,29 @@
 }
 
 /* indicator icons — sized by parent .pds-checkbox--{size} */
-.pds-checkbox--sm .pds-checkbox__icon { width: 0.75rem;  height: 0.75rem; }
-.pds-checkbox--md .pds-checkbox__icon { width: 0.875rem; height: 0.875rem; }
-.pds-checkbox--lg .pds-checkbox__icon { width: 1rem;     height: 1rem; }
+.pds-checkbox--sm .pds-checkbox__icon {
+  width: 0.75rem;
+  height: 0.75rem;
+}
+.pds-checkbox--md .pds-checkbox__icon {
+  width: 0.875rem;
+  height: 0.875rem;
+}
+.pds-checkbox--lg .pds-checkbox__icon {
+  width: 1rem;
+  height: 1rem;
+}
 
 /* show the right icon based on state — checked or indeterminate */
-.pds-checkbox__icon--check { display: block; }
-.pds-checkbox__icon--indeterminate { display: none; }
-.pds-checkbox[data-indeterminate] .pds-checkbox__icon--check { display: none; }
-.pds-checkbox[data-indeterminate] .pds-checkbox__icon--indeterminate { display: block; }
+.pds-checkbox__icon--check {
+  display: block;
+}
+.pds-checkbox__icon--indeterminate {
+  display: none;
+}
+.pds-checkbox[data-indeterminate] .pds-checkbox__icon--check {
+  display: none;
+}
+.pds-checkbox[data-indeterminate] .pds-checkbox__icon--indeterminate {
+  display: block;
+}

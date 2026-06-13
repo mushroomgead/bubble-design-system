@@ -36,8 +36,14 @@ const colorTextTokens = [
   { token: "--color-text-warning", note: "Warning messages" },
   { token: "--color-text-danger", note: "Error messages" },
   { token: "--color-text-on-brand", note: "Foreground on --color-bg-brand" },
-  { token: "--color-text-on-danger", note: "Foreground on --color-bg-danger-strong" },
-  { token: "--color-text-on-success", note: "Foreground on --color-bg-success-strong" },
+  {
+    token: "--color-text-on-danger",
+    note: "Foreground on --color-bg-danger-strong",
+  },
+  {
+    token: "--color-text-on-success",
+    note: "Foreground on --color-bg-success-strong",
+  },
 ];
 
 const colorBorderTokens = [
@@ -71,11 +77,11 @@ const shadowTokens = [
 ];
 
 const fontSizeTokens = [
-  { token: "--font-size-xs",  value: "0.75rem" },
-  { token: "--font-size-sm",  value: "0.875rem" },
-  { token: "--font-size-md",  value: "1rem" },
-  { token: "--font-size-lg",  value: "1.125rem" },
-  { token: "--font-size-xl",  value: "1.25rem" },
+  { token: "--font-size-xs", value: "0.75rem" },
+  { token: "--font-size-sm", value: "0.875rem" },
+  { token: "--font-size-md", value: "1rem" },
+  { token: "--font-size-lg", value: "1.125rem" },
+  { token: "--font-size-xl", value: "1.25rem" },
   { token: "--font-size-2xl", value: "1.5rem" },
   { token: "--font-size-3xl", value: "1.875rem" },
   { token: "--font-size-4xl", value: "2.25rem" },
@@ -84,35 +90,35 @@ const fontSizeTokens = [
 ];
 
 const lineHeightTokens = [
-  { token: "--line-height-tight",   value: "1.15" },
-  { token: "--line-height-snug",    value: "1.3" },
-  { token: "--line-height-normal",  value: "1.5" },
+  { token: "--line-height-tight", value: "1.15" },
+  { token: "--line-height-snug", value: "1.3" },
+  { token: "--line-height-normal", value: "1.5" },
   { token: "--line-height-relaxed", value: "1.65" },
 ];
 
 const fontWeightTokens = [
-  { token: "--font-weight-regular",  value: "400" },
-  { token: "--font-weight-medium",   value: "500" },
+  { token: "--font-weight-regular", value: "400" },
+  { token: "--font-weight-medium", value: "500" },
   { token: "--font-weight-semibold", value: "600" },
-  { token: "--font-weight-bold",     value: "700" },
+  { token: "--font-weight-bold", value: "700" },
 ];
 
 const trackingTokens = [
-  { token: "--letter-tight",  value: "-0.022em" },
-  { token: "--letter-snug",   value: "-0.012em" },
+  { token: "--letter-tight", value: "-0.022em" },
+  { token: "--letter-snug", value: "-0.012em" },
   { token: "--letter-normal", value: "0" },
-  { token: "--letter-wide",   value: "0.04em" },
+  { token: "--letter-wide", value: "0.04em" },
 ];
 
 const spacingTokens = [
-  { token: "--space-0",  value: "0" },
-  { token: "--space-1",  value: "0.25rem (4px)" },
-  { token: "--space-2",  value: "0.5rem (8px)" },
-  { token: "--space-3",  value: "0.75rem (12px)" },
-  { token: "--space-4",  value: "1rem (16px)" },
-  { token: "--space-5",  value: "1.25rem (20px)" },
-  { token: "--space-6",  value: "1.5rem (24px)" },
-  { token: "--space-8",  value: "2rem (32px)" },
+  { token: "--space-0", value: "0" },
+  { token: "--space-1", value: "0.25rem (4px)" },
+  { token: "--space-2", value: "0.5rem (8px)" },
+  { token: "--space-3", value: "0.75rem (12px)" },
+  { token: "--space-4", value: "1rem (16px)" },
+  { token: "--space-5", value: "1.25rem (20px)" },
+  { token: "--space-6", value: "1.5rem (24px)" },
+  { token: "--space-8", value: "2rem (32px)" },
   { token: "--space-10", value: "2.5rem (40px)" },
   { token: "--space-12", value: "3rem (48px)" },
   { token: "--space-16", value: "4rem (64px)" },
@@ -122,10 +128,10 @@ const spacingTokens = [
 
 const motionDurationTokens = [
   { token: "--duration-instant", value: "50ms" },
-  { token: "--duration-fast",    value: "120ms" },
-  { token: "--duration-normal",  value: "200ms" },
-  { token: "--duration-slow",    value: "320ms" },
-  { token: "--duration-slower",  value: "500ms" },
+  { token: "--duration-fast", value: "120ms" },
+  { token: "--duration-normal", value: "200ms" },
+  { token: "--duration-slow", value: "320ms" },
+  { token: "--duration-slower", value: "500ms" },
 ];
 
 const motionEaseTokens = [
@@ -136,41 +142,49 @@ const motionEaseTokens = [
 ];
 
 const densityTokens = [
-  { token: "--control-h-sm",  note: "Small control height — Input/Button/Select sm" },
-  { token: "--control-h-md",  note: "Medium control height (default)" },
-  { token: "--control-h-lg",  note: "Large control height" },
+  {
+    token: "--control-h-sm",
+    note: "Small control height — Input/Button/Select sm",
+  },
+  { token: "--control-h-md", note: "Medium control height (default)" },
+  { token: "--control-h-lg", note: "Large control height" },
   { token: "--control-px-sm", note: "Horizontal padding for sm controls" },
   { token: "--control-px-md", note: "Horizontal padding for md controls" },
   { token: "--control-px-lg", note: "Horizontal padding for lg controls" },
-  { token: "--card-p",        note: "Card / panel padding" },
-  { token: "--row-gap",       note: "Vertical gap between stacked controls" },
+  { token: "--card-p", note: "Card / panel padding" },
+  { token: "--row-gap", note: "Vertical gap between stacked controls" },
 ];
 
 const dataAttributes: { attr: string; values: string[]; effect: string }[] = [
   {
     attr: "data-theme",
     values: ["light", "dark"],
-    effect: "Swaps every --color-bg-*, --color-text-*, --color-border-*, and --shadow-* token to its dark variant.",
+    effect:
+      "Swaps every --color-bg-*, --color-text-*, --color-border-*, and --shadow-* token to its dark variant.",
   },
   {
     attr: "data-gray",
     values: ["slate", "neutral", "stone"],
-    effect: "Re-aliases --gray-50…950 (cool, true, or warm). Every surface/text/border token derived from gray inherits.",
+    effect:
+      "Re-aliases --gray-50…950 (cool, true, or warm). Every surface/text/border token derived from gray inherits.",
   },
   {
     attr: "data-brand",
     values: ["blue", "violet", "emerald", "orange", "mono", "teal"],
-    effect: "Re-aliases --brand-50…950. Every --color-bg-brand-*, --color-text-brand, --color-border-brand follows.",
+    effect:
+      "Re-aliases --brand-50…950. Every --color-bg-brand-*, --color-text-brand, --color-border-brand follows.",
   },
   {
     attr: "data-radius",
     values: ["default", "sharp", "soft", "pill"],
-    effect: "Re-binds --radius-xs…2xl. All rounded surfaces pick up new values instantly.",
+    effect:
+      "Re-binds --radius-xs…2xl. All rounded surfaces pick up new values instantly.",
   },
   {
     attr: "data-density",
     values: ["default", "compact", "comfortable"],
-    effect: "Re-binds --control-h-*, --control-px-*, --card-p, --row-gap. All sized controls reflow.",
+    effect:
+      "Re-binds --control-h-*, --control-px-*, --card-p, --row-gap. All sized controls reflow.",
   },
   {
     attr: "data-font",
@@ -194,7 +208,9 @@ function Section({
     <section id={id} className="docs-section">
       <div className="docs-section-header">
         <h2 className="docs-h2">{title}</h2>
-        {description ? <p className="docs-prose docs-text-sm">{description}</p> : null}
+        {description ? (
+          <p className="docs-prose docs-text-sm">{description}</p>
+        ) : null}
       </div>
       {children}
     </section>
@@ -232,13 +248,18 @@ export default function TokensPage() {
         <div className="docs-eyebrow">Reference</div>
         <h1 className="docs-h1">Design tokens</h1>
         <p className="docs-prose">
-          Every visual decision in <code className="docs-mono docs-mono--md">@bubble-design-system/ui</code>{" "}
+          Every visual decision in{" "}
+          <code className="docs-mono docs-mono--md">
+            @bubble-design-system/ui
+          </code>{" "}
           reads from a CSS custom property. Switch theme, brand, gray, radius,
-          density or font with the bar above — every swatch on this page
-          updates live. No rebuild.
+          density or font with the bar above — every swatch on this page updates
+          live. No rebuild.
         </p>
         <p className="docs-prose">
-          <Link href="/" className="docs-link">← Component gallery</Link>
+          <Link href="/" className="docs-link">
+            ← Component gallery
+          </Link>
         </p>
       </header>
 
@@ -249,13 +270,15 @@ export default function TokensPage() {
       >
         <div className="docs-grid-cards">
           <div className="docs-howto-card">
-            <div className="docs-howto-title">1. Reference directly via var(...)</div>
+            <div className="docs-howto-title">
+              1. Reference directly via var(...)
+            </div>
             <p className="docs-text-xs docs-muted">
-              Use semantic tokens in your own CSS so dark mode, brand swaps,
-              and tone changes follow automatically.
+              Use semantic tokens in your own CSS so dark mode, brand swaps, and
+              tone changes follow automatically.
             </p>
             <pre className="docs-pre">
-{`.my-card {
+              {`.my-card {
   background: var(--color-bg-primary);
   color: var(--color-text-primary);
   border: 1px solid var(--color-border-secondary);
@@ -268,12 +291,12 @@ export default function TokensPage() {
           <div className="docs-howto-card">
             <div className="docs-howto-title">2. Use the component classes</div>
             <p className="docs-text-xs docs-muted">
-              The shipped stylesheet provides stable, BEM-style class names
-              you can apply directly without going through a React component.
-              Useful for ad-hoc HTML, MDX, or static pages.
+              The shipped stylesheet provides stable, BEM-style class names you
+              can apply directly without going through a React component. Useful
+              for ad-hoc HTML, MDX, or static pages.
             </p>
             <pre className="docs-pre">
-{`<button class="pds-btn pds-btn--primary pds-btn--md">
+              {`<button class="pds-btn pds-btn--primary pds-btn--md">
   Save
 </button>
 
@@ -286,10 +309,14 @@ export default function TokensPage() {
 
         <div className="docs-callout">
           <strong>Naming pattern:</strong>{" "}
-          <code className="docs-mono">--color-{`{category}`}-{`{role}`}-{`{state?}`}</code>{" "}
-          — categories are <code className="docs-mono">bg</code>, <code className="docs-mono">text</code>,{" "}
+          <code className="docs-mono">
+            --color-{`{category}`}-{`{role}`}-{`{state?}`}
+          </code>{" "}
+          — categories are <code className="docs-mono">bg</code>,{" "}
+          <code className="docs-mono">text</code>,{" "}
           <code className="docs-mono">border</code>; roles are{" "}
-          <code className="docs-mono">primary</code>, <code className="docs-mono">brand</code>,{" "}
+          <code className="docs-mono">primary</code>,{" "}
+          <code className="docs-mono">brand</code>,{" "}
           <code className="docs-mono">success</code>, etc. So{" "}
           <code className="docs-mono">--color-bg-brand</code> reads as{" "}
           &quot;background-color, brand role&quot;.
@@ -322,7 +349,7 @@ export default function TokensPage() {
           </table>
         </div>
         <pre className="docs-pre">
-{`<html
+          {`<html
   data-theme="light"
   data-gray="slate"
   data-brand="blue"
@@ -481,7 +508,9 @@ export default function TokensPage() {
                       className="docs-swatch-line-height"
                       style={{ lineHeight: `var(${t.token})` }}
                     >
-                      Aa<br />Aa
+                      Aa
+                      <br />
+                      Aa
                     </div>
                   }
                   token={t.token}
@@ -538,7 +567,10 @@ export default function TokensPage() {
             <div className="docs-token-list">
               <TokenRow
                 swatch={
-                  <div className="docs-swatch-text-aa" style={{ fontFamily: "var(--font-sans)" }}>
+                  <div
+                    className="docs-swatch-text-aa"
+                    style={{ fontFamily: "var(--font-sans)" }}
+                  >
                     Aa
                   </div>
                 }
@@ -547,7 +579,10 @@ export default function TokensPage() {
               />
               <TokenRow
                 swatch={
-                  <div className="docs-swatch-text-aa" style={{ fontFamily: "var(--font-mono)" }}>
+                  <div
+                    className="docs-swatch-text-aa"
+                    style={{ fontFamily: "var(--font-mono)" }}
+                  >
                     Aa
                   </div>
                 }
@@ -664,9 +699,9 @@ export default function TokensPage() {
 
       <footer className="docs-footer">
         Token source of truth:{" "}
-        <code className="docs-mono">packages/ui/src/tokens.css</code>.
-        Component CSS:{" "}
-        <code className="docs-mono">packages/ui/src/components/*.css</code>.
+        <code className="docs-mono">packages/ui/src/tokens.css</code>. Component
+        CSS: <code className="docs-mono">packages/ui/src/components/*.css</code>
+        .
       </footer>
     </main>
   );

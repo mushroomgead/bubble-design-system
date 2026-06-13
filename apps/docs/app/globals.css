@@ -25,7 +25,10 @@ body {
   gap: 4rem;
 }
 
-.docs-main--tokens { gap: 3rem; padding-bottom: 5rem; }
+.docs-main--tokens {
+  gap: 3rem;
+  padding-bottom: 5rem;
+}
 
 /* ── headers / typography ───────────────────────────────── */
 .docs-h1 {
@@ -61,24 +64,39 @@ body {
   color: var(--color-text-tertiary);
 }
 
-.docs-muted { color: var(--color-text-secondary); }
-.docs-tertiary { color: var(--color-text-tertiary); }
-.docs-text-sm { font-size: var(--font-size-sm); }
-.docs-text-xs { font-size: var(--font-size-xs); }
-.docs-prose { color: var(--color-text-secondary); max-width: 42rem; }
+.docs-muted {
+  color: var(--color-text-secondary);
+}
+.docs-tertiary {
+  color: var(--color-text-tertiary);
+}
+.docs-text-sm {
+  font-size: var(--font-size-sm);
+}
+.docs-text-xs {
+  font-size: var(--font-size-xs);
+}
+.docs-prose {
+  color: var(--color-text-secondary);
+  max-width: 42rem;
+}
 
 .docs-link {
   color: var(--color-text-brand);
   text-decoration: none;
   text-underline-offset: 4px;
 }
-.docs-link:hover { text-decoration: underline; }
+.docs-link:hover {
+  text-decoration: underline;
+}
 
 .docs-mono {
   font-family: var(--font-mono);
   font-size: var(--font-size-xs);
 }
-.docs-mono--md { font-size: var(--font-size-sm); }
+.docs-mono--md {
+  font-size: var(--font-size-sm);
+}
 
 /* ── sections ────────────────────────────────────────────── */
 .docs-section {
@@ -154,15 +172,21 @@ body {
   gap: 1rem;
   max-width: 42rem;
 }
-.docs-grid-3--wide { max-width: 48rem; }
+.docs-grid-3--wide {
+  max-width: 48rem;
+}
 
 .docs-grid-cards {
   display: grid;
   gap: 1rem;
 }
 @media (min-width: 768px) {
-  .docs-grid-cards { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .docs-grid-cards--three { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .docs-grid-cards {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .docs-grid-cards--three {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
 }
 
 /* ── code surface / pre ──────────────────────────────────── */
@@ -269,7 +293,9 @@ body {
   padding-block: 0.5rem;
   border-bottom: 1px solid var(--color-border-tertiary);
 }
-.docs-token-row:last-child { border-bottom: 0; }
+.docs-token-row:last-child {
+  border-bottom: 0;
+}
 .docs-token-row__swatch {
   display: flex;
   align-items: center;
@@ -388,7 +414,9 @@ body {
   cursor: pointer;
   transition: color var(--duration-fast) var(--ease-out);
 }
-.docs-themebar__reset:hover { color: var(--color-text-primary); }
+.docs-themebar__reset:hover {
+  color: var(--color-text-primary);
+}
 .docs-themebar__reset:focus-visible {
   outline: none;
   box-shadow: var(--shadow-focus);
@@ -403,9 +431,26 @@ body {
 }
 
 /* ── brand blob (page demo) ──────────────────────────────── */
-.docs-blob-lg { width: 3rem;    height: 3rem;    border-radius: var(--radius-full); box-shadow: var(--shadow-md); background: var(--gradient-accent); }
-.docs-blob-md { width: 2rem;    height: 2rem;    border-radius: var(--radius-full); box-shadow: var(--shadow-sm); background: var(--gradient-accent); }
-.docs-blob-sm { width: 1.25rem; height: 1.25rem; border-radius: var(--radius-full); background: var(--gradient-accent); }
+.docs-blob-lg {
+  width: 3rem;
+  height: 3rem;
+  border-radius: var(--radius-full);
+  box-shadow: var(--shadow-md);
+  background: var(--gradient-accent);
+}
+.docs-blob-md {
+  width: 2rem;
+  height: 2rem;
+  border-radius: var(--radius-full);
+  box-shadow: var(--shadow-sm);
+  background: var(--gradient-accent);
+}
+.docs-blob-sm {
+  width: 1.25rem;
+  height: 1.25rem;
+  border-radius: var(--radius-full);
+  background: var(--gradient-accent);
+}
 
 /* ── grid demo cell ──────────────────────────────────────── */
 .docs-grid-demo-cell {
@@ -443,10 +488,20 @@ body {
   flex-direction: column;
   gap: 0.5rem;
 }
-.docs-skel-circle { width: 2.5rem !important; height: 2.5rem !important; }
-.docs-skel-block  { height: 8rem !important; width: 100% !important; }
-.docs-skel-half   { width: 50% !important; }
-.docs-skel-three  { width: 75% !important; }
+.docs-skel-circle {
+  width: 2.5rem !important;
+  height: 2.5rem !important;
+}
+.docs-skel-block {
+  height: 8rem !important;
+  width: 100% !important;
+}
+.docs-skel-half {
+  width: 50% !important;
+}
+.docs-skel-three {
+  width: 75% !important;
+}
 
 /* ── modal footer (in-page demo) ─────────────────────────── */
 .docs-modal-actions {
@@ -457,4 +512,6 @@ body {
 }
 
 /* ── container override for grid demo ────────────────────── */
-.docs-container-flush { padding-inline: 0 !important; }
+.docs-container-flush {
+  padding-inline: 0 !important;
+}

@@ -6,7 +6,10 @@ import { cn } from "../utils/cn";
 
 type BasePopupProps = ComponentPropsWithoutRef<typeof BaseTooltip.Popup>;
 
-export interface TooltipContentProps extends Omit<BasePopupProps, "className" | "render"> {
+export interface TooltipContentProps extends Omit<
+  BasePopupProps,
+  "className" | "render"
+> {
   className?: string;
   sideOffset?: number;
   side?: "top" | "bottom" | "left" | "right";
@@ -14,7 +17,17 @@ export interface TooltipContentProps extends Omit<BasePopupProps, "className" | 
 }
 
 const TooltipContent = forwardRef<HTMLDivElement, TooltipContentProps>(
-  ({ className, sideOffset = 6, side = "top", align = "center", children, ...props }, ref) => {
+  (
+    {
+      className,
+      sideOffset = 6,
+      side = "top",
+      align = "center",
+      children,
+      ...props
+    },
+    ref,
+  ) => {
     return (
       <BaseTooltip.Portal>
         <BaseTooltip.Positioner

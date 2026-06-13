@@ -33,7 +33,8 @@
 }
 .pds-textarea[aria-invalid]:focus-visible {
   border-color: var(--color-border-danger);
-  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-bg-danger-strong) 25%, transparent);
+  box-shadow: 0 0 0 3px
+    color-mix(in srgb, var(--color-bg-danger-strong) 25%, transparent);
 }
 
 /* sizes */

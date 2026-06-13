@@ -15,25 +15,33 @@
   background-color: var(--color-bg-info);
   border-color: var(--color-border-secondary);
 }
-.pds-alert--info .pds-alert__icon { color: var(--color-text-brand); }
+.pds-alert--info .pds-alert__icon {
+  color: var(--color-text-brand);
+}
 
 .pds-alert--success {
   background-color: var(--color-bg-success);
   border-color: var(--color-border-success);
 }
-.pds-alert--success .pds-alert__icon { color: var(--color-text-success); }
+.pds-alert--success .pds-alert__icon {
+  color: var(--color-text-success);
+}
 
 .pds-alert--warning {
   background-color: var(--color-bg-warning);
   border-color: var(--color-border-warning);
 }
-.pds-alert--warning .pds-alert__icon { color: var(--color-text-warning); }
+.pds-alert--warning .pds-alert__icon {
+  color: var(--color-text-warning);
+}
 
 .pds-alert--danger {
   background-color: var(--color-bg-danger);
   border-color: var(--color-border-danger);
 }
-.pds-alert--danger .pds-alert__icon { color: var(--color-text-danger); }
+.pds-alert--danger .pds-alert__icon {
+  color: var(--color-text-danger);
+}
 
 .pds-alert__icon {
   display: inline-flex;
@@ -43,7 +51,10 @@
   align-items: center;
   justify-content: center;
 }
-.pds-alert__icon svg { width: 1.25rem; height: 1.25rem; }
+.pds-alert__icon svg {
+  width: 1.25rem;
+  height: 1.25rem;
+}
 
 .pds-alert__body {
   flex: 1;

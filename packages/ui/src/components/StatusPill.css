@@ -26,7 +26,10 @@
   flex-shrink: 0;
   background: var(--pill-chip);
 }
-.pds-status-pill__indicator svg { width: 0.75rem; height: 0.75rem; }
+.pds-status-pill__indicator svg {
+  width: 0.75rem;
+  height: 0.75rem;
+}
 
 .pds-status-pill__label {
   line-height: 1;

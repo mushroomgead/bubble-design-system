@@ -14,18 +14,19 @@ const ToastProvider = ({ children, ...props }: ProviderProps) => {
 };
 ToastProvider.displayName = "Toast.Provider";
 
-const ToastViewport = forwardRef<HTMLDivElement, Omit<ViewportProps, "className"> & { className?: string }>(
-  ({ className, ...props }, ref) => {
-    return (
-      <BaseToast.Viewport
-        ref={ref}
-        className={cn("pds-toast-viewport", className)}
-        style={{ ["--gap" as string]: "12px" }}
-        {...props}
-      />
-    );
-  },
-);
+const ToastViewport = forwardRef<
+  HTMLDivElement,
+  Omit<ViewportProps, "className"> & { className?: string }
+>(({ className, ...props }, ref) => {
+  return (
+    <BaseToast.Viewport
+      ref={ref}
+      className={cn("pds-toast-viewport", className)}
+      style={{ ["--gap" as string]: "12px" }}
+      {...props}
+    />
+  );
+});
 ToastViewport.displayName = "Toast.Viewport";
 
 const Toaster = () => {
@@ -33,21 +34,12 @@ const Toaster = () => {
   return (
     <ToastViewport>
       {toasts.map((toast) => (
-        <BaseToast.Root
-          key={toast.id}
-          toast={toast}
-          className="pds-toast-item"
-        >
-          {toast.title ? (
-            <BaseToast.Title className="pds-toast-title" />
-          ) : null}
+        <BaseToast.Root key={toast.id} toast={toast} className="pds-toast-item">
+          {toast.title ? <BaseToast.Title className="pds-toast-title" /> : null}
           {toast.description ? (
             <BaseToast.Description className="pds-toast-description" />
           ) : null}
-          <BaseToast.Close
-            aria-label="Close"
-            className="pds-toast-close"
-          >
+          <BaseToast.Close aria-label="Close" className="pds-toast-close">
             <svg viewBox="0 0 16 16" fill="none" aria-hidden="true">
               <path
                 d="M4 4l8 8M12 4l-8 8"

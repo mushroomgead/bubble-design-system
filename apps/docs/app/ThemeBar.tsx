@@ -85,6 +85,9 @@ export function ThemeBar() {
       next[axis.attr] = current;
       document.documentElement.setAttribute(axis.attr, current);
     }
+    // Syncing from localStorage/DOM, which aren't available during SSR —
+    // this can't be computed during render.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setState(next);
   }, []);
 
@@ -138,11 +141,7 @@ export function ThemeBar() {
             </Select.Root>
           </label>
         ))}
-        <button
-          type="button"
-          onClick={reset}
-          className="docs-themebar__reset"
-        >
+        <button type="button" onClick={reset} className="docs-themebar__reset">
           Reset
         </button>
       </div>

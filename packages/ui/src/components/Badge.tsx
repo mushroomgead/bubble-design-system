@@ -1,12 +1,7 @@
 import { forwardRef, type HTMLAttributes } from "react";
 import { cn } from "../utils/cn";
 
-type BadgeVariant =
-  | "neutral"
-  | "brand"
-  | "success"
-  | "warning"
-  | "danger";
+type BadgeVariant = "neutral" | "brand" | "success" | "warning" | "danger";
 type BadgeSize = "sm" | "md" | "lg";
 
 export interface BadgeProps extends HTMLAttributes<HTMLSpanElement> {
