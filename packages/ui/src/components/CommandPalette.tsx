@@ -95,7 +95,7 @@ export function CommandPalette({
   open,
   onOpenChange,
   groups = [],
-  placeholder = "Search commands…",
+  placeholder = "Type to search",
   onSelect,
   className,
 }: CommandPaletteProps) {
