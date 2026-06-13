@@ -2,7 +2,7 @@
 
 > Read this first when resuming work. It catches you up on every decision, what's done, what's next, and how to verify everything still works.
 
-**Last updated:** 2026-06-11 (Switched the default `[data-font]` typeface from Geist to Roboto and dropped the `plex` option — `[data-font]` now has two values, `roboto` (default) and `system`)
+**Last updated:** 2026-06-13 (Added three new components — `Popover`, `DataTable`, `CommandPalette` — from a second Anthropic design-bundle handoff)
 
 ---
 
@@ -52,6 +52,7 @@ A neutral, minimal, token-driven design system built as a **portfolio + learning
 
 - [x] **Default typeface switched to Roboto, `plex` removed** (2026-06-11). `[data-font]` in `tokens.css` now has two values: `roboto` (new `:root` default — `--font-sans: 'Roboto', ui-sans-serif, system-ui, -apple-system, sans-serif`, `--font-mono: 'Roboto Mono', ui-monospace, 'SF Mono', Menlo, monospace`) and `system` (unchanged). The `geist`/`plex` blocks were removed. Rationale: user preference for Roboto as the system typeface. CSS-variable-only, no font loading added — same as how `geist`/`plex` were handled (named font, falls back to system fonts where unavailable). Updated everywhere the axis is documented or exercised: `apps/docs/app/layout.tsx` (`data-font="roboto"`), `ThemeBar.tsx` (options `["roboto", "system"]`, default `roboto`), `apps/docs/app/tokens/page.tsx`, `packages/ui/README.md`, and `CLAUDE.md`'s canonical-defaults line. `packages/ui/src/assets/logo-wordmark.svg` still hard-codes `'Geist'` for the wordmark text — that's a static brand-mark asset independent of this token, left as-is.
 - [x] **Prettier + ESLint added as repo-wide static gates, wired into a Claude Code `PostToolUse` hook** (2026-06-13). Root `.prettierrc.json` (double quotes, semicolons, trailing commas, printWidth 80, tabWidth 2) + `.prettierignore` (`dist`, `.next`, `.turbo`, `storybook-static`, `node_modules`, `pnpm-lock.yaml`, `CHANGELOG.md`). New root scripts: `pnpm format` (`prettier --write .`), `pnpm format:check` (`prettier --check .`), `pnpm lint` (`pnpm -r run lint`). Each workspace got its own ESLint 9 flat config (`packages/ui/eslint.config.mjs`, `apps/docs/eslint.config.mjs`) plus a `"lint": "eslint ."` script — flat-config resolution is cwd-based so a shared root config wouldn't resolve per-workspace. One-time full-repo `pnpm exec prettier --write .` reformatted 42 files (user-approved after reviewing the diff scope, including the 854-line `tokens.css` rewrite — hex colors lowercased, hand-aligned columns removed). New `.claude/hooks/format-and-lint.mjs` + `.claude/settings.json` (`PostToolUse` on `Edit|MultiEdit|Write`): Prettier `--write`s the touched file, then for JS/TS files under `packages/ui` or `apps/docs` runs ESLint `--fix` with `cwd` set to that workspace; if errors remain after `--fix`, the hook exits 2 with the ESLint output on stderr so Claude sees it as blocking feedback. See §3.14 for the full rationale and the rule-tuning decisions (`no-empty-object-type`, `no-undef`, `set-state-in-effect`).
+- [x] **3 new components — Popover, DataTable, CommandPalette** (2026-06-13). See §3.15 for source, rationale, and the non-obvious implementation choices.
 
 ### Todo (in order)
 
@@ -184,6 +185,19 @@ A neutral, minimal, token-driven design system built as a **portfolio + learning
 - **Hook design (`.claude/hooks/format-and-lint.mjs` + `.claude/settings.json`):** `PostToolUse` on `Edit|MultiEdit|Write`. Reads `tool_input.file_path` from stdin JSON. Runs `prettier --write` (repo root cwd) on any file with a Prettier-supported extension. For `.ts`/`.tsx`/`.js`/`.jsx`/`.mjs`/`.cjs` files under `packages/ui/` or `apps/docs/`, runs `eslint --fix` then a plain `eslint` check, both with `cwd` set to that workspace. If the post-fix check still reports errors, the hook writes them to stderr and exits 2 — Claude Code surfaces this as blocking feedback in the same turn. Binaries are invoked directly from `node_modules/.bin/` (not via `pnpm exec`) to keep the hook fast.
 - **Verification:** pipe-tested the hook's JSON-stdin contract directly, then proved both code paths live — introduced a formatting violation via Edit and confirmed Prettier silently fixed it, and introduced a lint error and confirmed the hook exited 2 with the ESLint output fed back. `pnpm -C packages/ui lint`, `pnpm -C apps/docs lint`, `pnpm format:check`, and both `typecheck` scripts all pass clean after the reformat.
 
+### 3.15 Three new components — Popover, DataTable, CommandPalette (2026-06-13)
+
+- **Source:** second Anthropic-bundled handoff from `claude.ai/design`, fetched as `https://api.anthropic.com/v1/design/h/XTU_wuyi4aa1fb1bH_xFPw` (a "bubble-design-system" project, `set3.jsx` + `set3.css`, vanilla JSX + plain CSS, no Base UI/Tailwind). As with §3.12, only the visual spec and component shapes transferred — code was re-derived through the existing Base UI + `cn()` + BEM-CSS pattern. These three were the only components in the bundle not already present in the library.
+- **`Popover`** — `src/components/Popover.tsx` + `.css`. Compound: `{ Root, Trigger, Content, Title, Description, Close, Header, Body, Footer }`. `Root`/`Trigger`/`Close` are Base UI `@base-ui/react/popover` primitives re-exported directly (same as `Modal.Trigger`/`Modal.Close`). `Content` pre-composes `Portal → Positioner → Popup` (Tooltip's pattern) with `side="bottom"`, `align="center"`, `sideOffset=10`, and an optional `Arrow` (`showArrow`, default `true`). `Header`/`Body`/`Footer` are plain `forwardRef<HTMLDivElement>` divs (`pds-popover__header/__body/__footer`), `Title`/`Description` wrap `BasePopover.Title`/`.Description`.
+  - **Arrow caret via `data-side`:** Base UI's `Popover.Arrow` sets a `data-side="top"|"bottom"|"left"|"right"` attribute. `.pds-popover-arrow` is a 10×10 square rotated 45° with a 1px border on all sides; each `[data-side="…"]` selector makes the two borders facing the popup transparent, so the visible two-border corner points at the trigger — recreates set3.css's caret without copying its `pop--bottom-start`/`pop--bottom-end` modifier-class approach.
+- **`DataTable`** — `src/components/DataTable.tsx` + `.css`. Generic `DataTable<T extends { id: string | number }>({ columns, data, selectable, searchable, pageSize, actions, className })`. Client-side search (substring match across all column keys), sortable columns (click `<th>`, tri-state via `SortIcon`), row selection (reuses the existing **`Checkbox`** component for both the header select-all — wired to its `indeterminate` prop — and per-row checkboxes, rather than hand-rolling new checkbox markup), and pagination (max 5 page-number buttons with a sliding window, ‹/› buttons disabled at the ends).
+- **`CommandPalette`** — `src/components/CommandPalette.tsx` + `.css`. `CommandPalette({ open, onOpenChange, groups, placeholder, onSelect, className })` built on `@base-ui/react/dialog` (`Backdrop` + `Popup`, no separate overlay wrapper div — `.pds-command-palette` itself is `position: fixed; top: 10vh; left: 50%; transform: translateX(-50%)`). `groups: CommandPaletteGroup[]` (each `{ label?, items: CommandPaletteItem[] }`) are filtered client-side across `label`/`description`/`keywords`. Arrow-key navigation + Enter-to-select via a controlled `activeIndex`; `Popup`'s `initialFocus={inputRef}` auto-focuses the search input on open (no `setTimeout`, unlike set3.jsx). Also exports **`useCommandPalette()`** — a small hook that owns `open` state and registers a `⌘K`/`Ctrl+K` `window` keydown listener to toggle it.
+  - **State-reset pattern:** resetting `query`/`activeIndex` when the palette opens, and resetting `activeIndex` when `query` changes, is done via the **"adjust state during render"** pattern (compare current vs. a `prev*` state variable inside the render body, call `setState` conditionally — not inside `useEffect`). `eslint-plugin-react-hooks`'s `set-state-in-effect` rule (added in §3.14) rejected the naive `useEffect(() => setState(...), [dep])` version; this is the React-docs-recommended fix and avoids an extra render pass.
+- **CSS architecture — no `[data-tone="soft"]` overrides (breaking from set3.css, continuing the convention from §3.12/§3.13):** set3.css has explicit `[data-tone="soft"]` blocks that strip borders and flatten radii for these three components. None of that was copied. Instead, all three containers use **shadow-only elevation** (`box-shadow: var(--shadow-md|lg|xl)`, no `border`) — the same pattern Card.css already established — because `--shadow-*` is already redefined per-tone (and per-theme) in `tokens.css`, so the container looks correct in vivid/pastel/soft without any component-specific tone branching. Pill-shaped controls (`DataTable`'s search input and pagination buttons) use `var(--ctrl-radius)`, which is likewise already tone-aware (`var(--radius-md)` in vivid/pastel, `9999px` in soft).
+- **Exports:** all three added to `src/index.ts` — `Popover` (+ `PopoverContentProps`/`PopoverTitleProps`/`PopoverDescriptionProps`/`PopoverHeaderProps`/`PopoverBodyProps`/`PopoverFooterProps`), `DataTable` (+ `DataTableColumn`, `DataTableProps`), `CommandPalette` + `useCommandPalette` (+ `CommandPaletteItem`, `CommandPaletteGroup`, `CommandPaletteProps`).
+- **Docs gallery:** `apps/docs/app/page.tsx` gained three sections (Popover, DataTable, Command Palette), placed just before "Brand mark · gradient blob". Popover demo is a "Column visibility" checkbox list with Reset/Apply footer and a close button; DataTable demo is a 12-row user-management table (`Avatar` + `StatusPill` composed into custom cell renderers); Command Palette demo wires `useCommandPalette()` to a trigger button plus two command groups (Navigation, Actions).
+- **Verification:** `pnpm -C packages/ui typecheck` / `build`, `pnpm -C apps/docs typecheck` / `build`, `pnpm -C packages/ui lint`, `pnpm -C apps/docs lint`, `pnpm format:check` — all pass. `dist/styles.css` grew from 21 to 24 components (~72.6 KB).
+
 ---
 
 ## 4. Stack & versions
@@ -238,11 +252,14 @@ bubble-design-system/
 │       │   │   ├── Button.tsx + .css       # primary/secondary/destructive/ghost × sm/md/lg; floating-pill hover lift on primary/secondary
 │       │   │   ├── Card.tsx + .css         # elevated/muted root + Header/Title/Description/Action/Body/Footer subcomponents
 │       │   │   ├── Checkbox.tsx + .css     # Base UI Checkbox.Root/.Indicator; check + indeterminate icons toggled via [data-indeterminate] selectors
+│       │   │   ├── CommandPalette.tsx + .css # Base UI Dialog; fuzzy-searchable grouped command list + useCommandPalette() ⌘K hook
+│       │   │   ├── DataTable.tsx + .css    # Generic <T extends {id}>; search/sort/select (reuses Checkbox)/pagination
 │       │   │   ├── Divider.tsx + .css      # Base UI Separator; horizontal/vertical via orientation prop
 │       │   │   ├── DropdownMenu.tsx + .css # Base UI Menu; { Root, Trigger, Content, Item, CheckboxItem, RadioGroup, RadioItem, Group, Label, Separator }
 │       │   │   ├── Grid.tsx + .css         # Container (size variants) + Grid (12-col with gutter variants) + Grid.Col (span + responsive smSpan/mdSpan/lgSpan)
 │       │   │   ├── Input.tsx + .css        # Base UI Input; size + invalid (aria-invalid); danger focus ring via color-mix
 │       │   │   ├── Modal.tsx + .css        # Base UI Dialog; { Root, Trigger, Close, Content, Title, Description }. Content = Portal→Backdrop→Popup
+│       │   │   ├── Popover.tsx + .css      # Base UI Popover; { Root, Trigger, Content, Title, Description, Close, Header, Body, Footer }. Arrow caret via data-side
 │       │   │   ├── Radio.tsx + .css        # Base UI Radio.Root/.Indicator + RadioGroup; indicator dot scales in on [data-unchecked]
 │       │   │   ├── Segmented.tsx + .css    # Compound: Segmented + Segmented.Item on Base UI ToggleGroup
 │       │   │   ├── Select.tsx + .css       # Compound: { Root, Trigger, Value, Content, Item }. Content pre-wires Portal→Positioner→Popup.
@@ -306,11 +323,11 @@ pnpm -C packages/ui typecheck
 # 3. Build packages/ui
 pnpm -C packages/ui build
 # → expect:
-#   CJS dist/index.cjs     ~28 KB
-#   ESM dist/index.js      ~26 KB
-#   DTS dist/index.d.ts    ~18 KB
-#   DTS dist/index.d.cts   ~18 KB
-#   ✓ dist/styles.css      ~63 KB (21 components + tokens + base)
+#   CJS dist/index.cjs     ~52 KB
+#   ESM dist/index.js      ~49 KB
+#   DTS dist/index.d.ts    ~21 KB
+#   DTS dist/index.d.cts   ~21 KB
+#   ✓ dist/styles.css      ~73 KB (24 components + tokens + base)
 #   ✓ dist/tokens.css      ~25 KB
 
 # 4. Confirm dist contents

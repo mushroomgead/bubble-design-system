@@ -7,12 +7,17 @@ import {
   Button,
   Card,
   Checkbox,
+  CommandPalette,
+  type CommandPaletteGroup,
   Container,
+  DataTable,
+  type DataTableColumn,
   Divider,
   DropdownMenu,
   Grid,
   Input,
   Modal,
+  Popover,
   Radio,
   RadioGroup,
   Segmented,
@@ -24,6 +29,7 @@ import {
   Textarea,
   Toast,
   Tooltip,
+  useCommandPalette,
   useToast,
 } from "@bubble-design-system/ui";
 import Link from "next/link";
@@ -45,6 +51,206 @@ const badgeVariants = [
   "danger",
 ] as const;
 const alertVariants = ["info", "success", "warning", "danger"] as const;
+
+interface UserRow {
+  id: number;
+  name: string;
+  email: string;
+  role: string;
+  status: "Active" | "Invited" | "Suspended";
+  lastSeen: string;
+}
+
+const userRows: UserRow[] = [
+  {
+    id: 1,
+    name: "Ava Thompson",
+    email: "ava@bubble.dev",
+    role: "Admin",
+    status: "Active",
+    lastSeen: "2 min ago",
+  },
+  {
+    id: 2,
+    name: "Liam Park",
+    email: "liam@bubble.dev",
+    role: "Editor",
+    status: "Active",
+    lastSeen: "1 hr ago",
+  },
+  {
+    id: 3,
+    name: "Sofia Reyes",
+    email: "sofia@bubble.dev",
+    role: "Editor",
+    status: "Invited",
+    lastSeen: "—",
+  },
+  {
+    id: 4,
+    name: "Noah Becker",
+    email: "noah@bubble.dev",
+    role: "Viewer",
+    status: "Active",
+    lastSeen: "3 hr ago",
+  },
+  {
+    id: 5,
+    name: "Maya Chen",
+    email: "maya@bubble.dev",
+    role: "Admin",
+    status: "Active",
+    lastSeen: "5 min ago",
+  },
+  {
+    id: 6,
+    name: "Ethan Wright",
+    email: "ethan@bubble.dev",
+    role: "Viewer",
+    status: "Suspended",
+    lastSeen: "2 days ago",
+  },
+  {
+    id: 7,
+    name: "Priya Nair",
+    email: "priya@bubble.dev",
+    role: "Editor",
+    status: "Active",
+    lastSeen: "30 min ago",
+  },
+  {
+    id: 8,
+    name: "Owen Clark",
+    email: "owen@bubble.dev",
+    role: "Viewer",
+    status: "Invited",
+    lastSeen: "—",
+  },
+  {
+    id: 9,
+    name: "Isla Murphy",
+    email: "isla@bubble.dev",
+    role: "Editor",
+    status: "Active",
+    lastSeen: "1 day ago",
+  },
+  {
+    id: 10,
+    name: "Leo Santos",
+    email: "leo@bubble.dev",
+    role: "Viewer",
+    status: "Active",
+    lastSeen: "4 hr ago",
+  },
+  {
+    id: 11,
+    name: "Grace Kim",
+    email: "grace@bubble.dev",
+    role: "Admin",
+    status: "Active",
+    lastSeen: "12 min ago",
+  },
+  {
+    id: 12,
+    name: "Jonas Weber",
+    email: "jonas@bubble.dev",
+    role: "Viewer",
+    status: "Suspended",
+    lastSeen: "1 week ago",
+  },
+];
+
+const statusIntent: Record<UserRow["status"], "success" | "info" | "danger"> = {
+  Active: "success",
+  Invited: "info",
+  Suspended: "danger",
+};
+
+const userColumns: DataTableColumn<UserRow>[] = [
+  {
+    key: "name",
+    label: "Name",
+    render: (_value, row) => (
+      <div className="pds-datatable__cell-user">
+        <Avatar size="sm">
+          <Avatar.Fallback>
+            {row.name
+              .split(" ")
+              .map((part) => part[0])
+              .join("")}
+          </Avatar.Fallback>
+        </Avatar>
+        <div className="pds-datatable__cell-user-info">
+          <span className="pds-datatable__cell-user-name">{row.name}</span>
+          <span className="pds-datatable__cell-user-sub">{row.email}</span>
+        </div>
+      </div>
+    ),
+  },
+  { key: "role", label: "Role" },
+  {
+    key: "status",
+    label: "Status",
+    render: (value) => {
+      const status = value as UserRow["status"];
+      return (
+        <StatusPill intent={statusIntent[status]}>
+          <StatusPill.Indicator />
+          <StatusPill.Label>{status}</StatusPill.Label>
+        </StatusPill>
+      );
+    },
+  },
+  { key: "lastSeen", label: "Last seen", muted: true, mono: true },
+];
+
+const commandGroups: CommandPaletteGroup[] = [
+  {
+    label: "Navigation",
+    items: [
+      {
+        id: "dashboard",
+        label: "Go to Dashboard",
+        description: "Overview & metrics",
+        shortcut: "G+D",
+      },
+      {
+        id: "users",
+        label: "Go to Users",
+        description: "Manage members & roles",
+        shortcut: "G+U",
+      },
+      {
+        id: "settings",
+        label: "Go to Settings",
+        description: "Workspace preferences",
+        shortcut: "G+S",
+      },
+    ],
+  },
+  {
+    label: "Actions",
+    items: [
+      {
+        id: "invite",
+        label: "Invite member",
+        description: "Send a workspace invite",
+        shortcut: "⌘+I",
+      },
+      {
+        id: "new-project",
+        label: "New project",
+        description: "Create an empty project",
+        shortcut: "⌘+N",
+      },
+      {
+        id: "export",
+        label: "Export data",
+        description: "Download the current view as CSV",
+      },
+    ],
+  },
+];
 
 function ToastDemo() {
   const toast = useToast();
@@ -88,6 +294,7 @@ export default function HomePage() {
   const [checkA, setCheckA] = useState(true);
   const [checkB, setCheckB] = useState(false);
   const [segVal, setSegVal] = useState("day");
+  const commandPalette = useCommandPalette();
   return (
     <Toast.Provider>
       <Tooltip.Provider>
@@ -626,6 +833,112 @@ export default function HomePage() {
                 </Grid.Col>
               </Grid>
             </Container>
+          </section>
+
+          <section className="docs-section">
+            <h2 className="docs-h2">Popover</h2>
+            <p className="docs-prose docs-text-sm">
+              Compound: <code className="docs-mono">Popover.Root</code> +{" "}
+              <code className="docs-mono">Popover.Trigger</code> +{" "}
+              <code className="docs-mono">Popover.Content</code>, with optional{" "}
+              <code className="docs-mono">Header</code>/
+              <code className="docs-mono">Body</code>/
+              <code className="docs-mono">Footer</code> slots and an anchored
+              arrow.
+            </p>
+            <Popover.Root>
+              <Popover.Trigger
+                render={(props) => (
+                  <Button {...props} variant="secondary">
+                    Columns
+                  </Button>
+                )}
+              />
+              <Popover.Content>
+                <Popover.Header>
+                  <Popover.Title>Column visibility</Popover.Title>
+                  <Popover.Close
+                    aria-label="Close"
+                    render={(props) => (
+                      <button {...props} className="pds-popover-close">
+                        <svg
+                          width="10"
+                          height="10"
+                          viewBox="0 0 10 10"
+                          fill="none"
+                          aria-hidden="true"
+                        >
+                          <path
+                            d="M2 2l6 6M8 2L2 8"
+                            stroke="currentColor"
+                            strokeWidth="1.6"
+                            strokeLinecap="round"
+                          />
+                        </svg>
+                      </button>
+                    )}
+                  />
+                </Popover.Header>
+                <Popover.Body>
+                  <div className="docs-section-stack-tight">
+                    {["Name", "Email", "Role", "Status", "Last seen"].map(
+                      (col, i) => (
+                        <label key={col} className="docs-inline-label">
+                          <Checkbox size="sm" defaultChecked={i !== 2} />
+                          <span>{col}</span>
+                        </label>
+                      ),
+                    )}
+                  </div>
+                </Popover.Body>
+                <Popover.Footer>
+                  <Button size="sm" variant="ghost">
+                    Reset
+                  </Button>
+                  <Button size="sm">Apply</Button>
+                </Popover.Footer>
+              </Popover.Content>
+            </Popover.Root>
+          </section>
+
+          <section className="docs-section">
+            <h2 className="docs-h2">DataTable</h2>
+            <p className="docs-prose docs-text-sm">
+              Composes <code className="docs-mono">Checkbox</code>,{" "}
+              <code className="docs-mono">StatusPill</code> and{" "}
+              <code className="docs-mono">Avatar</code> into a sortable,
+              searchable, paginated table with row selection.
+            </p>
+            <DataTable
+              columns={userColumns}
+              data={userRows}
+              actions={
+                <Button size="sm" variant="secondary">
+                  Invite member
+                </Button>
+              }
+            />
+          </section>
+
+          <section className="docs-section">
+            <h2 className="docs-h2">Command Palette</h2>
+            <p className="docs-prose docs-text-sm">
+              Dialog-based command menu with fuzzy search, keyboard navigation,
+              and grouped results. Press <kbd className="docs-mono">⌘K</kbd> /{" "}
+              <kbd className="docs-mono">Ctrl+K</kbd> anywhere on the page, or
+              use the button below.
+            </p>
+            <Button
+              variant="secondary"
+              onClick={() => commandPalette.setOpen(true)}
+            >
+              Open command palette
+            </Button>
+            <CommandPalette
+              open={commandPalette.open}
+              onOpenChange={commandPalette.setOpen}
+              groups={commandGroups}
+            />
           </section>
 
           <section className="docs-section">
