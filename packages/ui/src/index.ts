@@ -79,3 +79,24 @@ export {
   type GridRootProps,
   type GridColProps,
 } from "./components/Grid";
+export {
+  Popover,
+  type PopoverContentProps,
+  type PopoverTitleProps,
+  type PopoverDescriptionProps,
+  type PopoverHeaderProps,
+  type PopoverBodyProps,
+  type PopoverFooterProps,
+} from "./components/Popover";
+export {
+  DataTable,
+  type DataTableColumn,
+  type DataTableProps,
+} from "./components/DataTable";
+export {
+  CommandPalette,
+  useCommandPalette,
+  type CommandPaletteItem,
+  type CommandPaletteGroup,
+  type CommandPaletteProps,
+} from "./components/CommandPalette";
