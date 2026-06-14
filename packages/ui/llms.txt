@@ -1,0 +1,47 @@
+# @bubble-design-system/ui
+
+> Token-driven React component library on Base UI. 25 components, soft+teal "floating pill" aesthetic, single CSS import (`@bubble-design-system/ui/styles.css`), 7-axis live runtime theming via `data-theme` / `data-tone` / `data-gray` / `data-brand` / `data-radius` / `data-density` / `data-font`.
+
+## Rule #1
+
+If you're about to write `var(--color-bg-*)`, `var(--radius-*)`, or `var(--shadow-*)` on a hand-rolled element to build a surface, pill, banner, menu, or dialog — stop and check the table below. It is very likely already a component.
+
+## Pattern → Component
+
+| Need | Component |
+| --- | --- |
+| Floating card / panel / content surface | `Card` |
+| Chat message thread (bubbles, avatars, timestamps, reactions, compose bar) | `Chat` (`ChatThread`, `ChatMessage`, `ChatCompose`, `ChatDateDivider`) |
+| Notification / toast / status banner | `Toast` + `useToast()` |
+| Status dot (online/connected/error) | `StatusPill` |
+| Tag / count / label pill | `Badge` |
+| Dropdown / context menu | `DropdownMenu` |
+| "/" command menu / ⌘K palette | `CommandPalette` + `useCommandPalette()` |
+| Anchored popover | `Popover` |
+| Hover tooltip | `Tooltip` |
+| Loading placeholder | `Skeleton` |
+| Segmented toggle / view switcher | `Segmented` |
+| Confirm dialog / modal | `Modal` |
+| Responsive grid / page section | `Container`, `Grid` |
+| Tabbed interface | `Tabs` |
+| Sortable/searchable/paginated table | `DataTable` |
+| Rule / separator | `Divider` |
+| Avatar with fallback | `Avatar` |
+| Form fields | `Input`, `Textarea`, `Checkbox`, `Radio`/`RadioGroup`, `Switch`, `Select` |
+
+## Full component list (25)
+
+Alert, Avatar, Badge, Button, Card, Chat, Checkbox, CommandPalette, Container, DataTable, Divider, DropdownMenu, Grid, Input, Modal, Popover, Radio, RadioGroup, Segmented, Select, Skeleton, StatusPill, Switch, Tabs, Textarea, Toast, Tooltip
+
+## Setup
+
+```tsx
+import "@bubble-design-system/ui/styles.css";
+import { Button, Card } from "@bubble-design-system/ui";
+```
+
+Set theme attributes on `<html>`: `data-theme="light|dark"`, `data-tone="soft|vivid|pastel"`, `data-gray="slate|neutral|stone"`, `data-brand="teal|blue|violet|emerald|orange|mono"`, `data-radius="default|sharp|soft|pill"`, `data-density="default|compact|comfortable"`, `data-font="roboto|system"`.
+
+## Full docs
+
+See `README.md` in this package for props tables, design tokens, and per-component examples.
