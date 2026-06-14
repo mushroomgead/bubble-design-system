@@ -6,6 +6,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 `PROGRESS.md` at the repo root is the source of truth for project state, decision history (with rationale), the next-step task list, and verification commands. Read it before doing anything non-trivial. Update it after any decision or change you'd want a future Claude session to know about.
 
+`docs/decisions/` holds ADRs for the major architectural decisions that are still in force (monorepo structure, styled-vs-headless, token naming, the Bubble/`data-tone` identity, the hand-authored-CSS/no-Tailwind shape, ESM+CJS output, TS6 flag, Prettier/ESLint gates). Each formalized `PROGRESS.md` §3 entry links to its ADR and vice versa — see `docs/decisions/README.md` for the index and conventions. A new significant architectural decision gets a `PROGRESS.md` §3 entry (always) plus an ADR file (if it's the kind of decision worth standing on its own as a reference).
+
 ## Commands
 
 All commands run from the repo root. The package manager is `pnpm@10.33.0` (Node >= 20).
