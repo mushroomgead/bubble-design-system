@@ -1,0 +1,335 @@
+/* Chat */
+
+/* ── Thread container ───────────────────────────────── */
+.pds-chat-thread {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 16px;
+  overflow-y: auto;
+}
+
+/* ── Message wrapper ────────────────────────────────── */
+.pds-chat-msg {
+  display: flex;
+  flex-direction: column;
+  max-width: 72%;
+  gap: 3px;
+}
+.pds-chat-msg--received {
+  align-self: flex-start;
+  align-items: flex-start;
+}
+.pds-chat-msg--sent {
+  align-self: flex-end;
+  align-items: flex-end;
+}
+
+/* Group spacing — first/solo get top margin to separate runs */
+.pds-chat-msg--solo,
+.pds-chat-msg--first {
+  margin-top: 14px;
+}
+.pds-chat-thread > .pds-chat-msg:first-child {
+  margin-top: 0;
+}
+
+/* ── Meta row (name + time, shown on first/solo) ────── */
+.pds-chat-msg__meta-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0 4px;
+  margin-bottom: 2px;
+}
+.pds-chat-msg--sent .pds-chat-msg__meta-row {
+  flex-direction: row-reverse;
+}
+
+.pds-chat-msg__name {
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-secondary);
+  letter-spacing: var(--letter-snug);
+}
+.pds-chat-msg__time {
+  font-size: 11px;
+  color: var(--color-text-tertiary);
+  font-family: var(--font-mono);
+}
+
+/* ── Row: avatar slot + bubble column ───────────────── */
+.pds-chat-msg__row {
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+}
+.pds-chat-msg--sent .pds-chat-msg__row {
+  flex-direction: row-reverse;
+}
+
+/* fixed-width slot keeps bubbles aligned within their column */
+.pds-chat-msg__avatar-slot {
+  width: 32px;
+  flex: none;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+
+.pds-chat-msg__bubble-col {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+.pds-chat-msg--sent .pds-chat-msg__bubble-col {
+  align-items: flex-end;
+}
+
+/* ── Bubble ──────────────────────────────────────────
+   Elevation-only (no border), per the convention in
+   Popover/DataTable/CommandPalette — --shadow-sm is
+   already retuned per [data-tone], so the bubble reads
+   correctly in vivid/pastel/soft without branching. */
+.pds-chat-bubble {
+  padding: 9px 14px;
+  font-size: var(--font-size-sm);
+  line-height: 1.55;
+  word-break: break-word;
+  border-radius: var(--radius-xl);
+  max-width: 100%;
+}
+
+.pds-chat-bubble--received {
+  background: var(--color-bg-primary);
+  color: var(--color-text-primary);
+  box-shadow: var(--shadow-sm);
+}
+/* Tail corner: flat top-left on solo/first */
+.pds-chat-bubble--received.pds-chat-bubble--solo,
+.pds-chat-bubble--received.pds-chat-bubble--first {
+  border-top-left-radius: var(--radius-sm);
+}
+/* Mid run: both left corners flat */
+.pds-chat-bubble--received.pds-chat-bubble--middle {
+  border-top-left-radius: var(--radius-sm);
+  border-bottom-left-radius: var(--radius-sm);
+}
+/* Last in run: only top-left flat */
+.pds-chat-bubble--received.pds-chat-bubble--last {
+  border-top-left-radius: var(--radius-sm);
+}
+
+.pds-chat-bubble--sent {
+  background: var(--color-bg-brand);
+  color: var(--color-text-on-brand);
+  box-shadow: var(--shadow-sm);
+}
+.pds-chat-bubble--sent.pds-chat-bubble--solo,
+.pds-chat-bubble--sent.pds-chat-bubble--first {
+  border-top-right-radius: var(--radius-sm);
+}
+.pds-chat-bubble--sent.pds-chat-bubble--middle {
+  border-top-right-radius: var(--radius-sm);
+  border-bottom-right-radius: var(--radius-sm);
+}
+.pds-chat-bubble--sent.pds-chat-bubble--last {
+  border-top-right-radius: var(--radius-sm);
+}
+
+/* ── Reactions ──────────────────────────────────────── */
+.pds-chat-reactions {
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+.pds-chat-reaction {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  height: 24px;
+  padding: 0 8px;
+  background: var(--color-bg-primary);
+  border: 0;
+  border-radius: var(--radius-full);
+  box-shadow: var(--shadow-sm);
+  font-size: 13px;
+  line-height: 1;
+  font-family: inherit;
+  cursor: pointer;
+  transition:
+    background var(--duration-fast) var(--ease-out),
+    transform var(--duration-fast) var(--ease-out);
+}
+.pds-chat-reaction:hover {
+  background: var(--color-bg-hover);
+  transform: scale(1.08);
+}
+.pds-chat-reaction__count {
+  font-size: 11px;
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-secondary);
+}
+.pds-chat-reaction--mine {
+  background: var(--color-bg-brand-subtle);
+}
+.pds-chat-reaction--mine .pds-chat-reaction__count {
+  color: var(--color-text-brand);
+}
+
+/* ── Delivery status (sent only) ────────────────────── */
+.pds-chat-msg__status {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--color-text-tertiary);
+  margin-top: 2px;
+  padding: 0 2px;
+}
+.pds-chat-msg__status--read {
+  color: var(--color-bg-brand);
+}
+.pds-chat-msg__status-label {
+  font-size: 11px;
+  text-transform: capitalize;
+  font-family: var(--font-mono);
+}
+
+/* ── Date divider ───────────────────────────────────── */
+.pds-chat-divider {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 12px 0 4px;
+}
+.pds-chat-divider::before,
+.pds-chat-divider::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: var(--color-border-secondary);
+}
+.pds-chat-divider__label {
+  font-size: 11px;
+  font-family: var(--font-mono);
+  color: var(--color-text-tertiary);
+  white-space: nowrap;
+  letter-spacing: var(--letter-wide);
+  text-transform: uppercase;
+}
+
+/* ── Compose bar ─────────────────────────────────────
+   --color-bg-secondary equals --color-bg-page in soft
+   tone (the gray page) and a light gray in vivid/pastel,
+   so the white --color-bg-primary field floats above it
+   in every tone without a [data-tone] branch. */
+.pds-chat-compose {
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+  padding: 12px 16px 14px;
+  background: var(--color-bg-secondary);
+  border-top: 1px solid var(--color-border-tertiary);
+}
+.pds-chat-compose__avatar {
+  flex: none;
+  padding-bottom: 3px;
+}
+
+/* pill input wrapper */
+.pds-chat-compose__field {
+  flex: 1;
+  display: flex;
+  align-items: flex-end;
+  gap: 2px;
+  background: var(--color-bg-primary);
+  border-radius: var(--ctrl-radius);
+  box-shadow: var(--shadow-md);
+  padding: 5px 6px 5px 14px;
+  transition: box-shadow var(--duration-fast) var(--ease-out);
+}
+.pds-chat-compose__field:focus-within {
+  box-shadow: var(--shadow-focus);
+}
+
+/* textarea inside compose */
+.pds-chat-compose__textarea {
+  flex: 1;
+  border: 0;
+  background: transparent;
+  font-family: inherit;
+  font-size: var(--font-size-sm);
+  color: var(--color-text-primary);
+  resize: none;
+  outline: none;
+  min-height: 24px;
+  max-height: 120px;
+  line-height: 1.5;
+  padding: 5px 0;
+  overflow-y: auto;
+}
+.pds-chat-compose__textarea::placeholder {
+  color: var(--color-text-tertiary);
+}
+
+/* icon buttons inside the pill */
+.pds-chat-compose__icon-btn {
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-full);
+  background: transparent;
+  color: var(--color-text-tertiary);
+  cursor: pointer;
+  transition:
+    background var(--duration-fast) var(--ease-out),
+    color var(--duration-fast) var(--ease-out);
+}
+.pds-chat-compose__icon-btn:hover {
+  background: var(--color-bg-hover);
+  color: var(--color-text-secondary);
+}
+
+/* send button */
+.pds-chat-send {
+  flex: none;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-full);
+  background: var(--color-bg-brand);
+  color: var(--color-text-on-brand);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  opacity: 0.38;
+  transition:
+    background var(--duration-fast) var(--ease-out),
+    transform var(--duration-fast) var(--ease-out),
+    opacity var(--duration-fast) var(--ease-out),
+    box-shadow var(--duration-fast) var(--ease-out);
+}
+.pds-chat-send--active {
+  opacity: 1;
+  box-shadow: var(--shadow-sm);
+}
+.pds-chat-send--active:hover {
+  background: var(--color-bg-brand-hover);
+  box-shadow: var(--shadow-md);
+  transform: scale(1.07);
+}
+.pds-chat-send--active:active {
+  box-shadow: var(--shadow-sm);
+  transform: scale(0.93);
+}
+.pds-chat-send:disabled {
+  cursor: not-allowed;
+}

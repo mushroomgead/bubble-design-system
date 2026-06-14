@@ -6,6 +6,10 @@ import {
   Badge,
   Button,
   Card,
+  ChatCompose,
+  ChatDateDivider,
+  ChatMessage,
+  ChatThread,
   Checkbox,
   CommandPalette,
   type CommandPaletteGroup,
@@ -33,7 +37,7 @@ import {
   useToast,
 } from "@bubble-design-system/ui";
 import Link from "next/link";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { ThemeBar } from "./ThemeBar";
 
 const buttonVariants = [
@@ -285,6 +289,96 @@ function ToastDemo() {
       >
         No title
       </Button>
+    </div>
+  );
+}
+
+interface ChatDemoMessage {
+  id: number;
+  text: string;
+}
+
+function ChatDemo() {
+  const [messages, setMessages] = useState<ChatDemoMessage[]>([]);
+  const nextId = useRef(1);
+
+  function handleSend(text: string) {
+    setMessages((prev) => [...prev, { id: nextId.current++, text }]);
+  }
+
+  return (
+    <div className="docs-chat-frame">
+      <div className="docs-chat-frame__bar">
+        <Avatar size="sm">
+          <Avatar.Fallback>LT</Avatar.Fallback>
+        </Avatar>
+        <span className="docs-chat-frame__bar-name">Lena Torres</span>
+        <StatusPill intent="success">
+          <StatusPill.Indicator />
+          <StatusPill.Label>Online</StatusPill.Label>
+        </StatusPill>
+        <span className="docs-chat-frame__bar-sub">Bubble · chat</span>
+      </div>
+
+      <ChatThread style={{ flex: 1 }}>
+        <ChatDateDivider>Today</ChatDateDivider>
+
+        <ChatMessage
+          side="received"
+          position="first"
+          name="Lena Torres"
+          time="10:41 AM"
+        >
+          Hey! Just pushed the new design tokens to main. Can you take a look?
+        </ChatMessage>
+        <ChatMessage
+          side="received"
+          position="last"
+          name="Lena Torres"
+          avatar={
+            <Avatar size="sm">
+              <Avatar.Fallback>LT</Avatar.Fallback>
+            </Avatar>
+          }
+          reactions={[{ emoji: "👍", count: 2, mine: true }, { emoji: "🔥" }]}
+        >
+          Specifically the soft-tone shadow values — they look a bit heavy on
+          mobile.
+        </ChatMessage>
+
+        <ChatMessage side="sent" position="solo" time="10:44 AM" status="read">
+          On it — I&apos;ll adjust the md shadow to use a lower blur on small
+          viewports.
+        </ChatMessage>
+        <ChatMessage side="sent" position="first" time="10:45 AM">
+          Also bumping card border-radius from xl → 2xl on mobile.
+        </ChatMessage>
+        <ChatMessage side="sent" position="last" status="sent">
+          PR up in a few minutes
+        </ChatMessage>
+
+        {messages.map((message) => (
+          <ChatMessage
+            key={message.id}
+            side="sent"
+            position="solo"
+            time="Just now"
+            status="sending"
+          >
+            {message.text}
+          </ChatMessage>
+        ))}
+      </ChatThread>
+
+      <ChatCompose
+        avatar={
+          <Avatar size="sm">
+            <Avatar.Fallback>AK</Avatar.Fallback>
+          </Avatar>
+        }
+        placeholder="Write a message… (Shift+Enter for new line)"
+        onSend={handleSend}
+      />
     </div>
   );
 }
@@ -939,6 +1033,19 @@ export default function HomePage() {
               onOpenChange={commandPalette.setOpen}
               groups={commandGroups}
             />
+          </section>
+
+          <section className="docs-section">
+            <h2 className="docs-h2">Chat</h2>
+            <p className="docs-prose docs-text-sm">
+              A message thread with grouped bubbles, reactions, delivery status,
+              a date divider, and an auto-growing compose bar. Built from{" "}
+              <code className="docs-mono">ChatThread</code>,{" "}
+              <code className="docs-mono">ChatDateDivider</code>,{" "}
+              <code className="docs-mono">ChatMessage</code>, and{" "}
+              <code className="docs-mono">ChatCompose</code>.
+            </p>
+            <ChatDemo />
           </section>
 
           <section className="docs-section">

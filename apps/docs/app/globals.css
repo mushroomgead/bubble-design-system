@@ -515,3 +515,33 @@ body {
 .docs-container-flush {
   padding-inline: 0 !important;
 }
+
+/* ── chat demo frame ──────────────────────────────────────── */
+.docs-chat-frame {
+  display: flex;
+  flex-direction: column;
+  height: 520px;
+  max-width: 640px;
+  background: var(--color-bg-primary);
+  border-radius: var(--radius-2xl);
+  box-shadow: var(--shadow-lg);
+  overflow: hidden;
+}
+.docs-chat-frame__bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--color-border-tertiary);
+}
+.docs-chat-frame__bar-name {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: var(--letter-snug);
+}
+.docs-chat-frame__bar-sub {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-tertiary);
+  margin-left: auto;
+  font-family: var(--font-mono);
+}
