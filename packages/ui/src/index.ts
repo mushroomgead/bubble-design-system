@@ -100,3 +100,17 @@ export {
   type CommandPaletteGroup,
   type CommandPaletteProps,
 } from "./components/CommandPalette";
+export {
+  ChatThread,
+  ChatDateDivider,
+  ChatMessage,
+  ChatCompose,
+  type ChatThreadProps,
+  type ChatDateDividerProps,
+  type ChatMessageProps,
+  type ChatComposeProps,
+  type ChatMessageSide,
+  type ChatMessagePosition,
+  type ChatMessageStatus,
+  type ChatReaction,
+} from "./components/Chat";
