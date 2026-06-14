@@ -18,7 +18,7 @@ Every visual decision — tone, color, brand, gray family, radius, density, typo
 >
 ```
 
-- **21 components** — Button, Input, Textarea, Checkbox, Radio, Switch, Select, Badge, Avatar, Divider, Modal, Toast, Tooltip, Tabs, Alert, DropdownMenu, Skeleton, Card, StatusPill, Segmented (plus Container + Grid layout primitives). Each wraps an [`@base-ui/react`](https://base-ui.com/) primitive where one exists — accessible by construction, styled with a single shipped stylesheet.
+- **25 components** — Button, Input, Textarea, Checkbox, Radio, Switch, Select, Badge, Avatar, Divider, Modal, Toast, Tooltip, Tabs, Alert, DropdownMenu, Skeleton, Card, StatusPill, Segmented, Popover, DataTable, CommandPalette, Chat (plus Container + Grid layout primitives). Each wraps an [`@base-ui/react`](https://base-ui.com/) primitive where one exists — accessible by construction, styled with a single shipped stylesheet.
 - **A 3-layer, multi-theme token system** spanning color (light/dark · 3 gray families · 6 brand palettes including teal), **3 tones** (vivid · pastel · soft — soft is the signature look), radius (4 scales), density (3 scales), typography (2 font pairs), layered shadows, and motion.
 - **Live theme switching** via seven `data-*` attributes on any ancestor. Every CSS rule reads `var(--…)` at use-site, so swapping `data-tone="vivid"` for `data-tone="soft"` reflows the UI without re-rendering or rebuilding.
 - **No build dependency in consumer apps.** One CSS import. No PostCSS, no Tailwind, no preprocessor required.
@@ -37,8 +37,38 @@ The five rules every decision in Bubble traces back to:
 
 ---
 
+## Common UI Patterns
+
+Before writing custom CSS against `var(--color-bg-*)`, `var(--radius-*)`, or `var(--shadow-*)` to build a surface, pill, menu, or banner — check this table. There is very likely already a component for it.
+
+| You're building...                                                                          | Use                                                                                                                                                              | Not...                                                                                  |
+| ------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------- |
+| A floating card / panel / content surface                                                   | [`Card`](#card) (`variant="elevated"` or `"muted"`)                                                                                                              | a `<div>` styled with `--color-bg-secondary` + `--radius-lg` + `--shadow-md`            |
+| A chat message thread (bubbles, avatars, timestamps, read receipts, reactions, compose bar) | [`Chat`](#chat) — `ChatThread` / `ChatMessage` / `ChatCompose`                                                                                                   | a custom flex layout styled from raw tokens, with hand-rolled grouping and scroll logic |
+| A notification / toast / status banner                                                      | [`Toast`](#toast) + `useToast()`                                                                                                                                 | a custom `toast-container` + `setTimeout` store                                         |
+| A status indicator (online, connected, error dot)                                           | [`StatusPill`](#statuspill) + `StatusPill.Indicator`                                                                                                             | a `::after` pseudo-element colored with `--color-bg-success-strong`                     |
+| A small tag, count, or label pill                                                           | [`Badge`](#badge)                                                                                                                                                | a custom pill `<div>` with `--radius-full`                                              |
+| A dropdown / context menu / select-from-list                                                | [`DropdownMenu`](#dropdownmenu)                                                                                                                                  | an absolutely-positioned custom `<div>` list                                            |
+| A command palette / "/" slash-command menu / ⌘K launcher                                    | [`CommandPalette`](#commandpalette) + `useCommandPalette()`                                                                                                      | a custom filtered dropdown with arrow-key handling                                      |
+| A popover anchored to a trigger (info panel, form, menu)                                    | [`Popover`](#popover)                                                                                                                                            | a custom absolutely-positioned `<div>` + manual outside-click handling                  |
+| A hover tooltip                                                                             | [`Tooltip`](#tooltip)                                                                                                                                            | the native `title` attribute or a custom hover `<div>`                                  |
+| A loading placeholder                                                                       | [`Skeleton`](#skeleton)                                                                                                                                          | a custom `@keyframes pulse` `<div>`                                                     |
+| A view switcher / segmented toggle                                                          | [`Segmented`](#segmented)                                                                                                                                        | a custom button group with manual active-state CSS                                      |
+| A confirm dialog / modal                                                                    | [`Modal`](#modal)                                                                                                                                                | a custom backdrop + centered `<div>`                                                    |
+| A responsive page section / 12-col grid                                                     | [`Container`](#container--grid) + [`Grid`](#container--grid)                                                                                                     | custom `max-width` + flex/grid CSS                                                      |
+| A tabbed interface                                                                          | [`Tabs`](#tabs)                                                                                                                                                  | a custom button row + conditional render                                                |
+| A sortable / searchable / paginated table                                                   | [`DataTable`](#datatable)                                                                                                                                        | a custom `<table>` + manual sort/filter/page state                                      |
+| A horizontal or vertical rule                                                               | [`Divider`](#divider)                                                                                                                                            | `border-top: 1px solid var(--color-border-*)`                                           |
+| A user/avatar icon with fallback initials                                                   | [`Avatar`](#avatar)                                                                                                                                              | a circular `<div>` + `<img>` with manual error handling                                 |
+| Form fields (text, multiline, checkbox, radio, switch, select)                              | [`Input`](#input) / [`Textarea`](#textarea) / [`Checkbox`](#checkbox) / [`Radio` / `RadioGroup`](#radio--radiogroup) / [`Switch`](#switch) / [`Select`](#select) | native elements styled from scratch                                                     |
+
+**If nothing in this table fits**, that's a real gap — reach for tokens directly, and consider [opening an issue](https://github.com/mushroomgead/bubble-design-system/issues) so the pattern can become component #26.
+
+---
+
 ## Table of contents
 
+- [Common UI Patterns](#common-ui-patterns)
 - [Tech stack](#tech-stack)
 - [Installation](#installation)
 - [Setup](#setup)
@@ -207,13 +237,20 @@ import {
   Badge,
   Button,
   Card,
+  ChatCompose,
+  ChatDateDivider,
+  ChatMessage,
+  ChatThread,
   Checkbox,
+  CommandPalette,
   Container,
+  DataTable,
   Divider,
   DropdownMenu,
   Grid,
   Input,
   Modal,
+  Popover,
   Radio,
   RadioGroup,
   Segmented,
@@ -225,6 +262,7 @@ import {
   Textarea,
   Toast,
   Tooltip,
+  useCommandPalette,
   useToast,
   cn,
 } from "@bubble-design-system/ui";
@@ -374,6 +412,77 @@ Compound component for floating-pill surface content.
 
 ---
 
+### Chat
+
+Four standalone components for assembling a chat thread — no Base UI primitive needed, just plain markup. `ChatThread` is the scroll container, `ChatDateDivider` renders a centered separator label, `ChatMessage` is a single message bubble (with grouping, avatar, meta, reactions, and delivery status), and `ChatCompose` is an auto-growing input bar.
+
+| Component         | Description                                                      |
+| ----------------- | ---------------------------------------------------------------- |
+| `ChatThread`      | Scrollable message-list container.                               |
+| `ChatDateDivider` | Centered separator label (e.g. "Today").                         |
+| `ChatMessage`     | A single message bubble — grouping/avatar/meta/reactions/status. |
+| `ChatCompose`     | Auto-growing textarea + send button, controlled or uncontrolled. |
+
+**`ChatMessage` props:**
+
+| Prop        | Type                                                  | Default      | Description                                                                                                       |
+| ----------- | ----------------------------------------------------- | ------------ | ----------------------------------------------------------------------------------------------------------------- |
+| `side`      | `"sent" \| "received"`                                | `"received"` | Which side of the thread the bubble renders on.                                                                   |
+| `position`  | `"solo" \| "first" \| "middle" \| "last"`             | `"solo"`     | Position within a consecutive group — controls bubble-corner rounding and which messages show meta/avatar/status. |
+| `avatar`    | `ReactNode`                                           | —            | Avatar slot, shown for `received` messages at `solo`/`last`.                                                      |
+| `name`      | `string`                                              | —            | Sender name, shown at `solo`/`first` for received messages.                                                       |
+| `time`      | `string`                                              | —            | Timestamp, shown at `solo`/`first`.                                                                               |
+| `status`    | `"sending" \| "sent" \| "delivered" \| "read"`        | —            | Delivery-status row, shown for `sent` messages at `solo`/`last`.                                                  |
+| `reactions` | `{ emoji: string; count?: number; mine?: boolean }[]` | —            | Reaction pills rendered under the bubble.                                                                         |
+| `className` | `string`                                              | —            | Extra classes.                                                                                                    |
+
+**`ChatCompose` props:**
+
+| Prop          | Type                                            | Default              | Description                                                      |
+| ------------- | ----------------------------------------------- | -------------------- | ---------------------------------------------------------------- |
+| `value`       | `string`                                        | —                    | Controlled value. Omit for uncontrolled (internal state).        |
+| `onChange`    | `(e: ChangeEvent<HTMLTextAreaElement>) => void` | —                    | Change handler (controlled mode).                                |
+| `onSend`      | `(value: string) => void`                       | —                    | Called with the trimmed text on send (Enter or the send button). |
+| `placeholder` | `string`                                        | `"Write a message…"` | Textarea placeholder.                                            |
+| `avatar`      | `ReactNode`                                     | —                    | Avatar slot rendered before the input.                           |
+| `disabled`    | `boolean`                                       | `false`              | Disables the textarea and send button.                           |
+| `className`   | `string`                                        | —                    | Extra classes.                                                   |
+
+```tsx
+<ChatThread>
+  <ChatDateDivider>Today</ChatDateDivider>
+
+  <ChatMessage
+    side="received"
+    name="Lena Torres"
+    time="9:41 AM"
+    avatar={
+      <Avatar>
+        <Avatar.Fallback>LT</Avatar.Fallback>
+      </Avatar>
+    }
+    reactions={[{ emoji: "👍", count: 2, mine: true }]}
+  >
+    Hey — got a minute to look at the new Card variants?
+  </ChatMessage>
+
+  <ChatMessage side="sent" status="read">
+    Sure, pulling them up now.
+  </ChatMessage>
+</ChatThread>
+
+<ChatCompose
+  avatar={
+    <Avatar>
+      <Avatar.Fallback>AK</Avatar.Fallback>
+    </Avatar>
+  }
+  onSend={(text) => sendMessage(text)}
+/>
+```
+
+---
+
 ### Checkbox
 
 Wraps `@base-ui/react/checkbox`. Supports checked, unchecked, and indeterminate states with built-in SVG indicators.
@@ -388,6 +497,50 @@ Wraps `@base-ui/react/checkbox`. Supports checked, unchecked, and indeterminate 
 <Checkbox defaultChecked />
 <Checkbox indeterminate />
 <Checkbox disabled />
+```
+
+---
+
+### CommandPalette
+
+Built on `@base-ui/react/dialog`. A fuzzy-searchable, grouped command list with arrow-key navigation and Enter-to-select — the "/" or ⌘K menu pattern. Pair it with `useCommandPalette()`, a small hook that owns `open` state and registers a global `⌘K` / `Ctrl+K` listener.
+
+**`CommandPalette` props:**
+
+| Prop           | Type                                 | Default            | Description                                                                      |
+| -------------- | ------------------------------------ | ------------------ | -------------------------------------------------------------------------------- |
+| `open`         | `boolean`                            | —                  | Whether the palette is open.                                                     |
+| `onOpenChange` | `(open: boolean) => void`            | —                  | Called when the palette should open or close.                                    |
+| `groups`       | `CommandPaletteGroup[]`              | `[]`               | Grouped, filterable command items.                                               |
+| `placeholder`  | `string`                             | `"Type to search"` | Search input placeholder.                                                        |
+| `onSelect`     | `(item: CommandPaletteItem) => void` | —                  | Called when an item is chosen (Enter or click), after the item's own `onSelect`. |
+| `className`    | `string`                             | —                  | Extra classes on the popup.                                                      |
+
+**`CommandPaletteGroup`** — `{ label?: string; items: CommandPaletteItem[] }`
+
+**`CommandPaletteItem`** — `{ id: string; label: string; description?: string; icon?: ReactNode; shortcut?: string; keywords?: string[]; onSelect?: () => void }`
+
+```tsx
+const palette = useCommandPalette(); // owns `open` + ⌘K/Ctrl+K toggle
+
+<CommandPalette
+  open={palette.open}
+  onOpenChange={palette.setOpen}
+  groups={[
+    {
+      label: "Navigation",
+      items: [
+        { id: "home", label: "Go home", shortcut: "G H" },
+        { id: "settings", label: "Settings", keywords: ["preferences"] },
+      ],
+    },
+    {
+      label: "Actions",
+      items: [{ id: "new", label: "New item", onSelect: () => createItem() }],
+    },
+  ]}
+  onSelect={(item) => console.log("selected", item.id)}
+/>;
 ```
 
 ---
@@ -418,6 +571,55 @@ Layout primitives. `Container` centers content and applies page margins. `Grid` 
 **`Grid` props:** `gutter` = `"default" | "tight" | "flush"` (default `"default"`).
 
 **`Grid.Col` props:** `span`, `smSpan`, `mdSpan`, `lgSpan` = `1 | 2 | … | 12 | "full"`. Default `span` is `12`.
+
+---
+
+### DataTable
+
+Generic, client-side `DataTable<T extends { id: string | number }>` — search across all columns, sortable columns, row selection (header select-all + per-row, reusing `Checkbox`), and pagination.
+
+**Props:**
+
+| Prop         | Type                   | Default | Description                                             |
+| ------------ | ---------------------- | ------- | ------------------------------------------------------- |
+| `columns`    | `DataTableColumn<T>[]` | —       | Column definitions, rendered in order.                  |
+| `data`       | `T[]`                  | —       | Rows. Each row must have an `id: string \| number`.     |
+| `selectable` | `boolean`              | `true`  | Shows the select-all / per-row checkboxes.              |
+| `searchable` | `boolean`              | `true`  | Shows the search input; filters across all column keys. |
+| `pageSize`   | `number`               | `10`    | Rows per page.                                          |
+| `actions`    | `ReactNode`            | —       | Right-aligned toolbar content (e.g. a "New" button).    |
+| `className`  | `string`               | —       | Extra classes.                                          |
+
+**`DataTableColumn<T>`:**
+
+| Field            | Type                                    | Description                                    |
+| ---------------- | --------------------------------------- | ---------------------------------------------- |
+| `key`            | `string`                                | Property name read off each row.               |
+| `label`          | `string`                                | Column header text.                            |
+| `sortable`       | `boolean`                               | Default `true` — click the header to sort.     |
+| `render`         | `(value: unknown, row: T) => ReactNode` | Custom cell renderer.                          |
+| `width`          | `string`                                | CSS width for the `<th>` / `<td>`.             |
+| `muted` / `mono` | `boolean`                               | Styles the cell text as secondary / monospace. |
+
+```tsx
+<DataTable
+  columns={[
+    { key: "name", label: "Name" },
+    { key: "email", label: "Email", muted: true },
+    {
+      key: "status",
+      label: "Status",
+      render: (value) => (
+        <StatusPill intent={value === "active" ? "success" : "neutral"}>
+          {String(value)}
+        </StatusPill>
+      ),
+    },
+  ]}
+  data={users}
+  actions={<Button size="sm">Invite</Button>}
+/>
+```
 
 ---
 
@@ -541,6 +743,53 @@ Compound component built on `@base-ui/react/dialog`. Renders into a portal, with
     </div>
   </Modal.Content>
 </Modal.Root>
+```
+
+---
+
+### Popover
+
+Compound component built on `@base-ui/react/popover`. Like `Tooltip`, but for richer content (forms, lists, multi-element panels) that stays open until dismissed.
+
+| Sub-component                                        | Description                                                                          |
+| ---------------------------------------------------- | ------------------------------------------------------------------------------------ |
+| `Popover.Root`                                       | State container.                                                                     |
+| `Popover.Trigger`                                    | The element that opens the popover.                                                  |
+| `Popover.Content`                                    | The portalled popup — pre-wires Portal → Positioner → Popup, plus an optional arrow. |
+| `Popover.Title` / `Popover.Description`              | Accessible heading / description, wired to ARIA via Base UI.                         |
+| `Popover.Close`                                      | Closes the popover when clicked.                                                     |
+| `Popover.Header` / `Popover.Body` / `Popover.Footer` | Layout slots for `Content`'s children.                                               |
+
+**`Popover.Content` props:**
+
+| Prop         | Type                                     | Default    | Description                              |
+| ------------ | ---------------------------------------- | ---------- | ---------------------------------------- |
+| `side`       | `"top" \| "right" \| "bottom" \| "left"` | `"bottom"` | Preferred side.                          |
+| `align`      | `"start" \| "center" \| "end"`           | `"center"` | Alignment along the side.                |
+| `sideOffset` | `number`                                 | `10`       | Distance from the trigger.               |
+| `showArrow`  | `boolean`                                | `true`     | Renders a caret pointing at the trigger. |
+| `className`  | `string`                                 | —          | Extra classes on the popup.              |
+
+```tsx
+<Popover.Root>
+  <Popover.Trigger render={<Button variant="secondary">Filters</Button>} />
+  <Popover.Content>
+    <Popover.Header>
+      <Popover.Title>Column visibility</Popover.Title>
+    </Popover.Header>
+    <Popover.Body>…</Popover.Body>
+    <Popover.Footer>
+      <Popover.Close
+        render={
+          <Button size="sm" variant="ghost">
+            Reset
+          </Button>
+        }
+      />
+      <Button size="sm">Apply</Button>
+    </Popover.Footer>
+  </Popover.Content>
+</Popover.Root>
 ```
 
 ---
@@ -824,6 +1073,9 @@ cn("my-card", isActive && "my-card--active", className);
 ---
 
 ## Design tokens
+
+> **About to write `var(--color-bg-*)` / `var(--radius-*)` / `var(--shadow-*)` on a hand-authored `<div>`?**
+> Tokens are how you _theme_ Bubble's components and the escape hatch for genuine gaps — they are not a second, parallel "build it yourself" API. Check [Common UI Patterns](#common-ui-patterns) first; the surface/pill/menu/banner you're about to build very likely already exists as a themed, accessible component.
 
 All tokens are CSS custom properties defined in `src/tokens.css`. Reference them directly in your CSS with `var(--…)`. The semantic tokens (those prefixed `--color-bg-*`, `--color-text-*`, `--color-border-*`) re-resolve automatically when an ancestor `data-*` attribute changes.
 
