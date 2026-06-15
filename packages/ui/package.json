@@ -1,6 +1,6 @@
 {
   "name": "@bubble-design-system/ui",
-  "version": "1.2.0",
+  "version": "1.2.2",
   "description": "Bubble Design System — soft + teal floating-pill UI on Base UI, with token-driven theming and a single shipped stylesheet (no Tailwind required).",
   "keywords": [
     "react",
@@ -57,7 +57,8 @@
     "dev": "tsup --watch",
     "typecheck": "tsc --noEmit",
     "lint": "eslint .",
-    "clean": "rm -rf dist"
+    "clean": "rm -rf dist",
+    "npm-publish": "npm publish --access public"
   },
   "peerDependencies": {
     "react": ">=18.2",
