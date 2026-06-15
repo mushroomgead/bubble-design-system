@@ -2,7 +2,7 @@
 
 > Read this first when resuming work. It catches you up on every decision, what's done, what's next, and how to verify everything still works.
 
-**Last updated:** 2026-06-13 (Published `@bubble-design-system/ui@1.1.0` to npm)
+**Last updated:** 2026-06-15 (Published `@bubble-design-system/ui@1.2.0` to npm)
 
 ---
 
@@ -56,6 +56,7 @@ A neutral, minimal, token-driven design system built as a **portfolio + learning
 - [x] **Published `@bubble-design-system/ui@1.1.0` to npm** (2026-06-13). Minor bump from `1.0.1` — additive only (new `Popover`/`DataTable`/`CommandPalette` exports + the Prettier/ESLint formatting pass, no API removals or breaking changes). `npm publish --dry-run` verified the tarball (13 files, dist/ + README + LICENSE + package.json) before the real publish. Switched `~/.npmrc` from a stale `_authToken` to a fresh npm **Automation token** (Account Settings → Access Tokens → Classic Token → Automation) — automation tokens bypass the per-publish OTP/2FA prompt that a normal login token requires, since the regular web-OTP URL printed by `npm publish` is redacted as `***` by the npm CLI itself (no way to open it).
 - [x] **New component family — Chat** (2026-06-14). See §3.16 for source, rationale, and the non-obvious implementation choices.
 - [x] **README discoverability — Common UI Patterns table, Tokens-vs-Components callout, Popover/DataTable/CommandPalette/Chat doc backfill (21 → 25 components), new `llms.txt`** (2026-06-14). See §3.17 for source, rationale, and the scope-expansion note.
+- [x] **Published `@bubble-design-system/ui@1.2.0` to npm** (2026-06-15). Minor bump from `1.1.0` — additive only (new `Chat` family exports: `ChatThread`/`ChatMessage`/`ChatDateDivider`/`ChatCompose`, plus the README/`llms.txt` doc backfill; no API removals or breaking changes). `pnpm -C packages/ui typecheck/build/lint` all clean, `npm publish --dry-run` verified the tarball (13 files) before the real publish.
 
 ### Todo (in order)
 
