@@ -2,7 +2,7 @@
 
 > Read this first when resuming work. It catches you up on every decision, what's done, what's next, and how to verify everything still works.
 
-**Last updated:** 2026-06-14 (Created formal ADRs for the active architectural decisions in `docs/decisions/`)
+**Last updated:** 2026-06-15 (Published `@bubble-design-system/ui@1.2.2` to npm)
 
 ---
 
@@ -57,6 +57,8 @@ A neutral, minimal, token-driven design system built as a **portfolio + learning
 - [x] **New component family — Chat** (2026-06-14). See §3.16 for source, rationale, and the non-obvious implementation choices.
 - [x] **README discoverability — Common UI Patterns table, Tokens-vs-Components callout, Popover/DataTable/CommandPalette/Chat doc backfill (21 → 25 components), new `llms.txt`** (2026-06-14). See §3.17 for source, rationale, and the scope-expansion note.
 - [x] **ADR set created — `docs/decisions/`** (2026-06-14). See §3.18.
+- [x] **Published `@bubble-design-system/ui@1.2.0` to npm** (2026-06-15). Minor bump from `1.1.0` — additive only (new `Chat` family exports: `ChatThread`/`ChatMessage`/`ChatDateDivider`/`ChatCompose`, plus the README/`llms.txt` doc backfill; no API removals or breaking changes). `pnpm -C packages/ui typecheck/build/lint` all clean, `npm publish --dry-run` verified the tarball (13 files) before the real publish.
+- [x] **Patch republishes `1.2.1` → `1.2.2`** (2026-06-15). No source changes — same build as `1.2.0`. Also added a `scripts.npm-publish` convenience script (`"npm publish --access public"`) to `packages/ui/package.json`; `publishConfig.access` was already `"public"` so this is just an explicit one-liner for the publish step.
 
 ### Todo (in order)
 
