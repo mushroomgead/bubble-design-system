@@ -56,6 +56,7 @@ A neutral, minimal, token-driven design system built as a **portfolio + learning
 - [x] **Published `@bubble-design-system/ui@1.1.0` to npm** (2026-06-13). Minor bump from `1.0.1` — additive only (new `Popover`/`DataTable`/`CommandPalette` exports + the Prettier/ESLint formatting pass, no API removals or breaking changes). `npm publish --dry-run` verified the tarball (13 files, dist/ + README + LICENSE + package.json) before the real publish. Switched `~/.npmrc` from a stale `_authToken` to a fresh npm **Automation token** (Account Settings → Access Tokens → Classic Token → Automation) — automation tokens bypass the per-publish OTP/2FA prompt that a normal login token requires, since the regular web-OTP URL printed by `npm publish` is redacted as `***` by the npm CLI itself (no way to open it).
 - [x] **New component family — Chat** (2026-06-14). See §3.16 for source, rationale, and the non-obvious implementation choices.
 - [x] **README discoverability — Common UI Patterns table, Tokens-vs-Components callout, Popover/DataTable/CommandPalette/Chat doc backfill (21 → 25 components), new `llms.txt`** (2026-06-14). See §3.17 for source, rationale, and the scope-expansion note.
+- [x] **ADR set created — `docs/decisions/`** (2026-06-14). See §3.18.
 - [x] **Published `@bubble-design-system/ui@1.2.0` to npm** (2026-06-15). Minor bump from `1.1.0` — additive only (new `Chat` family exports: `ChatThread`/`ChatMessage`/`ChatDateDivider`/`ChatCompose`, plus the README/`llms.txt` doc backfill; no API removals or breaking changes). `pnpm -C packages/ui typecheck/build/lint` all clean, `npm publish --dry-run` verified the tarball (13 files) before the real publish.
 - [x] **Patch republishes `1.2.1` → `1.2.2`** (2026-06-15). No source changes — same build as `1.2.0`. Also added a `scripts.npm-publish` convenience script (`"npm publish --access public"`) to `packages/ui/package.json`; `publishConfig.access` was already `"public"` so this is just an explicit one-liner for the publish step.
 
@@ -69,10 +70,14 @@ A neutral, minimal, token-driven design system built as a **portfolio + learning
 
 ### 3.1 Styled library, not headless
 
+> Formalized as [ADR-0002](docs/decisions/0002-styled-library-not-headless.md).
+
 - **Decision:** ship a library that includes default styling (visual is part of the product), not pure headless primitives.
 - **Why:** Workflow is "designer hands over a spec → frontend dev encodes it into code". The token spec (colors, principles, shades) is the _product_. Headless libs serve a different goal (infrastructure for _other_ design systems).
 
 ### 3.2 Monorepo with pnpm workspaces
+
+> Formalized as [ADR-0001](docs/decisions/0001-monorepo-pnpm-workspaces.md).
 
 - **Decision:** structure as `packages/ui` + (future) `apps/docs`, managed by pnpm workspaces.
 - **Why:** Every real design system (Radix, Mantine, shadcn, Polaris, Chakra) uses a monorepo because the library and its docs/playground need separate dependency surfaces. Single-repo would bleed Storybook/Next.js deps into the published lib.
@@ -96,10 +101,14 @@ A neutral, minimal, token-driven design system built as a **portfolio + learning
 
 ### 3.6 ESM + CJS dual output, types per format
 
+> Formalized as [ADR-0003](docs/decisions/0003-esm-cjs-dual-output.md).
+
 - **Decision:** ship both ESM and CJS, with `.d.ts` for ESM consumers and `.d.cts` for CJS consumers.
 - **Why:** max consumer compatibility. The per-format types are required for strict `"moduleResolution": "NodeNext"` consumers — otherwise they'd see "ESM types in a CJS context" errors.
 
 ### 3.7 TypeScript 6 with `ignoreDeprecations: "6.0"`
+
+> Formalized as [ADR-0004](docs/decisions/0004-typescript-6-ignore-deprecations.md).
 
 - **Decision:** stay on TS 6, suppress the `baseUrl` deprecation warning via the official migration flag.
 - **Why:** `tsup` (via `rollup-plugin-dts`) uses `baseUrl` internally for type resolution and hasn't been updated for TS 6 yet. The flag is exactly designed for this kind of tool lag. Downgrading TS was the alternative; chose to keep TS 6 and revisit when the toolchain catches up.
@@ -110,6 +119,8 @@ A neutral, minimal, token-driven design system built as a **portfolio + learning
 - **Status:** Reversed on 2026-05-14. See §3.9.
 
 ### 3.9 Reverse §3.8 — adopt the spec's `--color-bg-*` / `--color-text-*` / `--color-border-*` token names
+
+> Formalized as [ADR-0005](docs/decisions/0005-adopt-spec-token-names.md).
 
 - **Decision:** Use the user-authored `tokens.css` verbatim. Layer 2 tokens follow the spec: `--color-bg-primary`, `--color-text-on-brand`, `--color-border-focus`, etc.
 - **Why:** The user provided a complete, hand-designed token sheet. Token names are part of the design and must round-trip 1:1 between spec docs and code. The §3.8 indirection (mapping spec names → flat names) was a workaround for an ergonomic concern (`bg-bg-primary` reads as redundant) — that concern is now subordinate to source-of-truth fidelity.
@@ -127,6 +138,8 @@ A neutral, minimal, token-driven design system built as a **portfolio + learning
 - **Status:** Reversed on 2026-06-03 as part of the Bubble rebrand. See §3.12.
 
 ### 3.12 Rebrand to Bubble — adopt soft+teal floating-pill identity (2026-06-03)
+
+> Formalized as [ADR-0006](docs/decisions/0006-bubble-rebrand-soft-tone.md).
 
 - **Decision:** Replace the "plain" identity with **Bubble** — a soft-gray page with white pill-shaped surfaces floating via layered shadows + inset white top-highlight, accented by **teal `#00CEC8`** brand and a **pink→magenta→violet gradient blob** mark. Canonical defaults: `tone=soft · brand=teal · gray=slate · radius=default · density=default · font=geist · light`.
 - **Source:** Anthropic-bundled handoff from `claude.ai/design`, fetched as `https://api.anthropic.com/v1/design/h/wZZdIFAGPYUmVtFFYzFz3Q`. The bundle is a "bubble-design-system" project — vanilla JSX + plain CSS classes (no Base UI, no Tailwind). Its design tokens and visual spec transferred; its component code did **not** (we re-derived through our existing Base UI + Tailwind + `cn()` pattern).
@@ -148,6 +161,8 @@ A neutral, minimal, token-driven design system built as a **portfolio + learning
 - **What's still on `@bubble-design-system/ui` on npm:** version `0.1.1`, undisturbed. **Suggested follow-up** (not done automatically — user-driven): `npm deprecate @bubble-design-system/ui@"*" "Renamed to @bubble-design-system/ui — install the new package."` and `npm publish --access public` from `packages/ui/`.
 
 ### 3.13 Remove Tailwind, ship a single hand-authored CSS file (2026-06-04, v0.2.0)
+
+> Formalized as [ADR-0007](docs/decisions/0007-hand-authored-css-no-tailwind.md) (which also covers the superseded §3.3/§3.4/§3.5/§3.10 decisions as alternatives considered).
 
 - **Decision:** Drop Tailwind v4 (and `tailwind-merge`) from the library and the docs app entirely. The lib now ships `dist/styles.css` — a flat, plain-CSS bundle containing the design tokens, a minimal reset, and every component rule keyed by stable BEM class names (`.pds-btn`, `.pds-btn--primary`, `.pds-card__header`, …). Consumers `@import "@bubble-design-system/ui/styles.css"` and need no PostCSS or Tailwind configuration. The `./preset.css` export is renamed to `./styles.css` — breaking; hence the `0.1.x` → `0.2.0` bump. Components stop emitting Tailwind utility strings in JSX and instead pass stable BEM names through `cn()` (which is now a thin clsx-only wrapper).
 - **Why:**
@@ -176,6 +191,8 @@ A neutral, minimal, token-driven design system built as a **portfolio + learning
 - **Verification.** `pnpm -C packages/ui typecheck`, `pnpm -C packages/ui build`, `pnpm -C apps/docs typecheck`, `pnpm -C apps/docs build` — all pass. `grep tailwind` over `packages/ui/src`, `apps/docs/app`, and all three `package.json` files returns zero matches. The docs dev server boots cleanly; both `/` and `/tokens` return 200; the served HTML contains `pds-btn`, `pds-card`, `pds-alert`, etc.; the bundled CSS contains the BEM rules and references `--color-bg-brand` in 25+ places.
 
 ### 3.14 Prettier + ESLint as static gates, enforced via a Claude Code hook (2026-06-13)
+
+> Formalized as [ADR-0008](docs/decisions/0008-prettier-eslint-static-gates.md).
 
 - **Decision:** add Prettier (single root config) and ESLint 9 flat config (one `eslint.config.mjs` per workspace) as the formatting/linting layer, and run both automatically after every Claude Code `Edit`/`MultiEdit`/`Write` via a `PostToolUse` hook.
 - **Why:** the repo had no formatter or linter at all — `tsc --noEmit` was the only static gate. Hand-formatted CSS (`tokens.css`) had drifted (mixed hex case, manually-aligned columns) and there was no automated check for unused imports, hook-rule violations, etc. Wiring the checks into a hook means every file Claude touches is auto-fixed and re-checked without the user remembering to run `pnpm lint`/`pnpm format` themselves.
@@ -234,6 +251,14 @@ A neutral, minimal, token-driven design system built as a **portfolio + learning
 - **Placement decision (`llms.txt`):** per the spec's §5 recommendation (a) — repo-package-local only (`packages/ui/llms.txt`), **not** added to `package.json`'s `files`/`exports`, no version bump. Revisit shipping to npm consumers (option (b)) once the content has stabilized, bundled with a future doc fix that also warrants a version bump.
 - **Deferred:** the spec's item 5 (2–3 app-level composition examples — chat bubble, connection-status banner, slash-command menu — added to the `apps/docs` gallery) is optional/lower-priority and touches code (full §7 verification needed). Left as a follow-up; not part of this docs-only pass.
 - **Verification:** docs-only change (`README.md` + new `llms.txt` + this file). `pnpm format:check` passes. The component-reference sections (`### Alert` through `### Tooltip`) total 25, matching `src/index.ts` exports and `dist/styles.css`'s 25 component CSS files. All new `(#anchor)` links verified against GitHub's auto-slug rules.
+
+### 3.18 ADR set created in `docs/decisions/` (2026-06-14)
+
+- **Decision:** Extract the decisions from §3 that are still in force into formal ADRs under `docs/decisions/`, one file per decision (`NNNN-title.md`), following the standard ADR template (Status/Date/Context/Decision/Alternatives Considered/Consequences). Eight ADRs created: 0001 (monorepo), 0002 (styled-not-headless), 0003 (ESM+CJS dual output), 0004 (TS6 `ignoreDeprecations`), 0005 (spec token names — supersedes the reversed §3.8), 0006 (Bubble rebrand / `data-tone` — supersedes the reversed §3.11), 0007 (hand-authored CSS / no Tailwind — supersedes §3.3/§3.4/§3.5/§3.10), 0008 (Prettier/ESLint gates).
+- **Why:** §3 is a complete, dated narrative log — great for "how did we get here" but not a quick, addressable reference for "what's true now and why" on a given architectural axis. ADRs give each still-active decision its own linkable file.
+- **Scope:** Only decisions still in force got their own ADR (~8 of them). Decisions that were proposed and reversed before "sticking" (flattened token names, the original shadcn/Tailwind v4 architecture, dropping Card/Textarea) are folded into the relevant ADR's "Alternatives Considered" section instead of getting standalone files — see ADR-0005, ADR-0006, ADR-0007.
+- **Cross-linking:** Each formalized §3 entry above now has a "Formalized as: ADR-000N" pointer; each ADR's "Related" section points back to its §3 entry/entries. §3 itself is otherwise unchanged and remains the full chronological log.
+- **Open question (see §10):** how PROGRESS.md §3 and `docs/decisions/` should relate for _future_ big decisions — keep writing the full §3 entry plus a cross-linked ADR (current approach), or eventually trim §3 to a pointer once an ADR exists. Not decided yet.
 
 ---
 
@@ -473,6 +498,7 @@ Shipped as `apps/docs/app/ThemeBar.tsx`. Six dropdowns (Theme / Gray / Brand / R
 - ~~Add a Tailwind v4 `@source` directive to `preset.css`~~ → Moot 2026-06-04: Tailwind removed (§3.13). Consumers now import a flat `styles.css`; no scanning required.
 - ~~Dark mode: no dark palette designed yet~~ → Resolved 2026-05-14: dark tokens are wired in `tokens.css` under `[data-theme="dark"]`. Components inherit dark-mode behavior automatically through `@theme inline`. Adding a UI toggle in `apps/docs` is still open.
 - App-level composition examples in `apps/docs` (chat bubble, connection-status banner, slash-command menu) — spec item 5 from `SPEC-pattern-component-discoverability.md` (§3.17), optional/lower-priority, deferred.
+- **PROGRESS.md §3 vs. `docs/decisions/` for future decisions** (raised 2026-06-14, see §3.18): right now, a new significant architectural decision gets a full §3 entry _and_ a cross-linked ADR. Revisit whether §3 should eventually shrink to a pointer for decisions that have an ADR, to reduce duplication. Deferred — no action needed until it becomes a real maintenance burden.
 
 ### In-flight items as of 2026-05-16 (resume here next session)
 
