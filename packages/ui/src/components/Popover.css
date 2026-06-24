@@ -10,7 +10,7 @@
   min-width: 220px;
   max-width: 340px;
   background-color: var(--color-bg-primary);
-  border-radius: var(--radius-lg);
+  border-radius: min(var(--radius-lg), var(--radius-xl));
   box-shadow: var(--shadow-lg);
   outline: none;
   transform-origin: var(--transform-origin);
