@@ -63,6 +63,59 @@ pnpm lint
 
 There is no test runner configured yet — typecheck, lint, and format are the static gates.
 
+## Releasing
+
+Release steps for `@bubble-design-system/ui`. Run everything from the repo root.
+
+### 1. Bump the version
+
+Edit `packages/ui/package.json` and update `"version"` following semver:
+
+- **patch** (1.2.2 → 1.2.3) — bug fixes, no API changes
+- **minor** (1.2.2 → 1.3.0) — new components or features, no breaking changes
+- **major** (1.2.2 → 2.0.0) — breaking API changes
+
+### 2. Run static checks
+
+```bash
+pnpm -C packages/ui typecheck
+pnpm -C packages/ui build
+pnpm -C packages/ui lint
+pnpm -C apps/docs typecheck
+pnpm format:check
+```
+
+### 3. Publish to npm
+
+```bash
+pnpm -C packages/ui npm-publish
+```
+
+Uses an npm Automation token (configured in `~/.npmrc`) to bypass the OTP prompt.
+
+### 4. Commit and push
+
+```bash
+git add packages/ui/package.json
+git commit -m "chore(ui): bump to vX.Y.Z"
+git push origin main
+```
+
+### 5. Tag the release
+
+Tags use the format `vMAJOR.MINOR.PATCH` (annotated).
+
+```bash
+git tag -a vX.Y.Z -m "vX.Y.Z: short summary of what changed"
+git push origin vX.Y.Z
+```
+
+### 6. Create a GitHub Release
+
+```bash
+gh release create vX.Y.Z --title "vX.Y.Z" --notes "Short description of changes." --latest
+```
+
 ## Documentation
 
 - [`packages/ui/README.md`](packages/ui/README.md) — installation, runtime theming, the full component reference, and design tokens.
